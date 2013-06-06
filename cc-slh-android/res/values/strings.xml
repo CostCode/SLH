@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Shopping List Helper</string>
+    <string name="activity_login">Login to your Account</string>
+    <string name="activity_register">Register New Account</string>
+    
+	<string name="user_username">Username</string>
+	<string name="user_password">Password</string>
+	<string name="user_memberid">Membership ID</string>
+	<string name="user_firstname">First name</string>
+	<string name="user_lastname">Last name</string>
+	
+	<string name="button_login">Login</string>
+	<string name="button_register">Register New Account</string>
+	<string name="link_register">New user? Register here</string>
+	<string name="link_login">Already has account? Login here</string>
+	
+	<string name="image_logo">Logo</string>
+	
+</resources>
