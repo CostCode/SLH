@@ -8,6 +8,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+/*Just Test*/
+
 public class WebService {
 	private String nameSpace, url, methodName, soapAction;
 	
