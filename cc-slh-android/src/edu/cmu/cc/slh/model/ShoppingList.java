@@ -2,17 +2,19 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.entity;
+package edu.cmu.cc.slh.model;
+
+import java.util.Date;
 
 
 /**
- *  DESCRIPTION: This class specifies a product item in the shopping list.
+ *  DESCRIPTION: ShoppingList class specifies a user's shopping list.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: May 31, 2013
  */
-public class ShoppingListItem extends BaseEntity {
+public class ShoppingList extends BaseEntity {
 
 	
 	//-------------------------------------------------------------------------
@@ -20,16 +22,19 @@ public class ShoppingListItem extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 	
-	/** Shopping list to which this item belongs */
-	private ShoppingList shoppingList;
+	/** Owner of the shopping list */
+	private User owner;
 	
-	/** Product category of this item */
-	private ItemCategory category;
+	/** Shopping list name */
+	private String name;
 	
-	/** Amount this item */
-	private int amount;
+	/** Shopping list creation date */
+	private Date date;
 	
-	/** Description of this item */
+	/** Shopping list status: open or closed */
+	private boolean status;
+	
+	/** Description information */
 	private String description;
 	
 	
@@ -38,41 +43,51 @@ public class ShoppingListItem extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 	
-	public ShoppingListItem() {}
+	public ShoppingList() {}
 
 	
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
+	
 
-
-	public ShoppingList getShoppingList() {
-		return shoppingList;
+	public User getOwner() {
+		return owner;
 	}
 
 
-	public void setShoppingList(ShoppingList shoppingList) {
-		this.shoppingList = shoppingList;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 
-	public ItemCategory getCategory() {
-		return category;
+	public String getName() {
+		return name;
 	}
 
 
-	public void setCategory(ItemCategory category) {
-		this.category = category;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 
-	public int getAmount() {
-		return amount;
+	public Date getDate() {
+		return date;
 	}
 
 
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+
+	public boolean isStatus() {
+		return status;
+	}
+
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 

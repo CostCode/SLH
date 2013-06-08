@@ -4,7 +4,7 @@
  */
 package edu.cmu.cc.slh.db;
 
-import edu.cmu.cc.slh.entity.User;
+import edu.cmu.cc.slh.model.User;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

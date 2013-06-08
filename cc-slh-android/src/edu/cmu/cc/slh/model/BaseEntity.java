@@ -2,7 +2,7 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.entity;
+package edu.cmu.cc.slh.model;
 
 /**
  *  DESCRIPTION: Base entity class for all entity classes.
