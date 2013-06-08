@@ -1,5 +1,8 @@
 <resources>
 
     <string name="app_name">cc-android-library</string>
+    
+    <string name="dialog_progress_title">Sample Title</string>
+    <string name="dialog_progress_text">Loading. Please wait...</string>
 
 </resources>

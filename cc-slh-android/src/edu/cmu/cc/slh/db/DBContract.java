@@ -22,7 +22,7 @@ public final class DBContract {
 	/**
 	 * User DB table description.
 	 */
-	public static abstract class UserTable {
+	public static abstract class User {
 		
 		/** TABLE NAME */
 		public static final String TABLE_NAME = "user";
@@ -51,7 +51,7 @@ public final class DBContract {
 	/**
 	 * ItemCategory DB table description.
 	 */
-	public static abstract class ItemCategoryTable {
+	public static abstract class ItemCategory {
 		
 		/** TABLE NAME */
 		public static final String TABLE_NAME = "itemcategory";
@@ -74,7 +74,7 @@ public final class DBContract {
 	/**
 	 * ShoppingList DB table description.
 	 */
-	public static abstract class ShoppingListTable {
+	public static abstract class ShoppingList {
 		
 		/** TABLE NAME */
 		public static final String TABLE_NAME = "shoppinglist";
@@ -103,7 +103,7 @@ public final class DBContract {
 	/**
 	 * ShoppingListItem DB table description.
 	 */
-	public static abstract class ShoppingListItemTable {
+	public static abstract class ShoppingListItem {
 		
 		/** TABLE NAME */
 		public static final String TABLE_NAME = "shoppinglistitem";

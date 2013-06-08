@@ -38,11 +38,8 @@ public class SOAPContract {
 	 */
 	public static abstract class Methods {
 		
-		/** User authorization method */
-		public static final String AUTHORIZE_USER = "authorize-user";
-		
 		/** User registration method */
-		public static final String REGISTER_USER = "register-user";
+		public static final String VALIDATE_MEMBERSHIP = "validate-membership";
 		
 	}
 	
@@ -67,8 +64,10 @@ public class SOAPContract {
 		/** Password */
 		public static final String PASSWORD = "password";
 		
-		/** Authorization result */
-		public static final String AUTHORIZED = "authorized";
+		
+		
+		/** Membership validity */
+		public static final String MEMBERSHIP_VALIDITY = "membership-validity";
 		
 	}
 	

@@ -36,46 +36,46 @@ public final class DBHelper extends SQLiteOpenHelper {
 	
 	/** Create User table SQL script */
 	public static final String SQL_CREATE_USER =
-			"CREATE TABLE " + DBContract.UserTable.TABLE_NAME + "(" +
-			DBContract.UserTable.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.UserTable.MEMBER_ID + " TEXT, " +
-			DBContract.UserTable.USERNAME + " TEXT, " +
-			DBContract.UserTable.FIRSTNAME + " TEXT, " +
-			DBContract.UserTable.LASTNAME + " TEXT, " +
-			DBContract.UserTable.PASSWORD + " TEXT)";
+			"CREATE TABLE " + DBContract.User.TABLE_NAME + "(" +
+			DBContract.User.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			DBContract.User.MEMBER_ID + " TEXT, " +
+			DBContract.User.USERNAME + " TEXT, " +
+			DBContract.User.FIRSTNAME + " TEXT, " +
+			DBContract.User.LASTNAME + " TEXT, " +
+			DBContract.User.PASSWORD + " TEXT)";
 	
 	
 	/** Create ItemCategory table SQL script */
 	public static final String SQL_CREATE_ITEMCATEGORY =
-			"CREATE TABLE " + DBContract.ItemCategoryTable.TABLE_NAME + "(" +
-			DBContract.ItemCategoryTable.ID + 
+			"CREATE TABLE " + DBContract.ItemCategory.TABLE_NAME + "(" +
+			DBContract.ItemCategory.ID + 
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.ItemCategoryTable.CATEGORY + " INTEGER, " +
-			DBContract.ItemCategoryTable.NAME + " TEXT, " +
-			DBContract.ItemCategoryTable.DESCRIPTION + " TEXT)";
+			DBContract.ItemCategory.CATEGORY + " INTEGER, " +
+			DBContract.ItemCategory.NAME + " TEXT, " +
+			DBContract.ItemCategory.DESCRIPTION + " TEXT)";
 	
 	
 	/** Create ShoppingList table SQL script */
 	public static final String SQL_CREATE_SHOPPINGLIST =
-			"CREATE TABLE " + DBContract.ShoppingListTable.TABLE_NAME + "(" +
-			DBContract.ShoppingListTable.ID + 
+			"CREATE TABLE " + DBContract.ShoppingList.TABLE_NAME + "(" +
+			DBContract.ShoppingList.ID + 
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.ShoppingListTable.OWNER + " INTEGER, " +
-			DBContract.ShoppingListTable.NAME + " TEXT, " +
-			DBContract.ShoppingListTable.DATE + " INTEGER, " +
-			DBContract.ShoppingListTable.STATUS + " INTEGER, " +
-			DBContract.ShoppingListTable.DESCRIPTION + " TEXT)";
+			DBContract.ShoppingList.OWNER + " INTEGER, " +
+			DBContract.ShoppingList.NAME + " TEXT, " +
+			DBContract.ShoppingList.DATE + " INTEGER, " +
+			DBContract.ShoppingList.STATUS + " INTEGER, " +
+			DBContract.ShoppingList.DESCRIPTION + " TEXT)";
 	
 	
 	/** Create ShoppingListItem table SQL script */
 	public static final String SQL_CREATE_SHOPPINGLISTITEM =
-			"CREATE TABLE " + DBContract.ShoppingListItemTable.TABLE_NAME + "(" +
-			DBContract.ShoppingListItemTable.ID + 
+			"CREATE TABLE " + DBContract.ShoppingListItem.TABLE_NAME + "(" +
+			DBContract.ShoppingListItem.ID + 
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.ShoppingListItemTable.SHOPPING_LIST + " INTEGER, " +
-			DBContract.ShoppingListItemTable.CATEGORY + " INTEGER, " +
-			DBContract.ShoppingListItemTable.AMOUNT + " INTEGER, " +
-			DBContract.ShoppingListItemTable.DESCRIPTION + " TEXT)";
+			DBContract.ShoppingListItem.SHOPPING_LIST + " INTEGER, " +
+			DBContract.ShoppingListItem.CATEGORY + " INTEGER, " +
+			DBContract.ShoppingListItem.AMOUNT + " INTEGER, " +
+			DBContract.ShoppingListItem.DESCRIPTION + " TEXT)";
 	
 	
 	/** Drop table SQL script */
@@ -137,12 +137,12 @@ public final class DBHelper extends SQLiteOpenHelper {
 				oldVersion, newVersion));
 		
 		db.execSQL(SQL_DROP_TABLE + 
-				DBContract.ShoppingListItemTable.TABLE_NAME);
+				DBContract.ShoppingListItem.TABLE_NAME);
 		db.execSQL(SQL_DROP_TABLE + 
-				DBContract.ShoppingListTable.TABLE_NAME);
+				DBContract.ShoppingList.TABLE_NAME);
 		db.execSQL(SQL_DROP_TABLE + 
-				DBContract.ItemCategoryTable.TABLE_NAME);
-		db.execSQL(SQL_DROP_TABLE + DBContract.UserTable.TABLE_NAME);
+				DBContract.ItemCategory.TABLE_NAME);
+		db.execSQL(SQL_DROP_TABLE + DBContract.User.TABLE_NAME);
 		
 		Log.d(TAG, "Database tables have been deleted");
 		

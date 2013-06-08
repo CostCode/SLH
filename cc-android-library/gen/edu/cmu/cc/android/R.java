@@ -15,6 +15,8 @@ public final class R {
     }
     public static final class string {
         public static int app_name=0x7f030000;
+        public static int dialog_progress_text=0x7f030002;
+        public static int dialog_progress_title=0x7f030001;
     }
     public static final class style {
         /** 
