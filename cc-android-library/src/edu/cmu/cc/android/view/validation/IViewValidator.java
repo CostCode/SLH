@@ -13,7 +13,7 @@ import android.view.View;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public interface ViewValidator {
+public interface IViewValidator {
 
 	/**
 	 * Validate the given view

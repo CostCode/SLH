@@ -4,47 +4,38 @@
  */
 package edu.cmu.cc.android.view.validation.textview;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
 import edu.cmu.cc.android.R;
 import edu.cmu.cc.android.view.validation.IViewValidator;
 
 /**
- *  DESCRIPTION: Common regular expression validator.
- *  Other custom validators can extend this class.
+ *  DESCRIPTION: Custom validator that validates Costco membership id.
+ *  It uses RegexValidator as base.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public class RegexValidator implements IViewValidator {
+public class MembershipValidator extends RegexValidator 
+implements IViewValidator {
 
 	//-------------------------------------------------------------------------
-	// FIELDS
+	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	/** Android Context */
-	protected Context ctx;
+	/** Costco membership id pattern: 10 digits */
+	private static final String REGEX = "[0-9]{10}";
 	
-	/** Regular expression pattern */
-	protected Pattern pattern;
-
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
 	/**
-	 * Constructor. Sets the context and regex to this validator.
+	 * Constructor.
 	 * @param ctx - android context
-	 * @param pattern - regular expression to validate against
 	 */
-	public RegexValidator(Context ctx, String regex) {
-		this.ctx = ctx;
-		this.pattern = Pattern.compile(regex);
+	public MembershipValidator(Context ctx) {
+		super(ctx, REGEX);
 	}
 
 	//-------------------------------------------------------------------------
@@ -52,15 +43,8 @@ public class RegexValidator implements IViewValidator {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public boolean validate(View view) {
-		Matcher matcher = pattern.matcher(((TextView)view).getText());
-		return matcher.matches();
-	}
-
-	@Override
 	public String getErrorMessage(String caption) {
-		return ctx.getString(R.string.validation_regex, caption, 
-				pattern.toString());
+		return ctx.getString(R.string.validation_membership, caption);
 	}
 	
 }

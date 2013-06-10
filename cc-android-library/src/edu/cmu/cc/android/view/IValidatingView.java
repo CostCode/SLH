@@ -4,7 +4,7 @@
  */
 package edu.cmu.cc.android.view;
 
-import edu.cmu.cc.android.view.validation.ViewValidator;
+import edu.cmu.cc.android.view.validation.IViewValidator;
 
 /**
  *  DESCRIPTION: Interface that all views which require validation
@@ -14,7 +14,7 @@ import edu.cmu.cc.android.view.validation.ViewValidator;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public interface ValidatingView {
+public interface IValidatingView {
 	
 	/**
 	 * Sets the validator to the view 
@@ -22,7 +22,7 @@ public interface ValidatingView {
 	 * @param fieldDisplayName - a name of the field to be displayed 
 	 * in the error message
 	 */
-	public void setValidator(ViewValidator validator, 
+	public void setValidator(IViewValidator validator, 
 			String fieldDisplayName);
 	
 	/**
