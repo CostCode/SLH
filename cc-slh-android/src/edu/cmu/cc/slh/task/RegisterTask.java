@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.ksoap2.serialization.SoapObject;
 
-import edu.cmu.cc.android.soap.WebService;
+import edu.cmu.cc.android.service.soap.WebService;
 import edu.cmu.cc.slh.soap.SOAPContract;
 import android.os.AsyncTask;
 import android.util.Log;

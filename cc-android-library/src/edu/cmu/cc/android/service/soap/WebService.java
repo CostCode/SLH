@@ -1,4 +1,4 @@
-package edu.cmu.cc.android.soap;
+package edu.cmu.cc.android.service.soap;
 
 import java.net.ConnectException;
 import java.util.Map;
