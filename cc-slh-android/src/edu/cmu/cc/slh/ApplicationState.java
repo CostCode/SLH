@@ -4,6 +4,8 @@
  */
 package edu.cmu.cc.slh;
 
+import edu.cmu.cc.slh.model.User;
+
 /**
  *  DESCRIPTION: This class is used to hold application data.
  *	
@@ -20,14 +22,26 @@ public class ApplicationState {
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
+	
+	private User user;
 
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
+	
+	public ApplicationState() {}
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS

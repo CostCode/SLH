@@ -38,8 +38,8 @@ public final class DBHelper extends SQLiteOpenHelper {
 	public static final String SQL_CREATE_USER =
 			"CREATE TABLE " + DBContract.User.TABLE_NAME + "(" +
 			DBContract.User.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.User.MEMBER_ID + " TEXT, " +
-			DBContract.User.USERNAME + " TEXT, " +
+			DBContract.User.MEMBER_ID + " TEXT UNIQUE, " +
+			DBContract.User.USERNAME + " TEXT UNIQUE, " +
 			DBContract.User.FIRSTNAME + " TEXT, " +
 			DBContract.User.LASTNAME + " TEXT, " +
 			DBContract.User.PASSWORD + " TEXT)";
@@ -51,7 +51,7 @@ public final class DBHelper extends SQLiteOpenHelper {
 			DBContract.ItemCategory.ID + 
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
 			DBContract.ItemCategory.CATEGORY + " INTEGER, " +
-			DBContract.ItemCategory.NAME + " TEXT, " +
+			DBContract.ItemCategory.NAME + " TEXT UNIQUE, " +
 			DBContract.ItemCategory.DESCRIPTION + " TEXT)";
 	
 	
@@ -64,7 +64,16 @@ public final class DBHelper extends SQLiteOpenHelper {
 			DBContract.ShoppingList.NAME + " TEXT, " +
 			DBContract.ShoppingList.DATE + " INTEGER, " +
 			DBContract.ShoppingList.STATUS + " INTEGER, " +
-			DBContract.ShoppingList.DESCRIPTION + " TEXT)";
+			DBContract.ShoppingList.DESCRIPTION + " TEXT, " +
+			"FOREIGN KEY(" + 
+			DBContract.ShoppingList.OWNER +
+			") REFERENCES " +
+			DBContract.User.TABLE_NAME + "(" +
+			DBContract.User.ID + "), " +
+			"UNIQUE (" +
+			DBContract.ShoppingList.OWNER + ", " +
+			DBContract.ShoppingList.NAME + "));";
+			
 	
 	
 	/** Create ShoppingListItem table SQL script */
@@ -75,7 +84,17 @@ public final class DBHelper extends SQLiteOpenHelper {
 			DBContract.ShoppingListItem.SHOPPING_LIST + " INTEGER, " +
 			DBContract.ShoppingListItem.CATEGORY + " INTEGER, " +
 			DBContract.ShoppingListItem.AMOUNT + " INTEGER, " +
-			DBContract.ShoppingListItem.DESCRIPTION + " TEXT)";
+			DBContract.ShoppingListItem.DESCRIPTION + " TEXT, " +
+			"FOREIGN KEY(" + 
+			DBContract.ShoppingListItem.SHOPPING_LIST +
+			") REFERENCES " +
+			DBContract.ShoppingList.TABLE_NAME + "(" +
+			DBContract.ShoppingList.ID + "), " +
+			"FOREIGN KEY(" + 
+			DBContract.ShoppingListItem.CATEGORY +
+			") REFERENCES " +
+			DBContract.ItemCategory.TABLE_NAME + "(" +
+			DBContract.ItemCategory.ID + "))";
 	
 	
 	/** Drop table SQL script */
@@ -86,7 +105,7 @@ public final class DBHelper extends SQLiteOpenHelper {
 	// FIELDS
 	//-------------------------------------------------------------------------
 
-	
+	//TODO: Finish dbAdaptor code!!!
 	private DBAdaptor dbAdaptor;
 	
 	

@@ -11,15 +11,18 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static int ic_launcher=0x7f020000;
+        public static int cancel=0x7f020000;
+        public static int ic_launcher=0x7f020001;
     }
     public static final class string {
-        public static int app_name=0x7f030000;
-        public static int dialog_progress_text=0x7f030002;
-        public static int dialog_progress_title=0x7f030001;
-        public static int validation_membership=0x7f030004;
-        public static int validation_regex=0x7f030003;
-        public static int validation_username=0x7f030005;
+        public static int androidUtil_error=0x7f030001;
+        public static int androidUtil_ok=0x7f030000;
+        public static int app_name=0x7f030002;
+        public static int dialog_progress_text=0x7f030004;
+        public static int dialog_progress_title=0x7f030003;
+        public static int validation_membership=0x7f030006;
+        public static int validation_regex=0x7f030005;
+        public static int validation_username=0x7f030007;
     }
     public static final class style {
         /** 
