@@ -35,10 +35,11 @@ public final class R {
         public static final int link_to_register=0x7f070005;
     }
     public static final class layout {
-        public static final int footer_repeat=0x7f030000;
-        public static final int header_gradient=0x7f030001;
-        public static final int login=0x7f030002;
-        public static final int register=0x7f030003;
+        public static final int activation=0x7f030000;
+        public static final int footer_repeat=0x7f030001;
+        public static final int header_gradient=0x7f030002;
+        public static final int login=0x7f030003;
+        public static final int register=0x7f030004;
     }
     public static final class string {
         public static final int activity_login=0x7f050001;
@@ -52,6 +53,7 @@ public final class R {
         public static final int user_firstname=0x7f050006;
         public static final int user_lastname=0x7f050007;
         public static final int user_memberid=0x7f050005;
+        public static final int user_membershipid=0x7f05000d;
         public static final int user_password=0x7f050004;
         public static final int user_username=0x7f050003;
     }

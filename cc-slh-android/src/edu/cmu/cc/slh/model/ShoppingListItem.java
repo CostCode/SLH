@@ -26,8 +26,14 @@ public class ShoppingListItem extends BaseEntity {
 	/** Product category of this item */
 	private ItemCategory category;
 	
-	/** Amount this item */
-	private int amount;
+	/** Name of the shopping list item */
+	private String name;
+	
+	/** Quantity of this item */
+	private int quantity;
+	
+	/** Unit id */
+	private int unit;
 	
 	/** Description of this item */
 	private String description;
@@ -50,7 +56,6 @@ public class ShoppingListItem extends BaseEntity {
 		return shoppingList;
 	}
 
-
 	public void setShoppingList(ShoppingList shoppingList) {
 		this.shoppingList = shoppingList;
 	}
@@ -60,26 +65,41 @@ public class ShoppingListItem extends BaseEntity {
 		return category;
 	}
 
-
 	public void setCategory(ItemCategory category) {
 		this.category = category;
 	}
 
 
-	public int getAmount() {
-		return amount;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public int getUnit() {
+		return unit;
 	}
 
+	public void setUnit(int unit) {
+		this.unit = unit;
+	}
 
+	
 	public String getDescription() {
 		return description;
 	}
-
 
 	public void setDescription(String description) {
 		this.description = description;

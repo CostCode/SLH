@@ -2,37 +2,45 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh;
-
+package edu.cmu.cc.slh.model;
 
 /**
- *  DESCRIPTION: This class is used to hold application data.
+ *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 10, 2013
+ *  Date: Jun 12, 2013
  */
-public class ApplicationState {
+public class Units {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
-
+	
+	public static class Weight {
+		public static int GRAM = 0;
+		public static int KILOGRAM = 1;
+		public static int POUNDS = 2;
+	}
+	
+	public static class Volume {
+		public static int MILLILITER = 3;
+		public static int LITER = 4;
+		public static int GALLON = 5;
+	}
+	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
-	
 
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
-	
-	public ApplicationState() {}
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
-	
+
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------

@@ -34,17 +34,6 @@ public final class DBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "cc.slh.db";
 	
 	
-	/** Create User table SQL script */
-	public static final String SQL_CREATE_USER =
-			"CREATE TABLE " + DBContract.User.TABLE_NAME + "(" +
-			DBContract.User.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.User.MEMBER_ID + " TEXT UNIQUE, " +
-			DBContract.User.USERNAME + " TEXT UNIQUE, " +
-			DBContract.User.FIRSTNAME + " TEXT, " +
-			DBContract.User.LASTNAME + " TEXT, " +
-			DBContract.User.PASSWORD + " TEXT)";
-	
-	
 	/** Create ItemCategory table SQL script */
 	public static final String SQL_CREATE_ITEMCATEGORY =
 			"CREATE TABLE " + DBContract.ItemCategory.TABLE_NAME + "(" +
@@ -60,20 +49,9 @@ public final class DBHelper extends SQLiteOpenHelper {
 			"CREATE TABLE " + DBContract.ShoppingList.TABLE_NAME + "(" +
 			DBContract.ShoppingList.ID + 
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			DBContract.ShoppingList.OWNER + " INTEGER, " +
-			DBContract.ShoppingList.NAME + " TEXT, " +
+			DBContract.ShoppingList.NAME + " TEXT UNIQUE, " +
 			DBContract.ShoppingList.DATE + " INTEGER, " +
-			DBContract.ShoppingList.STATUS + " INTEGER, " +
-			DBContract.ShoppingList.DESCRIPTION + " TEXT, " +
-			"FOREIGN KEY(" + 
-			DBContract.ShoppingList.OWNER +
-			") REFERENCES " +
-			DBContract.User.TABLE_NAME + "(" +
-			DBContract.User.ID + "), " +
-			"UNIQUE (" +
-			DBContract.ShoppingList.OWNER + ", " +
-			DBContract.ShoppingList.NAME + "));";
-			
+			DBContract.ShoppingList.DESCRIPTION + " TEXT";
 	
 	
 	/** Create ShoppingListItem table SQL script */
@@ -83,7 +61,8 @@ public final class DBHelper extends SQLiteOpenHelper {
 			" INTEGER PRIMARY KEY AUTOINCREMENT, " +
 			DBContract.ShoppingListItem.SHOPPING_LIST + " INTEGER, " +
 			DBContract.ShoppingListItem.CATEGORY + " INTEGER, " +
-			DBContract.ShoppingListItem.AMOUNT + " INTEGER, " +
+			DBContract.ShoppingListItem.QUANTITY + " INTEGER, " +
+			DBContract.ShoppingListItem.UNIT + " INTEGER, " +
 			DBContract.ShoppingListItem.DESCRIPTION + " TEXT, " +
 			"FOREIGN KEY(" + 
 			DBContract.ShoppingListItem.SHOPPING_LIST +
@@ -137,7 +116,6 @@ public final class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL("PRAGMA foreign_keys=ON;");
-		db.execSQL(SQL_CREATE_USER);
 		db.execSQL(SQL_CREATE_ITEMCATEGORY);
 		db.execSQL(SQL_CREATE_SHOPPINGLIST);
 		db.execSQL(SQL_CREATE_SHOPPINGLISTITEM);
@@ -161,7 +139,6 @@ public final class DBHelper extends SQLiteOpenHelper {
 				DBContract.ShoppingList.TABLE_NAME);
 		db.execSQL(SQL_DROP_TABLE + 
 				DBContract.ItemCategory.TABLE_NAME);
-		db.execSQL(SQL_DROP_TABLE + DBContract.User.TABLE_NAME);
 		
 		Log.d(TAG, "Database tables have been deleted");
 		

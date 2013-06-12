@@ -40,7 +40,7 @@
 		</LinearLayout>
         <!-- Footer Ends -->
  
-        <!-- Login Form -->
+        <!-- BEGIN: Activation Form -->
         <LinearLayout
 	          android:orientation="vertical"
 	          android:layout_width="match_parent"
@@ -48,14 +48,14 @@
 	          android:padding="10dip"
 	          android:layout_below="@id/header">
 		          
-		          <!-- Username Label and Field -->
+		          <!-- Costco Membership ID field -->
 		          <TextView 
 		              	android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:textColor="#372c24"
-		                android:text="@string/user_username"/>
+		                android:text="@string/user_membershipid"/>
 		          <EditText 
-		                android:id="@+id/etUsername"
+		                android:id="@+id/etMembershipID"
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:layout_marginTop="5dip"
@@ -63,42 +63,16 @@
 		                android:singleLine="true"
 		                android:inputType="text"/>
 		          
-		          <!-- Password Label and Field -->
-		          <TextView 
-		              	android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:textColor="#372c24"
-		                android:text="@string/user_password"/>
-		          <EditText 
-		                android:id="@+id/etPassword"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:layout_marginTop="5dip"
-		                android:singleLine="true"
-		                android:inputType="textPassword"/>
-		          
-		          <!-- Login button -->
+		          <!-- Activate button -->
 		          <Button 
-		                android:id="@+id/btnLogin"
+		                android:id="@+id/btnActivateApp"
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:layout_marginTop="10dip"
-		                android:text="@string/button_login"/>
+		                android:text="@string/button_activate"/>
 		          
-		          <!-- Link to Registration Screen -->
-		          <TextView 
-		                android:id="@+id/link_to_register"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:layout_marginTop="40dip"
-		                android:layout_marginBottom="40dip"
-		                android:text="@string/link_register"
-		                android:gravity="center"
-		                android:textSize="20sp"
-		                android:textColor="#0b84aa"/>
-		 
 		</LinearLayout>
-        <!-- Login Form Ends -->
+        <!-- END: Activation Form -->
   
   </RelativeLayout>
   

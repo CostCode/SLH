@@ -20,35 +20,6 @@ public final class DBContract {
 	
 	
 	/**
-	 * User DB table description.
-	 */
-	public static abstract class User {
-		
-		/** TABLE NAME */
-		public static final String TABLE_NAME = "user";
-		
-		/** PRIMARY KEY: User id */
-		public static final String ID = "id";
-		
-		/** COLUMN: Costco membership id */
-		public static final String MEMBER_ID = "member_id";
-		
-		/** COLUMN: System username of a user */
-		public static final String USERNAME = "username";
-		
-		/** COLUMN: User first name */
-		public static final String FIRSTNAME = "firstname";
-		
-		/** COLUMN: User last name */
-		public static final String LASTNAME = "lastname";
-		
-		/** COLUMN: User password */
-		public static final String PASSWORD = "password";
-		
-	}
-	
-	
-	/**
 	 * ItemCategory DB table description.
 	 */
 	public static abstract class ItemCategory {
@@ -82,17 +53,11 @@ public final class DBContract {
 		/** PRIMARY KEY: Shopping list id */
 		public static final String ID = "id";
 		
-		/** FOREIGN KEY: Shopping list owner (customer) */
-		public static final String OWNER = "user_id";
-		
 		/** COLUMN: Shopping list name */
 		public static final String NAME = "name";
 		
 		/** COLUMN: Shopping list creation date */
 		public static final String DATE = "date";
-		
-		/** COLUMN: Shopping list status (open, closed) */
-		public static final String STATUS = "status";
 		
 		/** COLUMN: Item category description */
 		public static final String DESCRIPTION = "description";
@@ -117,8 +82,11 @@ public final class DBContract {
 		/** FOREIGN KEY: Shopping list item category */
 		public static final String CATEGORY = "itemcategory_id";
 		
-		/** COLUMN: Shopping list item amount */
-		public static final String AMOUNT = "amount";
+		/** COLUMN: Shopping list item quantity */
+		public static final String QUANTITY = "quantity";
+		
+		/** COLUMN: Shopping list item units */
+		public static final String UNIT = "unit";
 		
 		/** COLUMN: Item category description */
 		public static final String DESCRIPTION = "description";

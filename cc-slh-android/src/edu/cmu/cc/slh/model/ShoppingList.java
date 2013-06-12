@@ -22,17 +22,11 @@ public class ShoppingList extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 	
-	/** Owner of the shopping list */
-	private User owner;
-	
 	/** Shopping list name */
 	private String name;
 	
 	/** Shopping list creation date */
 	private Date date;
-	
-	/** Shopping list status: open or closed */
-	private boolean status;
 	
 	/** Description information */
 	private String description;
@@ -51,16 +45,6 @@ public class ShoppingList extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 
-	public User getOwner() {
-		return owner;
-	}
-
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-
 	public String getName() {
 		return name;
 	}
@@ -78,16 +62,6 @@ public class ShoppingList extends BaseEntity {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-
-	public boolean isStatus() {
-		return status;
-	}
-
-
-	public void setStatus(boolean status) {
-		this.status = status;
 	}
 
 

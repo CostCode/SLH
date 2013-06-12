@@ -2,40 +2,41 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh;
+package edu.cmu.cc.slh.activity;
 
+import edu.cmu.cc.slh.R;
+import android.app.Activity;
+import android.os.Bundle;
 
 /**
- *  DESCRIPTION: This class is used to hold application data.
+ *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 10, 2013
+ *  Date: Jun 12, 2013
  */
-public class ApplicationState {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
+public class ActivationActivity extends Activity {
 
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
-	
-	public ApplicationState() {}
 
 	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
+	// PROTECTED METHODS
 	//-------------------------------------------------------------------------
 	
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
-	//-------------------------------------------------------------------------
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.activation);
+		
+		
+	}
 
 	//-------------------------------------------------------------------------
 	// HELPER METHODS
