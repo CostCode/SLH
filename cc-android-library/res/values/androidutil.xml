@@ -4,4 +4,6 @@
     <string name="androidUtil_ok">OK</string>
     <string name="androidUtil_error">Error</string>
     
+    <string name="androidUtil_error_notConnected">The device is not connected to the Internet</string>
+    
 </resources>

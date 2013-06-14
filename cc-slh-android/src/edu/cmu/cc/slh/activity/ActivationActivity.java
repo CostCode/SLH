@@ -4,8 +4,11 @@
  */
 package edu.cmu.cc.slh.activity;
 
+import edu.cmu.cc.android.activity.async.AbstractAsyncActivity;
+import edu.cmu.cc.android.util.WidgetUtils;
+import edu.cmu.cc.android.view.ValidatingEditText;
 import edu.cmu.cc.slh.R;
-import android.app.Activity;
+import edu.cmu.cc.slh.task.ActivationTask.IActivationTaskCaller;
 import android.os.Bundle;
 
 /**
@@ -15,11 +18,14 @@ import android.os.Bundle;
  *	@version 1.0
  *  Date: Jun 12, 2013
  */
-public class ActivationActivity extends Activity {
+public class ActivationActivity extends AbstractAsyncActivity 
+implements IActivationTaskCaller {
 
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
+	
+	private ValidatingEditText etMembershipID;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -35,9 +41,25 @@ public class ActivationActivity extends Activity {
 		
 		setContentView(R.layout.activation);
 		
+		etMembershipID = (ValidatingEditText) WidgetUtils
+				.getEditText(null, R.id.etMembershipID);
 		
 	}
 
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public void onAsyncTaskFailed(Class<?> taskClass, Throwable t) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onActivationTaskSucceeded(boolean activated) {
+		// TODO Auto-generated method stub
+	}
+	
 	//-------------------------------------------------------------------------
 	// HELPER METHODS
 	//-------------------------------------------------------------------------

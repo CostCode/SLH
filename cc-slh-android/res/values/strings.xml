@@ -2,9 +2,15 @@
 <resources>
 
     <!-- Global Application Strings -->
+    
     <string name="app_name">SLH</string>
     <string name="image_logo">Logo</string>
     
+    <string name="activity_activation">Application Activation</string>
+    
+	
+	
+	
 	<!-- UI: Buttons -->
 	<string name="button_activate">Activate!</string>
 	

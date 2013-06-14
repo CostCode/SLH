@@ -7,6 +7,8 @@ package edu.cmu.cc.android.view;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import edu.cmu.cc.android.view.validation.IViewValidator;
 import edu.cmu.cc.android.view.validation.textview.MembershipValidator;
@@ -58,24 +60,24 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 		
 		this.validator = validator;
 		this.fieldDisplayName = fieldDisplayName;
+		initInputType(validator);
 	}
 
 	@Override
 	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
+		return validator.validate(this);
 	}
 
 	@Override
 	public void flagOrUnflagValidationError() {
-		// TODO Auto-generated method stub
-		
+		String errMsg = (isValid()) ? null : 
+			validator.getErrorMessage(fieldDisplayName);
+		setError(errMsg);
 	}
 
 	@Override
 	public void unflagValidationError() {
-		// TODO Auto-generated method stub
-		
+		setError(null);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -89,12 +91,56 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 		} else {
 			setInputType(InputType.TYPE_CLASS_TEXT);
 		}
-		
-		
+		setInputType(getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	}
 	
-	//-------------------------------------------------------------------------
-	// HELPER METHODS
-	//-------------------------------------------------------------------------
+	/**
+	 * Setting up listeners for this view.
+	 */
+	protected void registerListerners() {
+		registerOnFocusChangeListener();
+		registerOnKeyListener();
+		registerOnLongClickListener();
+	}
+	
+	protected void registerOnFocusChangeListener() {
+		setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					flagOrUnflagValidationError();
+				}
+			}
+		});
+	}
+	
+	protected void registerOnKeyListener() {
+		setOnKeyListener(new OnKeyListener() {
+			
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				final int KEY_CODE_ENTER = 66;
+				boolean consumed = false;
+				if (keyCode == KEY_CODE_ENTER && 
+						event.getAction() == KeyEvent.ACTION_DOWN) {
+					flagOrUnflagValidationError();
+					consumed = true;
+				}
+				return consumed;
+			}
+		});
+	}
+	
+	protected void registerOnLongClickListener() {
+		setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				flagOrUnflagValidationError();
+				return true;
+			}
+		});
+	}
 
 }

@@ -10,13 +10,13 @@ import org.ksoap2.transport.HttpTransportSE;
 
 /*Just Test*/
 
-public class WebService {
+public class SoapWebService {
 	private String nameSpace, url, methodName, soapAction;
 	
 	/** Default constructor
 	 * 
 	 */
-	public WebService() {
+	public SoapWebService() {
 		nameSpace = "http://costcode.mse.cmu.edu/";
 		url = "http://shltestweb.appspot.com/shlappeng";	
 		methodName = "sayHello";
@@ -24,25 +24,30 @@ public class WebService {
 	}
 	
 	/**
+	 * Constructor.
 	 * 
+	 * @param url The complete URL where the web service resides
 	 * @param nameSpace The web method namespace
 	 * @param methodName The method name for Web Service
-	 * @param url The complete URL where the web service resides 
 	 */
-	public WebService(String nameSpace, String methodName, String url) {
+	public SoapWebService(String url, String nameSpace, String methodName) {
+		
+		this.url = url;
 		this.nameSpace = nameSpace;
 		this.methodName = methodName;
-		this.url = url;
+		
 		soapAction = nameSpace + methodName;
 	}
 	
-	/** Constructor with namespace and URL
+	/** 
+	 * Constructor with URL and namespace. 
+	 * 
+	 * @param url The complete URL where the web service resides
 	 * @param nameSpace The web method namespace
-	 * @param url The complete URL where the web service resides 
 	 */
-	public WebService(String nameSpace, String url) {
-		this.nameSpace = nameSpace;
+	public SoapWebService(String url, String nameSpace) {
 		this.url = url;
+		this.nameSpace = nameSpace;
 	}
 	
 	/** Call the web service with methodName
