@@ -6,6 +6,7 @@ package edu.cmu.cc.android.util;
 
 import edu.cmu.cc.android.R;
 import android.content.Context;
+import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 
 /**
@@ -63,8 +64,23 @@ public class Logger {
 	}
 	
 	public static void logErrorAndAlert(Context ctx, Class<?> caller, 
+			String message, Throwable t, OnClickListener listener) {
+		
+		if (t != null) {
+			logError(caller, message, t);
+		} else {
+			logError(caller, message);
+		}
+		
+		WidgetUtils.createOkAlertDialog(ctx, R.drawable.cancel, 
+				R.string.androidUtil_error, message, listener).show();
+	}
+	
+	public static void logErrorAndAlert(Context ctx, Class<?> caller, 
 			String message) {
 		logErrorAndAlert(ctx, caller, message, null);
 	}
+	
+	
 
 }

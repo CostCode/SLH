@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.android.activity.async;
 
-import edu.cmu.cc.android.R;
 import android.app.ProgressDialog;
 import android.content.Context;
 
@@ -41,10 +40,10 @@ public class AsyncActivityHelper {
 	/**
 	 * Display progress dialog
 	 */
-	public void showProgressDialog() {
+	public void showProgressDialog(int titleResID, int textResID) {
 		dialog = ProgressDialog.show(ctx, 
-				ctx.getString(R.string.dialog_progress_title), 
-				ctx.getString(R.string.dialog_progress_text), true);
+				ctx.getString(titleResID), 
+				ctx.getString(textResID), true);
 	}
 	
 	/**

@@ -39,8 +39,8 @@ implements IAsyncActivity {
 	//-------------------------------------------------------------------------
 
 	@Override
-	public void showProgressDialog() {
-		helper.showProgressDialog();
+	public void showProgressDialog(int titleResID, int textResID) {
+		helper.showProgressDialog(titleResID, textResID);
 	}
 
 	@Override

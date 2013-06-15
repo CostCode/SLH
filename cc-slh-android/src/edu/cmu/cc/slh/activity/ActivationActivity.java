@@ -22,6 +22,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.content.DialogInterface;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -89,10 +90,17 @@ implements IActivationTaskCaller {
 			@Override
 			public void run() {
 				
-				Logger.logErrorAndAlert(ActivationActivity.this, 
-						ActivationActivity.class, errorMsg, t);
+				DialogInterface.OnClickListener dialogListener =
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								ActivationActivity.this.finish();
+							}
+						};
 				
-				ActivationActivity.this.finish();
+				Logger.logErrorAndAlert(ActivationActivity.this, 
+						ActivationActivity.class, errorMsg, t, dialogListener);
 			}
 		};
 		
@@ -178,7 +186,8 @@ implements IActivationTaskCaller {
 							+ taskClass.toString()));
 		}
 		
-		return StringUtils.limitLength(getString(msgResID), 200, "...");
+		return StringUtils.limitLength(
+				getString(msgResID, t.getMessage()), 200, "...");
 	}
 	
 	/**

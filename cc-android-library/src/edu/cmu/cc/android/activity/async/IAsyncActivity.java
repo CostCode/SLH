@@ -18,7 +18,7 @@ public interface IAsyncActivity {
 	/**
 	 * Show progress dialog
 	 */
-	public void showProgressDialog();
+	public void showProgressDialog(int titleResID, int textResID);
 	
 	/**
 	 * Dismiss progress dialog

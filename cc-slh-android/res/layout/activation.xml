@@ -54,7 +54,7 @@
 		                android:layout_height="wrap_content"
 		                android:textColor="#372c24"
 		                android:text="@string/activation_membershipid"/>
-		          <EditText 
+		          <edu.cmu.cc.android.view.ValidatingEditText 
 		                android:id="@+id/etActivationMembershipID"
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"

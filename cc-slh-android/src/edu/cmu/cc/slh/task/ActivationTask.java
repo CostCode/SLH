@@ -62,7 +62,8 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		caller.showProgressDialog();
+		caller.showProgressDialog(R.string.activation_progressDialogTitle, 
+				R.string.activation_progressDialogText);
 	}
 	
 	/**
