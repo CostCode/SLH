@@ -9,6 +9,7 @@ import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.task.ActivationTask;
 import edu.cmu.cc.slh.task.ActivationTask.IActivationTaskCaller;
@@ -44,6 +45,8 @@ implements IActivationTaskCaller {
 	
 	private View activationView;
 	
+	private ApplicationState applicationState;
+	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -55,6 +58,8 @@ implements IActivationTaskCaller {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		applicationState = (ApplicationState) getApplication();
 		
 		activationView = initializeView();
 		setContentView(activationView);
@@ -118,6 +123,8 @@ implements IActivationTaskCaller {
 		
 		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
 		osMessage.sendToTarget();
+		
+		applicationState.setActivated(activated);
 	}
 	
 	//-------------------------------------------------------------------------

@@ -24,7 +24,7 @@ implements IViewValidator {
 	//-------------------------------------------------------------------------
 	
 	/** Costco membership id pattern: 10 digits */
-	private static final String REGEX = "[0-9]{10}";
+	private static final String REGEX = "^(1|3|8)\\d{11}$";
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
