@@ -17,17 +17,18 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int costco_logo=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int repeat_bg=0x7f020002;
+        public static final int accept=0x7f020000;
+        public static final int costco_logo=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int repeat_bg=0x7f020003;
     }
     public static final class id {
-        public static final int btnActivateApp=0x7f070003;
-        public static final int etMembershipID=0x7f070002;
+        public static final int btnActivationActivate=0x7f070003;
+        public static final int etActivationMembershipID=0x7f070002;
         public static final int footer=0x7f070001;
         public static final int header=0x7f070000;
     }
@@ -37,17 +38,30 @@ public final class R {
         public static final int header_gradient=0x7f030002;
     }
     public static final class string {
-        public static final int activity_activation=0x7f050002;
-        /**  Global Application Strings 
+        public static final int activation_activate=0x7f040002;
+        public static final int activation_error_activatonFailed=0x7f040007;
+        public static final int activation_invalidMembershipField=0x7f040006;
+        public static final int activation_membershipid=0x7f040001;
+        public static final int activation_result=0x7f040003;
+        public static final int activation_success=0x7f040004;
+        /**  Activation form details 
          */
-        public static final int app_name=0x7f050000;
-        /**  UI: Buttons 
+        public static final int activation_title=0x7f040000;
+        public static final int activation_unsuccess=0x7f040005;
+        /**  Global Application Sources 
          */
-        public static final int button_activate=0x7f050003;
-        public static final int image_logo=0x7f050001;
-        /**  UI: Captions 
+        public static final int app_name=0x7f040008;
+        public static final int error_unspecified=0x7f04000a;
+        public static final int image_logo=0x7f040009;
+        public static final int ws_activation_memberid=0x7f04000f;
+        public static final int ws_activation_result=0x7f04000e;
+        /**  Web Service:  
          */
-        public static final int user_membershipid=0x7f050004;
+        public static final int ws_activation_validate=0x7f04000d;
+        public static final int ws_namespace=0x7f04000c;
+        /**  Web Service: Connection details 
+         */
+        public static final int ws_url=0x7f04000b;
     }
     public static final class style {
         /** 

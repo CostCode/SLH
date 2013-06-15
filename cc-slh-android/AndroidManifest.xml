@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="edu.cmu.cc.slh.activity.ActivationActivity"
-            android:label="@string/activity_activation" >
+            android:label="@string/activation_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

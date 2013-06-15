@@ -4,6 +4,8 @@
  */
 package edu.cmu.cc.slh;
 
+import android.app.Application;
+
 
 /**
  *  DESCRIPTION: This class is used to hold application data.
@@ -12,7 +14,7 @@ package edu.cmu.cc.slh;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public class ApplicationState {
+public class ApplicationState extends Application {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -36,7 +38,7 @@ public class ApplicationState {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-
+	
 	//-------------------------------------------------------------------------
 	// HELPER METHODS
 	//-------------------------------------------------------------------------

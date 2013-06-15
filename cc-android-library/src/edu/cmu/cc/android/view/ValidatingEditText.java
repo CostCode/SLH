@@ -60,7 +60,9 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 		
 		this.validator = validator;
 		this.fieldDisplayName = fieldDisplayName;
+		
 		initInputType(validator);
+		registerListerners();
 	}
 
 	@Override

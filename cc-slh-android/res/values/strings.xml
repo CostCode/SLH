@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Global Application Strings -->
+    <!-- Global Application Sources -->
     
     <string name="app_name">SLH</string>
     <string name="image_logo">Logo</string>
-    
-    <string name="activity_activation">Application Activation</string>
-    
-	
-	
-	
-	<!-- UI: Buttons -->
-	<string name="button_activate">Activate!</string>
-	
-	<!-- UI: Captions -->
-	<string name="user_membershipid">Costco Membership ID:</string>
+    <string name="error_unspecified">Unspecified error.</string>
 	
 </resources>

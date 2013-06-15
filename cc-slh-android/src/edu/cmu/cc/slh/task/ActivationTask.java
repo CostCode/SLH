@@ -12,7 +12,8 @@ import org.ksoap2.serialization.SoapObject;
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
 import edu.cmu.cc.android.service.soap.SoapWebService;
 import edu.cmu.cc.android.util.Logger;
-import edu.cmu.cc.slh.soap.SOAPContract;
+import edu.cmu.cc.slh.R;
+import android.content.Context;
 import android.os.AsyncTask;
 
 /**
@@ -33,6 +34,8 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
+	private Context ctx;
+	
 	private IActivationTaskCaller caller;
 	
 	private boolean errorState;
@@ -44,9 +47,10 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	/**
 	 * Constructor.
 	 */
-	public ActivationTask(IActivationTaskCaller caller) {
+	public ActivationTask(Context ctx, IActivationTaskCaller caller) {
 		super();
 		
+		this.ctx = ctx;
 		this.caller = caller;
 	}
 	
@@ -69,8 +73,9 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 		
 		errorState = false;
 		
-		SoapWebService service = new SoapWebService(SOAPContract.URL, 
-				SOAPContract.NAMESPACE);
+		
+		SoapWebService service = new SoapWebService(ctx.getString(R.string.ws_url), 
+				ctx.getString(R.string.ws_namespace));
 		
 		String membershipId = params[0];
 		
@@ -79,15 +84,15 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 				"[MEMBERSHIP ID: %s]", membershipId));
 		
 		Map<String, String> arguments = new HashMap<String, String>(1);
-		arguments.put(SOAPContract.Membership.MEMBERSHIP_ID, membershipId);
+		arguments.put(ctx.getString(R.string.ws_activation_memberid), membershipId);
 		
 		try {
 			
 			SoapObject result = service.invokeMethod(
-					SOAPContract.Membership.METHOD_VALIDATE, arguments);
+					ctx.getString(R.string.ws_activation_validate), arguments);
 			
 			String strResult = result.getProperty(
-					SOAPContract.Membership.VALIDATION_RESULT).toString();
+					ctx.getString(R.string.ws_activation_result)).toString();
 			
 			Boolean validationResult = Boolean.valueOf(strResult);
 			

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Activation form details -->
+    
+    <string name="activation_title">Application activation</string>
+    <string name="activation_membershipid">Membership ID</string>
+    <string name="activation_activate">Activate!</string>
+    <string name="activation_result">Activation result</string>
+    <string name="activation_success">Application was successfully activated. Now you are eligible to use all the provided functionlities</string>
+    <string name="activation_unsuccess">Application was NOT activated! Membership ID is not valid</string>
+    <string name="activation_invalidMembershipField">Attention! Value of the Membership ID is not correct</string>
+    
+    <string name="activation_error_activatonFailed">Application activation failed.\n\nError details have been logged.\n\nError message:\"%1$s\"\n\n</string>
+    
+</resources>

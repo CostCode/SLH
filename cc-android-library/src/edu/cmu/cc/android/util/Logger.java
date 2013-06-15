@@ -44,9 +44,8 @@ public class Logger {
 		Log.e(caller.getSimpleName(), message, t);
 	}
 	
-	public static void logErrorAndThrow(Class<?> caller, String message, 
-			Throwable t) {
-		logError(caller, message, t);
+	public static void logErrorAndThrow(Class<?> caller, Throwable t) {
+		logError(caller, t);
 		throw new RuntimeException(t);
 	}
 	

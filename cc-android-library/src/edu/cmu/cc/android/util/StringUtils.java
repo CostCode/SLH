@@ -2,43 +2,21 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.soap;
+package edu.cmu.cc.android.util;
 
 /**
- *  DESCRIPTION: This class provides common data names for both 
- *  android client and server applications.
+ *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 5, 2013
+ *  Date: Jun 14, 2013
  */
-public class SOAPContract {
+public class StringUtils {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 
-	
-	/** Web Service url */
-	public static final String URL = "http://shltestweb.appspot.com/shlappeng";
-	
-	/** Web Service namespace */
-	public static final String NAMESPACE = "http://costcode.mse.cmu.edu/";
-	
-	/**
-	 * User data descriptions.
-	 */
-	public static abstract class Membership {
-		
-		public static final String METHOD_VALIDATE = "validateMembership";
-		
-		public static final String VALIDATION_RESULT = "validateMembershipResult";
-		
-		public static final String MEMBERSHIP_ID = "membership_id";
-		
-	}
-	
-	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
@@ -54,6 +32,44 @@ public class SOAPContract {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
+	/**
+	 * Checks whether the given string is empty or null
+	 * @param value - a string to be validated
+	 * @return <b>true</b> - if the given string is null or empty, 
+	 * <b>false</b> - if not
+	 */
+	public static boolean isNullOrEmpty(String value) {
+		return value == null || value.isEmpty();
+	}
+	
+	/**
+	 * Limits the length of the string to the given max length and adds 
+	 * additional ending 
+	 * @param originalValue - a string to be limited
+	 * @param maxLength - maximum length of the final string
+	 * @param appendChars - a characters to be added to the end
+	 * @return limited string
+	 */
+	public static String limitLength(String originalValue, int maxLength, 
+			String appendChars) {
+		
+		if (originalValue == null) {
+			return "";
+		}
+		if (originalValue.length() <= maxLength) {
+			return originalValue;
+		}
+		if (appendChars == null) {
+			appendChars = "";
+		}
+		
+		String limitedValue = originalValue
+				.substring(0, maxLength - appendChars.length() - 1) 
+				+ appendChars;
+		
+		return limitedValue;
+	}
 
 	//-------------------------------------------------------------------------
 	// HELPER METHODS

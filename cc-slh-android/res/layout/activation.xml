@@ -53,9 +53,9 @@
 		              	android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:textColor="#372c24"
-		                android:text="@string/user_membershipid"/>
+		                android:text="@string/activation_membershipid"/>
 		          <EditText 
-		                android:id="@+id/etMembershipID"
+		                android:id="@+id/etActivationMembershipID"
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:layout_marginTop="5dip"
@@ -65,11 +65,11 @@
 		          
 		          <!-- Activate button -->
 		          <Button 
-		                android:id="@+id/btnActivateApp"
+		                android:id="@+id/btnActivationActivate"
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:layout_marginTop="10dip"
-		                android:text="@string/button_activate"/>
+		                android:text="@string/activation_activate"/>
 		          
 		</LinearLayout>
         <!-- END: Activation Form -->
