@@ -3,13 +3,13 @@
 
     <!-- Web Service: Connection details -->
     
-    <string name="ws_url">http://shltestweb.appspot.com/shlappeng</string>
-    <string name="ws_namespace">http://costcode.mse.cmu.edu/</string>
+    <string name="ws_url">http://slhwsapp-costcode.rhcloud.com:80/MemberWS</string>
+    <string name="ws_namespace">http://ws.biz.slh.cc.mse.cmu.edu/</string>
     
     <!-- Web Service:  -->
     
-    <string name="ws_activation_validate">activation-validate</string>
-    <string name="ws_activation_result">activation-result</string>
-    <string name="ws_activation_memberid">activation-memberid</string>
+    <string name="ws_activation_validate">validateMembership</string>
+    <string name="ws_activation_result">validity</string>
+    <string name="ws_activation_memberid">membershipID</string>
     
 </resources>

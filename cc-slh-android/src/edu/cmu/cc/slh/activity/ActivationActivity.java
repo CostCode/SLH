@@ -79,6 +79,10 @@ implements IActivationTaskCaller {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
+	public ActivationViewAdapter getActivationViewAdapter() {
+		return activationViewAdapter;
+	}
 
 	@Override
 	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
