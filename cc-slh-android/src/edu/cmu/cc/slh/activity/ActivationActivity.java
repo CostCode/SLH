@@ -11,6 +11,7 @@ import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.adapter.ActivationAdapter;
 import edu.cmu.cc.slh.task.ActivationTask;
 import edu.cmu.cc.slh.task.ActivationTask.IActivationTaskCaller;
 import edu.cmu.cc.slh.view.adapter.ActivationViewAdapter;
@@ -62,9 +63,12 @@ implements IActivationTaskCaller {
 		
 		applicationState = (ApplicationState) getApplication();
 		
+		if (ActivationAdapter.retrieveActivationStatus(applicationState)) {
+			showMainActivity();
+		}
+		
 		activationView = initializeView();
 		setContentView(activationView);
-		
 		activationViewAdapter = new ActivationViewAdapter(activationView);
 		
 		initializeButtons();
@@ -79,6 +83,10 @@ implements IActivationTaskCaller {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
+	public View getActivationView() {
+		return activationView;
+	}
 	
 	public ActivationViewAdapter getActivationViewAdapter() {
 		return activationViewAdapter;
@@ -98,7 +106,8 @@ implements IActivationTaskCaller {
 						new DialogInterface.OnClickListener() {
 							
 							@Override
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog, 
+									int which) {
 								ActivationActivity.this.finish();
 							}
 						};
@@ -136,7 +145,7 @@ implements IActivationTaskCaller {
 		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
 		osMessage.sendToTarget();
 		
-		applicationState.setActivated(activated);
+		ActivationAdapter.persistActivationStatus(applicationState, activated);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -206,6 +215,12 @@ implements IActivationTaskCaller {
 		View view = inflater.inflate(R.layout.activation, null);
 		
 		return view;
+	}
+	
+	
+	private void showMainActivity() {
+		//TODO: Show main activity here
+		this.finish();
 	}
 	
 

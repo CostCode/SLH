@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh;
 
-import edu.cmu.cc.android.util.SharedPrefsAdapter;
 import android.app.Application;
 
 
@@ -21,13 +20,10 @@ public class ApplicationState extends Application {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static final String ACTIVATED = "activated";
-
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -41,20 +37,6 @@ public class ApplicationState extends Application {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-	
-	public void setActivated(boolean activated) {
-		
-		SharedPrefsAdapter
-			.persist(this, ACTIVATED, String.valueOf(activated));
-	}
-	
-	public boolean isActivated() {
-		
-		String strActivated = 
-				SharedPrefsAdapter.retrieve(this, ACTIVATED);
-		
-		return Boolean.parseBoolean(strActivated);
-	}
 	
 	//-------------------------------------------------------------------------
 	// HELPER METHODS

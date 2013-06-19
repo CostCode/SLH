@@ -7,13 +7,14 @@ package edu.cmu.cc.slh.activity.test;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.ActivationActivity;
+import edu.cmu.cc.slh.adapter.ActivationAdapter;
 import edu.cmu.cc.slh.view.adapter.ActivationViewAdapter;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.EditText;
 
 /**
- *  DESCRIPTION: 
+ *  DESCRIPTION: Activation activity test class
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
@@ -43,13 +44,14 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 	public ActivationActivityTest() {
 		super(ActivationActivity.class);
 	}
-
-	
 	
 	//-------------------------------------------------------------------------
 	// TEST METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * This will be called before each test method.
+	 */
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -66,8 +68,15 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 		viewValues = new String[] {"123456789012"};
 	}
 	
+	/**
+	 * Testing Initial conditions
+	 */
 	public void testPreConditions() {
-		assertFalse(applicationState.isActivated());
+		//-----------------------------------------------
+		// Initially, user app is not activated
+		//-----------------------------------------------
+		assertFalse(ActivationAdapter
+				.retrieveActivationStatus(applicationState));
 	}
 	
 	@UiThreadTest
@@ -97,6 +106,22 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 		assertFalse(isViewValid());
 	}
 	
+	@UiThreadTest
+	public void testStateDestroyedAndCreated() {
+		
+		assignViewValues(viewValues);
+		
+		String membershipIDBefore = ActivationViewAdapter
+				.getMembershipID(activationActivity.getActivationView());
+		 
+		activationActivity.finish();
+		activationActivity = getActivity();
+		
+		String membershipIDAfter = ActivationViewAdapter
+				.getMembershipID(activationActivity.getActivationView());
+		
+		assertEquals(membershipIDBefore, membershipIDAfter);
+	}
 	
 	//-------------------------------------------------------------------------
 	// HELPER METHODS
