@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<endpoints  
+  xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"  
+  version="2.0">  
+  <endpoint  
+      name="FloorPlanWS"  
+      implementation="edu.cmu.mse.cc.slh.biz.ws.FloorPlanWS"  
+      url-pattern="/FloorPlanWS"/> 
+  <endpoint  
+      name="MemberWS"  
+      implementation="edu.cmu.mse.cc.slh.biz.ws.MemberWS"  
+      url-pattern="/MemberWS"/>
+</endpoints>
