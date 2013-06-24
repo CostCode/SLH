@@ -16,15 +16,15 @@ import edu.cmu.cc.slh.R;
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 19, 2013
+ *  Date: Jun 21, 2013
  */
-public class ActivationAdapter {
+public class ShoppingListAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_ACTIVATION_STATUS = "activation-status";
+	private static String KEY_SHOPPINGLISTS_VERSION = "shoppinglists-version";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -42,66 +42,63 @@ public class ActivationAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistActivationStatus(boolean status) {
+	public static synchronized boolean persistVersion(int version) {
 		
 		return saveToSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS, String.valueOf(status));
+				KEY_SHOPPINGLISTS_VERSION, String.valueOf(version), 
+				R.string.shoppinglist_all_error_versionPersist);
 	}
 	
-	public static boolean retrieveActivationStatus() {
+	public static int retrieveVersion() {
 		
-		return retrieveFromSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS);
+		String strValue = retrieveFromSharedPrefs(ApplicationState.getContext(), 
+				KEY_SHOPPINGLISTS_VERSION, 
+				R.string.shoppinglist_all_error_versionRetrieve);
+		
+		return Integer.parseInt(strValue);
 	}
+	
+	
 
 	//-------------------------------------------------------------------------
-	// HELPER METHODS
+	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
 	private static boolean saveToSharedPrefs(Context ctx, 
-			String key, String value) {
+			String key, String value, int errMsgResID) {
 		
 		try {
 			
 			return SharedPrefsAdapter.persist(ctx, key, value);
 			
 		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_persist, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
+			String errMsg = getErrorMessage(ctx, errMsgResID, t);
+			Logger.logErrorAndAlert(ctx, ShoppingListAdapter.class, errMsg, t);
 		}
 		
 		return false;
 	}
 	
-	private static boolean retrieveFromSharedPrefs(Context ctx, String key) {
+	private static String retrieveFromSharedPrefs(Context ctx, String key, 
+			int errMsgResID) {
 		
 		try {
 			
-			String strValue = SharedPrefsAdapter.retrieve(ctx, key);
-			
-			if (!StringUtils.isNullOrEmpty(strValue)) {
-				return Boolean.valueOf(strValue);
-			}
+			return SharedPrefsAdapter.retrieve(ctx, key);
 			
 		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_retrieve, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
+			String errMsg = getErrorMessage(ctx, errMsgResID, t);
+			Logger.logErrorAndAlert(ctx, ShoppingListAdapter.class, errMsg, t);
 		}
 		
-		return false;
+		return null;
 	}
 	
 	private static String getErrorMessage(Context ctx, 
-			int errMessageResID, Throwable t) {
+			int errMsgResID, Throwable t) {
 		
 		return StringUtils.limitLength(
-				ctx.getString(errMessageResID, t.getMessage()), 200, "...");
+				ctx.getString(errMsgResID, t.getMessage()), 200, "...");
 	}
 
 }

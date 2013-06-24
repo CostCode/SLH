@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Shopping list -->
+    
+    <string name="shoppinglist_name">Name</string>
+    <string name="shoppinglist_date">Date</string>
+    <string name="shoppinglist_comments">Comments</string>
+    
+    <string name="shoppinglist_delete">Delete</string>
+    
+    <!-- Shopping lists -->
+    
+    <string name="shoppinglist_all_title">All Shopping lists</string>
+    <string name="shoppinglist_all_error_versionPersist">Cannot store shopping lists version.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
+    <string name="shoppinglist_all_error_versionRetrieve">Cannot retrieve shopping lists version.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
+    <string name="shoppinglist_all_error_fetch">Shopping lists fetching failed.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
+    
+    <string name="shoppinglist_all_add">Add new shopping list</string>
+    
+    <string name="shoppinglist_all_progressDialogText">Loading. Please wait&#8230;</string>
+    
+</resources>

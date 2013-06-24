@@ -22,8 +22,8 @@
         android:name="edu.cmu.cc.slh.ApplicationState"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name">
+        
         <activity
             android:name="edu.cmu.cc.slh.activity.ActivationActivity"
             android:label="@string/activation_title" >
@@ -32,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity 
+            android:name="edu.cmu.cc.slh.activity.ShoppingListsActivity" 
+            android:label="@string/shoppinglist_all_title"/>
+        
     </application>
 
 </manifest>

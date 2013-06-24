@@ -56,7 +56,7 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	
 	
 	//-------------------------------------------------------------------------
-	// HELPER METHODS
+	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
@@ -89,11 +89,11 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 		
 		try {
 			
-			SoapObject result = service.invokeMethod(
+			SoapObject soapResponse = service.invokeMethod(
 					ctx.getString(R.string.ws_activation_validate), arguments);
 			
-			String strResult = result.getProperty(
-					ctx.getString(R.string.ws_activation_result)).toString();
+			String strResult = soapResponse.getProperty(
+					ctx.getString(R.string.ws_activation_validity)).toString();
 			
 			Boolean validationResult = Boolean.valueOf(strResult);
 			
@@ -105,10 +105,10 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 		} catch (Exception e) {
 			errorState = true;
 			caller.onAsyncTaskFailed(this.getClass(), e);
-			return null;
 		}
 		
-	}//doInBackground
+		return null;
+	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) {

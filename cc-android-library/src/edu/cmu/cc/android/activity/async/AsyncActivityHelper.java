@@ -38,7 +38,15 @@ public class AsyncActivityHelper {
 	//-------------------------------------------------------------------------
 
 	/**
-	 * Display progress dialog
+	 * Display progress dialog without title
+	 */
+	public void showProgressDialog(int textResID) {
+		dialog = ProgressDialog
+				.show(ctx, null, ctx.getString(textResID), true);
+	}
+	
+	/**
+	 * Display progress dialog with title
 	 */
 	public void showProgressDialog(int titleResID, int textResID) {
 		dialog = ProgressDialog.show(ctx, 

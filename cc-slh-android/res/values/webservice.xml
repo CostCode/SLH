@@ -6,10 +6,15 @@
     <string name="ws_url">http://slhwsapp-costcode.rhcloud.com:80/MemberWS</string>
     <string name="ws_namespace">http://ws.biz.slh.cc.mse.cmu.edu/</string>
     
-    <!-- Web Service:  -->
+    <!-- Web Service: Activation -->
     
     <string name="ws_activation_validate">validateMembership</string>
-    <string name="ws_activation_result">validity</string>
+    <string name="ws_activation_validity">validity</string>
     <string name="ws_activation_memberid">membershipID</string>
+    
+    <!-- Web Service: Shopping Lists  -->
+    
+    <string name="ws_shoppinglists_retrieveVersion">retrieveVersion</string>
+    <string name="ws_shoppinglists_version">version</string>
     
 </resources>

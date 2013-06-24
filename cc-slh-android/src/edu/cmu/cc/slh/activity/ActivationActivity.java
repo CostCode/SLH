@@ -9,7 +9,6 @@ import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
-import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.adapter.ActivationAdapter;
 import edu.cmu.cc.slh.task.ActivationTask;
@@ -17,6 +16,7 @@ import edu.cmu.cc.slh.task.ActivationTask.IActivationTaskCaller;
 import edu.cmu.cc.slh.view.adapter.ActivationViewAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,8 +47,6 @@ implements IActivationTaskCaller {
 	
 	private View activationView;
 	
-	private ApplicationState applicationState;
-	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -61,9 +59,7 @@ implements IActivationTaskCaller {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		applicationState = (ApplicationState) getApplication();
-		
-		if (ActivationAdapter.retrieveActivationStatus(applicationState)) {
+		if (ActivationAdapter.retrieveActivationStatus()) {
 			showMainActivity();
 		}
 		
@@ -129,6 +125,20 @@ implements IActivationTaskCaller {
 			@Override
 			public void run() {
 				
+				DialogInterface.OnClickListener dialogListener =
+						new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, 
+									int which) {
+								
+								if (activated) {
+									showMainActivity();
+								}
+								dialog.dismiss();
+							}
+						};
+				
 				int resultMsgResID = (activated) 
 						? R.string.activation_success 
 						: R.string.activation_unsuccess;
@@ -136,7 +146,7 @@ implements IActivationTaskCaller {
 				AlertDialog dialog = WidgetUtils.createOkAlertDialog(
 						ActivationActivity.this, R.drawable.accept, 
 						R.string.activation_result, 
-						getString(resultMsgResID));
+						getString(resultMsgResID), dialogListener);
 				
 				dialog.show();
 			}
@@ -145,7 +155,7 @@ implements IActivationTaskCaller {
 		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
 		osMessage.sendToTarget();
 		
-		ActivationAdapter.persistActivationStatus(applicationState, activated);
+		ActivationAdapter.persistActivationStatus(activated);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -219,8 +229,8 @@ implements IActivationTaskCaller {
 	
 	
 	private void showMainActivity() {
-		//TODO: Show main activity here
-		this.finish();
+		Intent intent = new Intent(this, ShoppingListsActivity.class);
+		startActivity(intent);
 	}
 	
 

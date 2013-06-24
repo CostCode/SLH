@@ -56,6 +56,17 @@ public class DeviceUtils {
 		return connected;
 	}
 	
+	public static boolean isNetworkConnectedElseAlert(Context ctx, 
+			Class<?> caller, int msgResID) {
+		
+		boolean connected = isNetworkConnected(ctx);
+		if (!connected) {
+			Logger.logErrorAndAlert(ctx, caller, ctx.getString(msgResID));
+		}
+		
+		return connected;
+	}
+	
 	/**
 	 * Checks whether the device is connected to the Network.
 	 * @param ctx - android context

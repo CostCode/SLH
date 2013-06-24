@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.activity.test;
 
-import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.ActivationActivity;
 import edu.cmu.cc.slh.adapter.ActivationAdapter;
@@ -33,8 +32,6 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 	
 	private ActivationActivity activationActivity;
 	
-	private ApplicationState applicationState;
-	
 	private String[] viewValues;
 
 	//-------------------------------------------------------------------------
@@ -58,9 +55,6 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 		
 		activationActivity = getActivity();
 		
-		applicationState = 
-				(ApplicationState) activationActivity.getApplication();
-		
 		//-----------------------------------------------
 		// Assigning valid Costco membership id value:
 		// 12 digits, starting from 1,3, or 8.
@@ -76,7 +70,7 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 		// Initially, user app is not activated
 		//-----------------------------------------------
 		assertFalse(ActivationAdapter
-				.retrieveActivationStatus(applicationState));
+				.retrieveActivationStatus());
 	}
 	
 	@UiThreadTest
