@@ -25,9 +25,9 @@ import javax.sql.DataSource;
  * @version 1.0.0. 21 Jun 2013
  * @author M. A. Riveros T.
  */
-public class ConnectionUtil {
+public class ResourceUtil {
 
-	private final static Logger LOGGER = Logger.getLogger(ConnectionUtil.class
+	private final static Logger LOGGER = Logger.getLogger(ResourceUtil.class
 			.getSimpleName());
 
 	private final static String JNDI_NAME = "java:comp/env/jdbc/MysqlDS";

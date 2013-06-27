@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
-import edu.cmu.mse.cc.slh.integration.dao.util.ConnectionUtil;
+import edu.cmu.mse.cc.slh.integration.dao.util.ResourceUtil;
 
 /**
  * DAO for Section entity.
@@ -49,7 +49,7 @@ public class SectionDAO {
 		ResultSet resultSet = null;
 
 		try {
-			connection = ConnectionUtil.getConnection();
+			connection = ResourceUtil.getConnection();
 			statement = connection.createStatement();
 			String query = "SELECT " + "SID, " + "MID, " + "CID, "
 					+ "XCoordinates, " + "YCoordinates " + "FROM "
@@ -76,7 +76,7 @@ public class SectionDAO {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeResources(resultSet, statement, connection);
+			ResourceUtil.closeResources(resultSet, statement, connection);
 		}
 
 		return sections;

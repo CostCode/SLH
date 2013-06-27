@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
-import edu.cmu.mse.cc.slh.integration.dao.util.ConnectionUtil;
+import edu.cmu.mse.cc.slh.integration.dao.util.ResourceUtil;
 
 /**
  * DAO for Floor plan entity.
@@ -49,7 +49,7 @@ public class FloorPlanDAO {
 		ResultSet resultSet = null;
 
 		try {
-			connection = ConnectionUtil.getConnection();
+			connection = ResourceUtil.getConnection();
 			statement = connection.createStatement();
 			String query = "SELECT " + "version " + "FROM " + "TBL_FloorMaps "
 					+ "WHERE " + "WID = " + warehouseID;
@@ -68,7 +68,7 @@ public class FloorPlanDAO {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
 			e.printStackTrace();
 		} finally {
-			ConnectionUtil.closeResources(resultSet, statement, connection);
+			ResourceUtil.closeResources(resultSet, statement, connection);
 		}
 
 		return version;
