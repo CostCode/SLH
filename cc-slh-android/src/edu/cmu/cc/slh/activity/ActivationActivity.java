@@ -61,6 +61,7 @@ implements IActivationTaskCaller {
 		
 		if (ActivationAdapter.retrieveActivationStatus()) {
 			showMainActivity();
+			this.finish();
 		}
 		
 		activationView = initializeView();
@@ -209,7 +210,7 @@ implements IActivationTaskCaller {
 							+ taskClass.toString()));
 		}
 		
-		return StringUtils.limitLength(
+		return StringUtils.getLimitedString(
 				getString(msgResID, t.getMessage()), 200, "...");
 	}
 	
@@ -227,11 +228,12 @@ implements IActivationTaskCaller {
 		return view;
 	}
 	
-	
+	/**
+	 * Shows ShoppingListsActivity
+	 */
 	private void showMainActivity() {
 		Intent intent = new Intent(this, ShoppingListsActivity.class);
 		startActivity(intent);
 	}
-	
 
 }

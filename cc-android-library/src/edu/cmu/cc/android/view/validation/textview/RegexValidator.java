@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-import edu.cmu.cc.android.R;
 import edu.cmu.cc.android.view.validation.IViewValidator;
 
 /**
@@ -21,7 +20,7 @@ import edu.cmu.cc.android.view.validation.IViewValidator;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public class RegexValidator implements IViewValidator {
+public abstract class RegexValidator implements IViewValidator {
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -57,10 +56,10 @@ public class RegexValidator implements IViewValidator {
 		return matcher.matches();
 	}
 
-	@Override
-	public String getErrorMessage(String caption) {
-		return ctx.getString(R.string.validation_regex, caption, 
-				pattern.toString());
-	}
+//	@Override
+//	public String getErrorMessage(String caption) {
+//		return ctx.getString(R.string.validation_regex, caption, 
+//				pattern.toString());
+//	}
 	
 }

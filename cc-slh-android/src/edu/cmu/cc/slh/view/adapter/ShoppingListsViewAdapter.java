@@ -7,6 +7,7 @@ package edu.cmu.cc.slh.view.adapter;
 import java.text.DateFormat;
 import java.util.List;
 
+import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.ShoppingList;
 import android.content.Context;
@@ -29,6 +30,8 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
+	
+	private static final String DATE_PATTERN = "yyyy-MM-dd";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -103,6 +106,8 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 		
 		viewHolder.getNameView().setText(sl.getName());
 		viewHolder.getDateView().setText(dateFormat.format(sl.getDate()));
+		viewHolder.getDateView().setText(
+				StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
 		customizeDeleteImage(viewHolder.getDeleteView());
 	}
 	

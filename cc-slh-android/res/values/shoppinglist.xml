@@ -8,6 +8,11 @@
     <string name="shoppinglist_comments">Comments</string>
     
     <string name="shoppinglist_delete">Delete</string>
+    <string name="shoppinglist_save">Save</string>
+    <string name="shoppinglist_cancel">Cancel</string>
+    
+    <string name="shoppinglist_save_success">Shopping list was saved</string>
+    <string name="shoppinglist_save_invalidFields">Cannot save. Fields are not correctly filled!</string>
     
     <!-- Shopping lists -->
     

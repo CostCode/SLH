@@ -97,7 +97,7 @@ public class ShoppingListAdapter {
 	private static String getErrorMessage(Context ctx, 
 			int errMsgResID, Throwable t) {
 		
-		return StringUtils.limitLength(
+		return StringUtils.getLimitedString(
 				ctx.getString(errMsgResID, t.getMessage()), 200, "...");
 	}
 

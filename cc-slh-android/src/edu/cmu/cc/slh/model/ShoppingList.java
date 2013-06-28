@@ -38,6 +38,12 @@ public class ShoppingList extends BaseEntity {
 	
 	
 	public ShoppingList() {}
+	
+	public ShoppingList(String name, Date date, String description) {
+		this.name = name;
+		this.date = date;
+		this.description = description;
+	}
 
 	
 	//-------------------------------------------------------------------------

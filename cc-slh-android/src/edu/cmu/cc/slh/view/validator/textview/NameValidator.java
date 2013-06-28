@@ -2,11 +2,11 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.android.view.validation.textview;
+package edu.cmu.cc.slh.view.validator.textview;
 
 import android.content.Context;
-import edu.cmu.cc.android.R;
-import edu.cmu.cc.android.view.validation.IViewValidator;
+import edu.cmu.cc.android.view.validation.textview.TextValidator;
+import edu.cmu.cc.slh.R;
 
 /**
  *  DESCRIPTION: Custom validator that validates Costco membership id.
@@ -16,15 +16,14 @@ import edu.cmu.cc.android.view.validation.IViewValidator;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public class MembershipValidator extends RegexValidator 
-implements IViewValidator {
+public class NameValidator extends TextValidator {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	/** Costco membership id pattern: 10 digits */
-	private static final String REGEX = "^(1|3|8)\\d{11}$";
+	/** Name pattern */
+	private static final String REGEX = "^[a-z0-9_- ]{3,20}$";
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -34,7 +33,7 @@ implements IViewValidator {
 	 * Constructor.
 	 * @param ctx - android context
 	 */
-	public MembershipValidator(Context ctx) {
+	public NameValidator(Context ctx) {
 		super(ctx, REGEX);
 	}
 
@@ -44,7 +43,7 @@ implements IViewValidator {
 	
 	@Override
 	public String getErrorMessage(String caption) {
-		return ctx.getString(R.string.validation_membership, caption);
+		return ctx.getString(R.string.validation_name, caption);
 	}
 	
 }

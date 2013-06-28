@@ -4,20 +4,28 @@
  */
 package edu.cmu.cc.slh.activity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import edu.cmu.cc.android.activity.async.AbstractAsyncListActivity;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.dialog.ShoppingListDialog;
+import edu.cmu.cc.slh.dialog.ShoppingListDialog.IShoppingListDialogCaller;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.task.FetchShoppingListsTask;
 import edu.cmu.cc.slh.task.FetchShoppingListsTask.IFetchShoppingListsTaskCaller;
@@ -30,8 +38,9 @@ import edu.cmu.cc.slh.view.adapter.ShoppingListsViewAdapter;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
+@SuppressLint("UseSparseArrays")
 public class ShoppingListsActivity extends AbstractAsyncListActivity
-implements IFetchShoppingListsTaskCaller {
+implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -52,6 +61,11 @@ implements IFetchShoppingListsTaskCaller {
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
+	
+	@Override
+	public ShoppingListsViewAdapter getListAdapter() {
+		return (ShoppingListsViewAdapter) super.getListAdapter();
+	}
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -72,14 +86,11 @@ implements IFetchShoppingListsTaskCaller {
 	}
 	
 	@Override
-	public ShoppingListsViewAdapter getListAdapter() {
-		return (ShoppingListsViewAdapter) super.getListAdapter();
-	}
-
-	@Override
 	public void onFetchShoppingListsTaskSucceeded(List<ShoppingList> list) {
 		
-		setListAdapter(list);
+		ApplicationState.getInstance().setShoppingLists(list);
+		
+		refreshGUI();
 	}
 	
 	@Override
@@ -130,6 +141,32 @@ implements IFetchShoppingListsTaskCaller {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		if (item.getTitle().equals(getString(R.string.shoppinglist_all_add))) {
+			ShoppingList newSL = new ShoppingList(
+					null, new Date(System.currentTimeMillis()), null);
+			showShoppingListDialog(newSL);
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public void onShoppingListSaved() {
+		
+		Runnable callback = new Runnable() {
+			
+			@Override
+			public void run() {
+				fetchShoppingLists();
+			}
+		};
+		
+		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
+		osMessage.sendToTarget();
+	}
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
@@ -141,17 +178,19 @@ implements IFetchShoppingListsTaskCaller {
 		MenuItem menuItem = menuItems.get(menuItemTitleResID);
 		menuItem.setVisible(visible);
 		menuItem.setEnabled(enabled);
-	}
-
-	private void setListAdapter(List<ShoppingList> list) {
-		setListAdapter(new ShoppingListsViewAdapter(this, list));
+		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM 
+				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 	
-	private void fetchShoppingLists() {
-		boolean fetched = (getListAdapter() != null);
-		if (!fetched) {
-			new FetchShoppingListsTask(this, this).execute();
-		}
+	/**
+	 * Displays a detail shopping list dialog
+	 */
+	private void showShoppingListDialog(ShoppingList sl) {
+		
+		ApplicationState.getInstance().setShoppingList(sl);
+		
+		DialogFragment slDialog = ShoppingListDialog.newInstance(this, this);
+		slDialog.show(getFragmentManager(), null);
 	}
 	
 	private String getAsyncTaskFailedMessage(Class<?> taskClass, Throwable t) {
@@ -166,8 +205,52 @@ implements IFetchShoppingListsTaskCaller {
 							+ taskClass.toString()));
 		}
 		
-		return StringUtils.limitLength(
+		return StringUtils.getLimitedString(
 				getString(msgResID, t.getMessage()), 200, "...");
 	}
 
+	private void fetchShoppingLists() {
+		new FetchShoppingListsTask(this, this).execute();
+	}
+
+	/**
+	 * Setting the shopping lists adapter
+	 */
+	private void setListAdapter() {
+		
+		List<ShoppingList> list = 
+				ApplicationState.getInstance().getShoppingLists();
+		
+		setListAdapter(new ShoppingListsViewAdapter(this, list));
+	}
+	
+	/**
+	 * Initializes list click capability
+	 */
+	private void prepareListClick() {
+		
+		getListView().setOnItemClickListener(
+				new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, 
+					int position, long id) {
+				
+				ShoppingList sl = 
+						(ShoppingList) getListAdapter().getItem(position);
+				
+				showShoppingListDialog(sl);
+			}
+		});
+	}
+	
+	/*
+	 * Update activity UI
+	 */
+	private void refreshGUI() {
+		setListAdapter();
+		onContentChanged();
+		prepareListClick();
+	}
+	
 }

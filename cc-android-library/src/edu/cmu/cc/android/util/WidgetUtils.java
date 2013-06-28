@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  *  DESCRIPTION: Helper class for managing Android UI widgets
@@ -26,8 +27,18 @@ public class WidgetUtils {
 	//-------------------------------------------------------------------------
 	
 	/**
+	 * Retrieve EditText widget from the parent view
+	 * @param parentView - parent view
+	 * @param id - id of the widget
+	 * @return Requested EditText widget
+	 */
+	public static EditText getEditText(View parentView, int id) {
+		return (EditText) parentView.findViewById(id);
+	}
+	
+	/**
 	 * Get the text of the EditText by parent view and id
-	 * @param parentView
+	 * @param parentView - parent view
 	 * @param id - id of the widget
 	 * @return text of the requested EditText
 	 */
@@ -36,13 +47,23 @@ public class WidgetUtils {
 	}
 	
 	/**
-	 * Retrieve EditText widget from the parent view
-	 * @param parentView
+	 * Retrieve TextView widget from the parent view
+	 * @param parentView - parent view
 	 * @param id - id of the widget
-	 * @return Requested widget
+	 * @return Requested TextView widget
 	 */
-	public static EditText getEditText(View parentView, int id) {
-		return (EditText) parentView.findViewById(id);
+	public static TextView getTextView(View parentView, int id) {
+		return (TextView) parentView.findViewById(id);
+	}
+	
+	/**
+	 * Get the text of the TextView by parent view and id
+	 * @param parentView - parent view
+	 * @param id - id of the widget
+	 * @return text of the requested TextView
+	 */
+	public static String getTextViewAsString(View parentView, int id) {
+		return getTextView(parentView, id).getText().toString();
 	}
 	
 	

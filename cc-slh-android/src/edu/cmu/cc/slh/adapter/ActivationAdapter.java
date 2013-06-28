@@ -100,7 +100,7 @@ public class ActivationAdapter {
 	private static String getErrorMessage(Context ctx, 
 			int errMessageResID, Throwable t) {
 		
-		return StringUtils.limitLength(
+		return StringUtils.getLimitedString(
 				ctx.getString(errMessageResID, t.getMessage()), 200, "...");
 	}
 

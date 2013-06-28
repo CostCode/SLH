@@ -4,6 +4,11 @@
  */
 package edu.cmu.cc.android.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  *  DESCRIPTION: 
  *	
@@ -16,7 +21,7 @@ public class StringUtils {
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
-
+	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
@@ -32,6 +37,37 @@ public class StringUtils {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
+	/**
+	 * Converts date into formatted string
+	 * @param date - date to be converted
+	 * @param pattern - pattern of the string representation
+	 * @return string representation of the date
+	 */
+	public static String getDateAsString(Date date, final String pattern) {
+		
+		return new SimpleDateFormat(pattern, Locale.US).format(date);
+	}
+	
+	/**
+	 * Parses a date object from the string data
+	 * @param strDate - string data
+	 * @param pattern - date pattern
+	 * @return date object
+	 */
+	public static Date getDateFromString(final String strDate, 
+			final String pattern) {
+		
+		Date date = null;
+		try {
+			date = new SimpleDateFormat(pattern, Locale.US).parse(strDate);
+		} catch (ParseException e) {
+			Logger.logError(StringUtils.class, "Cannot parse string date: " 
+					+ strDate, e);
+		}
+		
+		return date;
+	}
 	
 	/**
 	 * Checks whether the given string is empty or null
@@ -51,7 +87,7 @@ public class StringUtils {
 	 * @param appendChars - a characters to be added to the end
 	 * @return limited string
 	 */
-	public static String limitLength(String originalValue, int maxLength, 
+	public static String getLimitedString(String originalValue, int maxLength, 
 			String appendChars) {
 		
 		if (originalValue == null) {
