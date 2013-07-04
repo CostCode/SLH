@@ -5,8 +5,12 @@
         \&#34;%1$s\&#34; must start with (1, 3, or 8) and contain 12 digits in total
     </string>
     
-    <string name="validation_name">
-        \&#34;%1$s\&#34; should contain only letters, numbers, space and underscore
+    <string name="validation_shoppinglist_name">
+        \&#34;%1$s\&#34; should contain between 3 and 10 characters
+    </string>
+    
+    <string name="validation_shoppinglist_comment">
+        \&#34;%1$s\&#34; should contain no more than 20 characters
     </string>
     
 </resources>

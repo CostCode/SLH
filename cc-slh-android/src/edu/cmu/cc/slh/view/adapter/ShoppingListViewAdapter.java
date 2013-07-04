@@ -5,7 +5,6 @@
 package edu.cmu.cc.slh.view.adapter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -16,9 +15,10 @@ import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.android.view.IValidatingView;
 import edu.cmu.cc.android.view.validation.IViewValidator;
+import edu.cmu.cc.android.view.validation.textview.RegexValidator;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.ShoppingList;
-import edu.cmu.cc.slh.view.validator.textview.NameValidator;
 
 /**
  *  DESCRIPTION: 
@@ -32,6 +32,8 @@ public class ShoppingListViewAdapter {
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
+	
+	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 	
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -52,7 +54,10 @@ public class ShoppingListViewAdapter {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
-	public static void updateView(View view, ShoppingList sl) {
+	public static void updateView(View view) {
+		
+		ShoppingList sl = 
+				ApplicationState.getInstance().getShoppingList();
 		
 		WidgetUtils.getEditText(view, R.id.etShoppingListName)
 			.setText(sl.getName());
@@ -60,24 +65,24 @@ public class ShoppingListViewAdapter {
 			.setText(sl.getDescription());
 		
 		WidgetUtils.getTextView(view, R.id.tvShoppingListDate)
-			.setText(StringUtils.getDateAsString(sl.getDate(), "yyyy-MM-dd"));
+			.setText(StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
 		WidgetUtils.getTextView(view, R.id.tvShoppingListDate)
 			.setTag(sl.getDate());
 	}
 	
 	
-	public static ShoppingList fromView(View shoppingListView) {
+	public static void updateModel(View view) {
 		
-		String name = WidgetUtils.getEditTextAsString(shoppingListView, 
-				R.id.etShoppingListName);
+		ShoppingList sl = 
+				ApplicationState.getInstance().getShoppingList();
 		
-		String comments = WidgetUtils.getEditTextAsString(shoppingListView, 
-				R.id.etShoppingListComments);
+		sl.setName(WidgetUtils
+				.getEditTextAsString(view, R.id.etShoppingListName));
 		
-		Date date = (Date) WidgetUtils.getTextView(
-				shoppingListView, R.id.tvShoppingListDate).getTag();
+		sl.setDescription(WidgetUtils
+				.getEditTextAsString(view, R.id.etShoppingListComments));
 		
-		return new ShoppingList(name, date, comments);
+		ApplicationState.getInstance().setShoppingList(sl);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -144,10 +149,10 @@ public class ShoppingListViewAdapter {
 		synchronized (validatingViews) {
 			assignValidatorToView(parentView, R.id.etShoppingListName, 
 					R.string.shoppinglist_name, 
-					new NameValidator(ctx));
+					new RegexValidator(ctx, ".{3,10}", R.string.validation_shoppinglist_name));
 			assignValidatorToView(parentView, R.id.etShoppingListComments, 
 					R.string.shoppinglist_comments, 
-					new NameValidator(ctx));
+					new RegexValidator(ctx, ".{0,20}", R.string.validation_shoppinglist_comment));
 		}
 	}
 	

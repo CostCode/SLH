@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  *  DESCRIPTION: 
@@ -46,7 +47,14 @@ public class StringUtils {
 	 */
 	public static String getDateAsString(Date date, final String pattern) {
 		
-		return new SimpleDateFormat(pattern, Locale.US).format(date);
+		if (date == null || isNullOrEmpty(pattern)) {
+			return null;
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.US);
+		sdf.setTimeZone(TimeZone.getDefault());
+		
+		return sdf.format(date);
 	}
 	
 	/**

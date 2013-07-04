@@ -4,10 +4,10 @@
 	    <item name="android:background">@drawable/ellipse</item>
 	    <item name="android:layout_width">fill_parent</item>
 	    <item name="android:layout_height">wrap_content</item>
-	    <item name="android:layout_weight">1</item>
+	    <item name="android:layout_weight">2</item>
 	    <item name="android:paddingLeft">5dip</item>
 	    <item name="android:textSize">18sp</item>
 	    <item name="android:textStyle">bold|italic</item>
 	</style>
-
+	
 </resources>

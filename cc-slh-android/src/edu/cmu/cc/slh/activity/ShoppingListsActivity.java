@@ -24,6 +24,7 @@ import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.dao.ShoppingListDAO;
 import edu.cmu.cc.slh.dialog.ShoppingListDialog;
 import edu.cmu.cc.slh.dialog.ShoppingListDialog.IShoppingListDialogCaller;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -154,7 +155,12 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 	}
 	
 	@Override
-	public void onShoppingListSaved() {
+	public void onShoppingListUpdated() {
+		
+		ShoppingList sl = 
+				ApplicationState.getInstance().getShoppingList();
+		
+		saveShoppingList(sl);
 		
 		Runnable callback = new Runnable() {
 			
@@ -189,7 +195,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 		
 		ApplicationState.getInstance().setShoppingList(sl);
 		
-		DialogFragment slDialog = ShoppingListDialog.newInstance(this, this);
+		DialogFragment slDialog = ShoppingListDialog.newInstance(this);
 		slDialog.show(getFragmentManager(), null);
 	}
 	
@@ -211,6 +217,23 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 
 	private void fetchShoppingLists() {
 		new FetchShoppingListsTask(this, this).execute();
+	}
+	
+	/**
+	 * Saves the shopping list in the local DB
+	 * @param sl - shopping list to be saved
+	 */
+	private void saveShoppingList(final ShoppingList sl) {
+		
+		try {
+			new ShoppingListDAO().save(sl);
+		} catch (Exception e) {
+			final String errMsg = StringUtils.getLimitedString(
+					getString(R.string.shoppinglist_save_failed, 
+							e.getMessage()), 200, "...");
+			
+			Logger.logErrorAndAlert(this, getClass(), errMsg, e);
+		}
 	}
 
 	/**

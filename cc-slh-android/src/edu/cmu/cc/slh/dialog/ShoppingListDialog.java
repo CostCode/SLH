@@ -4,9 +4,9 @@
  */
 package edu.cmu.cc.slh.dialog;
 
+import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.view.adapter.ShoppingListViewAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 /**
@@ -36,11 +37,11 @@ public class ShoppingListDialog extends DialogFragment {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private Context ctx;
-	
 	private ShoppingListViewAdapter viewAdaptor;
 	
 	private IShoppingListDialogCaller caller;
+	
+	private View view;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -50,10 +51,6 @@ public class ShoppingListDialog extends DialogFragment {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
-	private void setContext(Context ctx) {
-		this.ctx = ctx;
-	}
-	
 	private void setCaller(IShoppingListDialogCaller caller) {
 		this.caller = caller;
 	}
@@ -62,11 +59,10 @@ public class ShoppingListDialog extends DialogFragment {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static ShoppingListDialog newInstance(Context ctx, 
+	public static ShoppingListDialog newInstance(
 			IShoppingListDialogCaller caller) {
 		
 		ShoppingListDialog dialog = new ShoppingListDialog();
-		dialog.setContext(ctx);
 		dialog.setCaller(caller);
 		
 		return dialog;
@@ -75,12 +71,15 @@ public class ShoppingListDialog extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ctx);
+		AlertDialog.Builder dialogBuilder = 
+				new AlertDialog.Builder(getActivity());
 		
 		LayoutInflater inflater = (LayoutInflater) 
-				ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		final View view = inflater.inflate(R.layout.allshoppinglists_detail, null);
+		view = inflater.inflate(R.layout.allshoppinglists_detail, null);
+		
+		ShoppingListViewAdapter.updateView(view);
 		
 		viewAdaptor = new ShoppingListViewAdapter(view);
 		
@@ -91,24 +90,7 @@ public class ShoppingListDialog extends DialogFragment {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
-				viewAdaptor.validateAllViews();
-				
-				if (!viewAdaptor.areAllViewsValid()) {
-					Toast.makeText(ctx, 
-							R.string.shoppinglist_save_invalidFields, 
-							Toast.LENGTH_LONG).show();
-				} else {
-					ShoppingList sl = ShoppingListViewAdapter.fromView(view);
-					ApplicationState.getInstance().setShoppingList(sl);
-					caller.onShoppingListSaved();
-					
-					dialog.dismiss();
-					
-					Toast.makeText(ctx, 
-							R.string.shoppinglist_save_success, 
-							Toast.LENGTH_LONG).show();
-				}
+				Logger.logDebug(ShoppingListDialog.class, "POSITIVE BUTTON!!!!");
 			}
 		});
 		
@@ -117,24 +99,82 @@ public class ShoppingListDialog extends DialogFragment {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				
-				ApplicationState.getInstance().setShoppingList(null);
-				dialog.cancel();
+				Logger.logDebug(ShoppingListDialog.class, "NEGATIVE BUTTON!!!!");
 			}
 		});
 		
-		return dialogBuilder.create();
+		
+		final AlertDialog dialog = dialogBuilder.create();
+		
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			
+			@Override
+			public void onShow(final DialogInterface dlg) {
+				
+				Logger.logDebug(ShoppingListDialog.class, "onShow WAS CALLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				
+				if (dialog != null) {
+					
+					// Positive button
+					
+					Button btnPositive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+					btnPositive.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							viewAdaptor.validateAllViews();
+							view.invalidate();
+							
+							if (!viewAdaptor.areAllViewsValid()) {
+								
+								Logger.logDebug(ShoppingListDialog.class, "Fields are not valid!!!");
+								
+								Toast.makeText(getActivity(), 
+										R.string.shoppinglist_save_invalidFields, 
+										Toast.LENGTH_LONG).show();
+							} else {
+								Logger.logDebug(ShoppingListDialog.class, "Fields are valid!!!");
+								
+								ShoppingListViewAdapter.updateModel(view);
+								caller.onShoppingListUpdated();
+								
+								Toast.makeText(getActivity(), 
+										R.string.shoppinglist_save_success, 
+										Toast.LENGTH_LONG).show();
+								
+								dlg.dismiss();
+							}
+						}
+					});
+					
+					// Negative button
+					Button btnNegative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+					btnNegative.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+							Logger.logDebug(ShoppingListDialog.class, "CANCEL BUTTON WAS PRESSED!!!!!!");
+							
+							ApplicationState.getInstance().setShoppingList(null);
+							dlg.dismiss();
+						}
+					});
+				}
+				
+			}
+		});
+		
+		return dialog;
 	}
 	
-	
-
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
-	
+
 	public interface IShoppingListDialogCaller {
 		
-		public void onShoppingListSaved();
+		public void onShoppingListUpdated();
 		
 	}
 

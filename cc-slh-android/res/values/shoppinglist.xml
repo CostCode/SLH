@@ -13,10 +13,11 @@
     
     <string name="shoppinglist_save_success">Shopping list was saved</string>
     <string name="shoppinglist_save_invalidFields">Cannot save. Fields are not correctly filled!</string>
+    <string name="shoppinglist_save_failed">Cannot save shopping list.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     
     <!-- Shopping lists -->
     
-    <string name="shoppinglist_all_title">All Shopping lists</string>
+    <string name="shoppinglist_all_title">Shopping lists</string>
     <string name="shoppinglist_all_error_versionPersist">Cannot store shopping lists version.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     <string name="shoppinglist_all_error_versionRetrieve">Cannot retrieve shopping lists version.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     <string name="shoppinglist_all_error_fetch">Shopping lists fetching failed.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -102,6 +103,36 @@ public class ShoppingListDAO {
 		db.close();
 		
 		return list;
+	}
+	
+	/**
+	 * Saves given shopping list object into the database.
+	 * @param sl - shopping list object to be saved
+	 * @return saved shopping list object with attached id number
+	 */
+	public ShoppingList save(ShoppingList sl) {
+		
+		Logger.logDebug(getClass(), 
+				String.format("Trying to save ShoppingList [%s]", sl));
+		
+		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_NAME, sl.getName());
+		values.put(COLUMN_DATE, sl.getDate().getTime());
+		values.put(COLUMN_DESC, sl.getDescription());
+		
+		if (sl.getId() > 0) {
+			db.update(TABLE_NAME, values, COLUMN_ID + "=" + sl.getId(), null);
+		} else {
+			long id = db.insert(TABLE_NAME, null, values);
+			sl.setId(id);
+		}
+		
+		Logger.logDebug(getClass(), 
+				String.format("ShoppingList was saved in the local DB. [%s]", sl));
+		
+		return sl;
 	}
 	
 	/**

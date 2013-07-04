@@ -20,7 +20,7 @@ import edu.cmu.cc.android.view.validation.IViewValidator;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public abstract class RegexValidator implements IViewValidator {
+public class RegexValidator implements IViewValidator {
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -31,6 +31,9 @@ public abstract class RegexValidator implements IViewValidator {
 	
 	/** Regular expression pattern */
 	protected Pattern pattern;
+	
+	/** Resource id for the error message */
+	private int msgResID;
 
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -45,6 +48,11 @@ public abstract class RegexValidator implements IViewValidator {
 		this.ctx = ctx;
 		this.pattern = Pattern.compile(regex);
 	}
+	
+	public RegexValidator(Context ctx, String regex, int msgResID) {
+		this(ctx, regex);
+		this.msgResID = msgResID;
+	}
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -56,10 +64,10 @@ public abstract class RegexValidator implements IViewValidator {
 		return matcher.matches();
 	}
 
-//	@Override
-//	public String getErrorMessage(String caption) {
-//		return ctx.getString(R.string.validation_regex, caption, 
-//				pattern.toString());
-//	}
+	@Override
+	public String getErrorMessage(String caption) {
+		return ctx.getString(msgResID, caption, 
+				pattern.toString());
+	}
 	
 }

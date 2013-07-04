@@ -72,16 +72,16 @@ public final class R {
         /**  Global Application Sources 
          */
         public static final int app_name=0x7f040003;
-        public static final int error_unspecified=0x7f040021;
-        public static final int image_logo=0x7f040020;
-        public static final int shoppinglist_all_add=0x7f04001e;
-        public static final int shoppinglist_all_error_fetch=0x7f04001d;
-        public static final int shoppinglist_all_error_versionPersist=0x7f04001b;
-        public static final int shoppinglist_all_error_versionRetrieve=0x7f04001c;
-        public static final int shoppinglist_all_progressDialogText=0x7f04001f;
+        public static final int error_unspecified=0x7f040022;
+        public static final int image_logo=0x7f040021;
+        public static final int shoppinglist_all_add=0x7f04001f;
+        public static final int shoppinglist_all_error_fetch=0x7f04001e;
+        public static final int shoppinglist_all_error_versionPersist=0x7f04001c;
+        public static final int shoppinglist_all_error_versionRetrieve=0x7f04001d;
+        public static final int shoppinglist_all_progressDialogText=0x7f040020;
         /**  Shopping lists 
          */
-        public static final int shoppinglist_all_title=0x7f04001a;
+        public static final int shoppinglist_all_title=0x7f04001b;
         public static final int shoppinglist_cancel=0x7f040017;
         public static final int shoppinglist_comments=0x7f040014;
         public static final int shoppinglist_date=0x7f040013;
@@ -90,25 +90,27 @@ public final class R {
          */
         public static final int shoppinglist_name=0x7f040012;
         public static final int shoppinglist_save=0x7f040016;
+        public static final int shoppinglist_save_failed=0x7f04001a;
         public static final int shoppinglist_save_invalidFields=0x7f040019;
         public static final int shoppinglist_save_success=0x7f040018;
-        public static final int validation_membership=0x7f040022;
-        public static final int validation_name=0x7f040023;
+        public static final int validation_membership=0x7f040023;
         public static final int validation_regex=0x7f040004;
+        public static final int validation_shoppinglist_comment=0x7f040025;
+        public static final int validation_shoppinglist_name=0x7f040024;
         public static final int validation_username=0x7f040005;
-        public static final int ws_activation_memberid=0x7f040028;
+        public static final int ws_activation_memberid=0x7f04002a;
         /**  Web Service: Activation 
          */
-        public static final int ws_activation_validate=0x7f040026;
-        public static final int ws_activation_validity=0x7f040027;
-        public static final int ws_namespace=0x7f040025;
+        public static final int ws_activation_validate=0x7f040028;
+        public static final int ws_activation_validity=0x7f040029;
+        public static final int ws_namespace=0x7f040027;
         /**  Web Service: Shopping Lists  
          */
-        public static final int ws_shoppinglists_retrieveVersion=0x7f040029;
-        public static final int ws_shoppinglists_version=0x7f04002a;
+        public static final int ws_shoppinglists_retrieveVersion=0x7f04002b;
+        public static final int ws_shoppinglists_version=0x7f04002c;
         /**  Web Service: Connection details 
          */
-        public static final int ws_url=0x7f040024;
+        public static final int ws_url=0x7f040026;
     }
     public static final class style {
         /** 
@@ -122,8 +124,21 @@ public final class R {
         res/values-v11/styles.xml on API 14+ devices.
     
  API 14 theme customizations can go here. 
+
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    
+
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        
          */
         public static final int AppBaseTheme=0x7f060001;
+        /**  Application theme. 
+ All customizations that are NOT specific to a particular API-level can go here. 
+         */
+        public static final int SLHTheme=0x7f060002;
         public static final int formHeader=0x7f060000;
     }
 }

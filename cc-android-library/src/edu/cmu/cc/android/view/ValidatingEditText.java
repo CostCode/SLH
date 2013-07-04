@@ -75,6 +75,7 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 		String errMsg = (isValid()) ? null : 
 			validator.getErrorMessage(fieldDisplayName);
 		setError(errMsg);
+		invalidate();
 	}
 
 	@Override

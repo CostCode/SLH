@@ -6,6 +6,8 @@ package edu.cmu.cc.slh.model;
 
 import java.util.Date;
 
+import edu.cmu.cc.android.util.StringUtils;
+
 
 /**
  *  DESCRIPTION: ShoppingList class specifies a user's shopping list.
@@ -16,6 +18,11 @@ import java.util.Date;
  */
 public class ShoppingList extends BaseEntity {
 
+	//-------------------------------------------------------------------------
+	// CONSTANTS
+	//-------------------------------------------------------------------------
+	
+	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 	
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -79,5 +86,25 @@ public class ShoppingList extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append(id);
+		builder.append(", ");
+		builder.append(name);
+		builder.append(", ");
+		builder.append(StringUtils.getDateAsString(date, DATE_PATTERN));
+		builder.append(", ");
+		builder.append(description);
+		
+		return builder.toString();
+	}
+
 	
 }

@@ -19,8 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
         android:layout_marginBottom="20dip"
-        android:singleLine="true"
-        android:inputType="text"/>
+        android:singleLine="true"/>
     
     <!-- DATE -->
     
@@ -52,7 +51,6 @@
         android:layout_marginTop="5dip"
         android:layout_marginBottom="20dip"
         android:singleLine="true"
-        android:inputType="text"
         android:lines="5" />
     
 </LinearLayout>
