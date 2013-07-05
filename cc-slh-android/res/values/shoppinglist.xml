@@ -3,6 +3,8 @@
 
     <!-- Shopping list -->
     
+    <string name="shoppinglist_title">Active Shopping List</string>
+    
     <string name="shoppinglist_name">Name</string>
     <string name="shoppinglist_date">Date</string>
     <string name="shoppinglist_comments">Comments</string>

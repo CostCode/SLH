@@ -5,17 +5,22 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
     
-    <View android:layout_width="fill_parent" 
+    <!-- HEADER -->
+    
+    <View 
+        android:layout_width="fill_parent" 
         android:layout_height="4sp" />
     
     <TextView 
         android:id="@+id/allshoppinglists_title" 
-        style="@style/formHeader" 
-        android:text="@string/shoppinglist_all_title" />
+        android:text="@string/shoppinglist_all_title"
+        style="@style/formHeader"/>
     
     <View 
         android:layout_width="fill_parent" 
         android:layout_height="3sp" />
+    
+    <!-- LIST -->
     
     <ListView 
         android:id="@+id/android:list" 
@@ -27,5 +32,5 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" 
         android:text=""/>
-
+    
 </LinearLayout>
