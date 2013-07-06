@@ -11,7 +11,7 @@ import android.os.AsyncTask;
 
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.ShoppingListDAO;
+import edu.cmu.cc.slh.dao.SLDAO;
 import edu.cmu.cc.slh.model.ShoppingList;
 
 /**
@@ -21,7 +21,7 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class FetchShoppingListsTask 
+public class FetchSLTask 
 extends AsyncTask<Void, Void, List<ShoppingList>>{
 
 	//-------------------------------------------------------------------------
@@ -42,7 +42,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public FetchShoppingListsTask(Context ctx, 
+	public FetchSLTask(Context ctx, 
 			IFetchShoppingListsTaskCaller caller) {
 		
 		this.ctx = ctx;
@@ -98,7 +98,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	
 	private List<ShoppingList> retrieveFromLocal() {
 		
-		return new ShoppingListDAO().getAll();
+		return new SLDAO().getAll();
 	}
 	
 	

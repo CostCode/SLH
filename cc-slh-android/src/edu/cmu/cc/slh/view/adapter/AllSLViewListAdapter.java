@@ -8,15 +8,19 @@ import java.text.DateFormat;
 import java.util.List;
 
 import edu.cmu.cc.android.util.StringUtils;
+import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.dao.SLDAO;
 import edu.cmu.cc.slh.model.ShoppingList;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  *  DESCRIPTION: View adapter for the list of shopping lists
@@ -25,7 +29,7 @@ import android.widget.TextView;
  *	@version 1.0
  *  Date: Jun 24, 2013
  */
-public class ShoppingListsViewAdapter extends BaseAdapter {
+public class AllSLViewListAdapter extends BaseAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -37,19 +41,26 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
+	private Context ctx;
+	
 	private LayoutInflater inflater;
 	
 	private List<ShoppingList> list;
+	
+	private IDeleteSLCaller deleteCaller;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public ShoppingListsViewAdapter(Context ctx, List<ShoppingList> list) {
+	public AllSLViewListAdapter(Context ctx, List<ShoppingList> list, 
+			IDeleteSLCaller deleteCaller) {
 		
 		super();
 		
+		this.ctx = ctx;
 		this.list = list;
+		this.deleteCaller = deleteCaller;
 		this.inflater = LayoutInflater.from(ctx);
 	}
 
@@ -108,11 +119,43 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 		viewHolder.getDateView().setText(dateFormat.format(sl.getDate()));
 		viewHolder.getDateView().setText(
 				StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
-		customizeDeleteImage(viewHolder.getDeleteView());
+		
+		customizeDeleteImage(viewHolder.getDeleteView(), sl);
 	}
 	
-	private void customizeDeleteImage(ImageView deleteImage) {
+	private void customizeDeleteImage(ImageView deleteImage, final ShoppingList sl) {
 		deleteImage.setVisibility(View.VISIBLE);
+		deleteImage.setClickable(true);
+		deleteImage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				DialogInterface.OnClickListener deleteListener = new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+						new SLDAO().delete(sl);
+						
+						Toast.makeText(ctx, 
+								R.string.shoppinglist_delete_success, 
+								Toast.LENGTH_LONG).show();
+						
+						deleteCaller.onShoppingListDeleted();
+					}
+				};
+				
+				final String deleteMessage = getDeleteMessage(
+						R.string.shoppinglist_delete_message, sl);
+				
+				WidgetUtils.createYesNoAlertDialog(ctx, 
+						edu.cmu.cc.android.R.drawable.cancel, 
+						R.string.shoppinglist_delete_title, 
+						deleteMessage, deleteListener).show();
+			}
+			
+		});
 	}
 	
 	private ViewHolder getViewHolder(View view) {
@@ -129,6 +172,10 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 		ViewHolder viewHolder = new ViewHolder(nameView, dateView, deleteView);
 		
 		return viewHolder;
+	}
+	
+	private String getDeleteMessage(int deleteMsgResID, final ShoppingList sl) {
+		return ctx.getString(deleteMsgResID, sl.getName());
 	}
 	
 	//-------------------------------------------------------------------------
@@ -167,6 +214,16 @@ public class ShoppingListsViewAdapter extends BaseAdapter {
 		public ImageView getDeleteView() {
 			return deleteView;
 		}
+		
+	}
+	
+	//-------------------------------------------------------------------------
+	// INTERFACE
+	//-------------------------------------------------------------------------
+	
+	public interface IDeleteSLCaller {
+		
+		public void onShoppingListDeleted();
 		
 	}
 

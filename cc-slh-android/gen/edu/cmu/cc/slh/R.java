@@ -56,66 +56,77 @@ public final class R {
         public static final int header_gradient=0x7f030007;
     }
     public static final class string {
-        public static final int activation_activate=0x7f040008;
-        public static final int activation_error_activatonFailed=0x7f04000d;
-        public static final int activation_error_status_persist=0x7f04000e;
-        public static final int activation_error_status_retrieve=0x7f04000f;
-        public static final int activation_invalidMembershipField=0x7f04000c;
-        public static final int activation_membershipid=0x7f040007;
-        public static final int activation_progressDialogText=0x7f040011;
-        public static final int activation_progressDialogTitle=0x7f040010;
-        public static final int activation_result=0x7f040009;
-        public static final int activation_success=0x7f04000a;
+        public static final int activation_activate=0x7f04000b;
+        public static final int activation_error_activatonFailed=0x7f040010;
+        public static final int activation_error_status_persist=0x7f040011;
+        public static final int activation_error_status_retrieve=0x7f040012;
+        public static final int activation_invalidMembershipField=0x7f04000f;
+        public static final int activation_membershipid=0x7f04000a;
+        public static final int activation_progressDialogText=0x7f040014;
+        public static final int activation_progressDialogTitle=0x7f040013;
+        public static final int activation_result=0x7f04000c;
+        public static final int activation_success=0x7f04000d;
         /**  Activation form details 
          */
-        public static final int activation_title=0x7f040006;
-        public static final int activation_unsuccess=0x7f04000b;
-        public static final int androidUtil_error=0x7f040001;
-        public static final int androidUtil_error_notConnected=0x7f040002;
+        public static final int activation_title=0x7f040009;
+        public static final int activation_unsuccess=0x7f04000e;
+        public static final int androidUtil_cancel=0x7f040001;
+        public static final int androidUtil_error=0x7f040004;
+        public static final int androidUtil_error_notConnected=0x7f040005;
+        public static final int androidUtil_no=0x7f040003;
         public static final int androidUtil_ok=0x7f040000;
+        public static final int androidUtil_yes=0x7f040002;
         /**  Global Application Sources 
          */
-        public static final int app_name=0x7f040003;
-        public static final int error_unspecified=0x7f040023;
-        public static final int image_logo=0x7f040022;
-        public static final int shoppinglist_all_add=0x7f040020;
-        public static final int shoppinglist_all_error_fetch=0x7f04001f;
-        public static final int shoppinglist_all_error_versionPersist=0x7f04001d;
-        public static final int shoppinglist_all_error_versionRetrieve=0x7f04001e;
-        public static final int shoppinglist_all_progressDialogText=0x7f040021;
+        public static final int app_name=0x7f040006;
+        public static final int error_unspecified=0x7f04002c;
+        public static final int image_logo=0x7f04002b;
+        public static final int settings_triangulation_onOff=0x7f040015;
+        public static final int shoppinglist_all_add=0x7f040029;
+        public static final int shoppinglist_all_error_fetch=0x7f040028;
+        public static final int shoppinglist_all_error_versionPersist=0x7f040026;
+        public static final int shoppinglist_all_error_versionRetrieve=0x7f040027;
+        public static final int shoppinglist_all_progressDialogText=0x7f04002a;
         /**  Shopping lists 
          */
-        public static final int shoppinglist_all_title=0x7f04001c;
-        public static final int shoppinglist_cancel=0x7f040018;
-        public static final int shoppinglist_comments=0x7f040015;
-        public static final int shoppinglist_date=0x7f040014;
-        public static final int shoppinglist_delete=0x7f040016;
-        public static final int shoppinglist_name=0x7f040013;
-        public static final int shoppinglist_save=0x7f040017;
-        public static final int shoppinglist_save_failed=0x7f04001b;
-        public static final int shoppinglist_save_invalidFields=0x7f04001a;
-        public static final int shoppinglist_save_success=0x7f040019;
+        public static final int shoppinglist_all_title=0x7f040025;
+        public static final int shoppinglist_cancel=0x7f04001c;
+        public static final int shoppinglist_comments=0x7f040019;
+        public static final int shoppinglist_date=0x7f040018;
+        public static final int shoppinglist_delete=0x7f04001a;
+        public static final int shoppinglist_delete_message=0x7f040022;
+        public static final int shoppinglist_delete_success=0x7f040023;
+        public static final int shoppinglist_delete_title=0x7f040021;
+        /**  Shopping list Item 
+         */
+        public static final int shoppinglist_item_add=0x7f040024;
+        public static final int shoppinglist_name=0x7f040017;
+        public static final int shoppinglist_save=0x7f04001b;
+        public static final int shoppinglist_save_failed=0x7f040020;
+        public static final int shoppinglist_save_invalidFields=0x7f04001f;
+        public static final int shoppinglist_save_success=0x7f04001e;
+        public static final int shoppinglist_show_summary=0x7f04001d;
         /**  Shopping list 
          */
-        public static final int shoppinglist_title=0x7f040012;
-        public static final int validation_membership=0x7f040024;
-        public static final int validation_regex=0x7f040004;
-        public static final int validation_shoppinglist_comment=0x7f040026;
-        public static final int validation_shoppinglist_name=0x7f040025;
-        public static final int validation_username=0x7f040005;
-        public static final int ws_activation_memberid=0x7f04002b;
+        public static final int shoppinglist_title=0x7f040016;
+        public static final int validation_membership=0x7f04002d;
+        public static final int validation_regex=0x7f040007;
+        public static final int validation_shoppinglist_comment=0x7f04002f;
+        public static final int validation_shoppinglist_name=0x7f04002e;
+        public static final int validation_username=0x7f040008;
+        public static final int ws_activation_memberid=0x7f040034;
         /**  Web Service: Activation 
          */
-        public static final int ws_activation_validate=0x7f040029;
-        public static final int ws_activation_validity=0x7f04002a;
-        public static final int ws_namespace=0x7f040028;
+        public static final int ws_activation_validate=0x7f040032;
+        public static final int ws_activation_validity=0x7f040033;
+        public static final int ws_namespace=0x7f040031;
         /**  Web Service: Shopping Lists  
          */
-        public static final int ws_shoppinglists_retrieveVersion=0x7f04002c;
-        public static final int ws_shoppinglists_version=0x7f04002d;
+        public static final int ws_shoppinglists_retrieveVersion=0x7f040035;
+        public static final int ws_shoppinglists_version=0x7f040036;
         /**  Web Service: Connection details 
          */
-        public static final int ws_url=0x7f040027;
+        public static final int ws_url=0x7f040030;
     }
     public static final class style {
         /** 

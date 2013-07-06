@@ -67,6 +67,7 @@ public class WidgetUtils {
 	}
 	
 	
+	
 	public static AlertDialog createOkAlertDialog(Context ctx, int iconResID, 
 			int titleResID, String message) {
 		
@@ -91,7 +92,30 @@ public class WidgetUtils {
 		return dialog;
 	}
 	
-	public static AlertDialog createOkAlertDialog(Context ctx, int iconResID, 
+	
+	
+	public static AlertDialog createYesNoAlertDialog(Context ctx, int iconResID, 
+			int titleResID, String message, OnClickListener listener) {
+		
+		return createOkCancelOrYesNoAlertDialog(ctx, iconResID, titleResID, 
+				message, R.string.androidUtil_yes, R.string.androidUtil_no, 
+				listener);
+	}
+	
+	public static AlertDialog createOkCancelAlertDialog(Context ctx, 
+			int iconResID, int titleResID, String message, 
+			OnClickListener listener) {
+		
+		return createOkCancelOrYesNoAlertDialog(ctx, iconResID, titleResID, 
+				message, R.string.androidUtil_ok, R.string.androidUtil_cancel, 
+				listener);
+	}
+	
+	//-------------------------------------------------------------------------
+	// PRIVATE METHODS
+	//-------------------------------------------------------------------------	
+	
+	private static AlertDialog createOkAlertDialog(Context ctx, int iconResID, 
 			int titleResID, String message, int okButtonTextResID, 
 			OnClickListener listener) {
 		
@@ -105,5 +129,27 @@ public class WidgetUtils {
 		
 		return dialog;
 	}
+	
+	public static AlertDialog createOkCancelOrYesNoAlertDialog(
+			Context ctx, int iconResID, int titleResID, String message, 
+			int okOrYesTextResID, int cancelOrNoTextResID, 
+			OnClickListener listener) {
+		
+		final AlertDialog dialog = createOkAlertDialog(ctx, iconResID, 
+				titleResID, message, okOrYesTextResID, listener);
+		
+		dialog.setButton(DialogInterface.BUTTON_NEGATIVE, 
+				ctx.getString(cancelOrNoTextResID), 
+				new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+		
+		return dialog;
+	}
+	
 
 }

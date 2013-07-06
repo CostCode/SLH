@@ -22,7 +22,7 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class ShoppingListDAO {
+public class SLDAO {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -62,7 +62,7 @@ public class ShoppingListDAO {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public ShoppingListDAO() {}
+	public SLDAO() {}
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -133,6 +133,23 @@ public class ShoppingListDAO {
 				String.format("ShoppingList was saved in the local DB. [%s]", sl));
 		
 		return sl;
+	}
+	
+	/**
+	 * Removes the given Shopping list from the local DB
+	 * @param sl - shopping list to be removed
+	 */
+	public void delete(ShoppingList sl) {
+		
+		Logger.logDebug(getClass(), 
+				String.format("Trying to delete ShoppingList [%s]", sl));
+		
+		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		
+		int deleted = db.delete(TABLE_NAME, COLUMN_ID + "=" + sl.getId(), null);
+		
+		Logger.logDebug(getClass(), String.format("[%d] " +
+				"ShoppingList records were deleted from the DB", deleted));
 	}
 	
 	/**

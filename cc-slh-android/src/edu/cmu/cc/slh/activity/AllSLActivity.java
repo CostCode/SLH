@@ -24,13 +24,14 @@ import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.ShoppingListDAO;
-import edu.cmu.cc.slh.dialog.ShoppingListDialog;
-import edu.cmu.cc.slh.dialog.ShoppingListDialog.IShoppingListDialogCaller;
+import edu.cmu.cc.slh.dao.SLDAO;
+import edu.cmu.cc.slh.dialog.SLDialog;
+import edu.cmu.cc.slh.dialog.SLDialog.IShoppingListDialogCaller;
 import edu.cmu.cc.slh.model.ShoppingList;
-import edu.cmu.cc.slh.task.FetchShoppingListsTask;
-import edu.cmu.cc.slh.task.FetchShoppingListsTask.IFetchShoppingListsTaskCaller;
-import edu.cmu.cc.slh.view.adapter.ShoppingListsViewAdapter;
+import edu.cmu.cc.slh.task.FetchSLTask;
+import edu.cmu.cc.slh.task.FetchSLTask.IFetchShoppingListsTaskCaller;
+import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
+import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter.IDeleteSLCaller;
 
 /**
  *  DESCRIPTION: 
@@ -40,8 +41,9 @@ import edu.cmu.cc.slh.view.adapter.ShoppingListsViewAdapter;
  *  Date: Jun 21, 2013
  */
 @SuppressLint("UseSparseArrays")
-public class ShoppingListsActivity extends AbstractAsyncListActivity
-implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
+public class AllSLActivity extends AbstractAsyncListActivity
+implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller, 
+IDeleteSLCaller {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -64,8 +66,8 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public ShoppingListsViewAdapter getListAdapter() {
-		return (ShoppingListsViewAdapter) super.getListAdapter();
+	public AllSLViewListAdapter getListAdapter() {
+		return (AllSLViewListAdapter) super.getListAdapter();
 	}
 
 	//-------------------------------------------------------------------------
@@ -110,12 +112,12 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 							@Override
 							public void onClick(DialogInterface dialog, 
 									int which) {
-								ShoppingListsActivity.this.finish();
+								AllSLActivity.this.finish();
 							}
 						};
 				
-				Logger.logErrorAndAlert(ShoppingListsActivity.this, 
-						ShoppingListsActivity.class, errorMsg, t, dialogListener);
+				Logger.logErrorAndAlert(AllSLActivity.this, 
+						AllSLActivity.class, errorMsg, t, dialogListener);
 			}
 		};
 		
@@ -155,7 +157,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 	}
 	
 	@Override
-	public void onShoppingListUpdated() {
+	public void onShoppingListAdded() {
 		
 		ShoppingList sl = 
 				ApplicationState.getInstance().getShoppingList();
@@ -174,10 +176,17 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 		osMessage.sendToTarget();
 	}
 
+	@Override
+	public void onShoppingListDeleted() {
+		fetchShoppingLists();
+	}
+	
+	
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+
 	private void setMenuItemState(int menuItemTitleResID, 
 			boolean visible, boolean enabled) {
 		
@@ -195,7 +204,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 		
 		ApplicationState.getInstance().setShoppingList(sl);
 		
-		DialogFragment slDialog = ShoppingListDialog.newInstance(this);
+		DialogFragment slDialog = SLDialog.newInstance(this);
 		slDialog.show(getFragmentManager(), null);
 	}
 	
@@ -203,7 +212,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 		
 		int msgResID = R.string.error_unspecified;
 		
-		if (taskClass == FetchShoppingListsTask.class) {
+		if (taskClass == FetchSLTask.class) {
 			msgResID = R.string.shoppinglist_all_error_fetch;
 		} else {
 			Logger.logErrorAndThrow(getClass(), 
@@ -216,7 +225,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 	}
 
 	private void fetchShoppingLists() {
-		new FetchShoppingListsTask(this, this).execute();
+		new FetchSLTask(this, this).execute();
 	}
 	
 	/**
@@ -226,7 +235,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 	private void saveShoppingList(final ShoppingList sl) {
 		
 		try {
-			new ShoppingListDAO().save(sl);
+			new SLDAO().save(sl);
 		} catch (Exception e) {
 			final String errMsg = StringUtils.getLimitedString(
 					getString(R.string.shoppinglist_save_failed, 
@@ -244,7 +253,7 @@ implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller {
 		List<ShoppingList> list = 
 				ApplicationState.getInstance().getShoppingLists();
 		
-		setListAdapter(new ShoppingListsViewAdapter(this, list));
+		setListAdapter(new AllSLViewListAdapter(this, list, this));
 	}
 	
 	/**

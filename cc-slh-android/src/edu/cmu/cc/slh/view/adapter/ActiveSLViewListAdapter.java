@@ -25,7 +25,7 @@ import android.widget.BaseAdapter;
  *	@version 1.0
  *  Date: Jul 4, 2013
  */
-public class ActiveSLViewAdapter extends BaseAdapter {
+public class ActiveSLViewListAdapter extends BaseAdapter {
 
 
 	//-------------------------------------------------------------------------
@@ -46,7 +46,7 @@ public class ActiveSLViewAdapter extends BaseAdapter {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public ActiveSLViewAdapter(Context ctx, Adapter adapter) {
+	public ActiveSLViewListAdapter(Context ctx, Adapter adapter) {
 		categoryHeaders = 
 				new ArrayAdapter<String>(ctx, R.layout.active_sl_group);
 		categories = new LinkedHashMap<String, Adapter>();

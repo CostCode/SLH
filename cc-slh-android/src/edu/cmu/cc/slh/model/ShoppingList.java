@@ -91,6 +91,8 @@ public class ShoppingList extends BaseEntity {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
+	
+	
 	@Override
 	public String toString() {
 		
@@ -104,6 +106,17 @@ public class ShoppingList extends BaseEntity {
 		builder.append(description);
 		
 		return builder.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		ShoppingList sl = (ShoppingList) obj;
+		return (id == sl.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)id;
 	}
 
 	

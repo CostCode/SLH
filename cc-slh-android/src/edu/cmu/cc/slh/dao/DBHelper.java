@@ -60,7 +60,7 @@ final class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL("PRAGMA foreign_keys=ON;");
-		db.execSQL(ShoppingListDAO.SQL_CREATE_TABLE);
+		db.execSQL(SLDAO.SQL_CREATE_TABLE);
 		
 		Logger.logDebug(getClass(), DATABASE_NAME + 
 				" tables have been created...");
@@ -77,7 +77,7 @@ final class DBHelper extends SQLiteOpenHelper {
 						DATABASE_NAME, oldVersion, newVersion));
 		
 		db.execSQL("PRAGMA foreign_keys=OFF;");
-		db.execSQL(ShoppingListDAO.SQL_DROP_TABLE);
+		db.execSQL(SLDAO.SQL_DROP_TABLE);
 		
 		onCreate(db);
 	}

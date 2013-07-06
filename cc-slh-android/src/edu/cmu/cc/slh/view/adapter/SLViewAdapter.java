@@ -27,7 +27,7 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 27, 2013
  */
-public class ShoppingListViewAdapter {
+public class SLViewAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -45,7 +45,7 @@ public class ShoppingListViewAdapter {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public ShoppingListViewAdapter(View view) {
+	public SLViewAdapter(View view) {
 		
 		initializeValidators(view);
 	}

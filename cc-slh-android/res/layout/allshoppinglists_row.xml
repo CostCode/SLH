@@ -24,14 +24,15 @@
             android:gravity="right"
             android:layout_gravity="right">
   			
-  			<ImageView 
+  			<ImageView
   			    android:id="@+id/btn_allshoppinglists_row_delete"
   			    android:layout_width="wrap_content" 
-  			    android:layout_height="wrap_content" 
-  			    android:src="@drawable/delete" 
+  			    android:layout_height="wrap_content"
+  			    android:src="@drawable/delete"
   			    android:paddingLeft="5sp"
   			    android:contentDescription="@string/shoppinglist_delete"
   			    android:layout_gravity="right"/>
+  			
   		</LinearLayout>
         
     </TableRow>

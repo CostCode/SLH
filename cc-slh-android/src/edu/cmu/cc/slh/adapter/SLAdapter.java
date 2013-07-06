@@ -18,7 +18,7 @@ import edu.cmu.cc.slh.R;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class ShoppingListAdapter {
+public class SLAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -73,7 +73,7 @@ public class ShoppingListAdapter {
 			
 		} catch (Throwable t) {
 			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, ShoppingListAdapter.class, errMsg, t);
+			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
 		}
 		
 		return false;
@@ -88,7 +88,7 @@ public class ShoppingListAdapter {
 			
 		} catch (Throwable t) {
 			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, ShoppingListAdapter.class, errMsg, t);
+			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
 		}
 		
 		return null;

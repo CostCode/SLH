@@ -4,6 +4,8 @@
  */
 package edu.cmu.cc.slh.model;
 
+import java.math.BigDecimal;
+
 
 /**
  *  DESCRIPTION: This class specifies a product item in the shopping list.
@@ -19,18 +21,17 @@ public class ShoppingListItem extends BaseEntity {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	
-	/** Shopping list to which this item belongs */
-	private ShoppingList shoppingList;
-	
-	/** Product category of this item */
-	private ItemCategory category;
+	/** Product category id of this item */
+	private long categoryId;
 	
 	/** Name of the shopping list item */
 	private String name;
 	
 	/** Quantity of this item */
 	private int quantity;
+	
+	/** Price of the item */
+	private BigDecimal price;
 	
 	/** Unit id */
 	private int unit;
@@ -52,21 +53,12 @@ public class ShoppingListItem extends BaseEntity {
 	//-------------------------------------------------------------------------
 
 
-	public ShoppingList getShoppingList() {
-		return shoppingList;
+	public long getCategoryId() {
+		return categoryId;
 	}
 
-	public void setShoppingList(ShoppingList shoppingList) {
-		this.shoppingList = shoppingList;
-	}
-
-
-	public ItemCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(ItemCategory category) {
-		this.category = category;
+	public void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 
@@ -87,6 +79,15 @@ public class ShoppingListItem extends BaseEntity {
 		this.quantity = quantity;
 	}
 
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+	
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
 
 	public int getUnit() {
 		return unit;
@@ -103,6 +104,80 @@ public class ShoppingListItem extends BaseEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append(id);
+		builder.append(", ");
+		builder.append(categoryId);
+		builder.append(", ");
+		builder.append(name);
+		builder.append(", ");
+		builder.append(quantity);
+		builder.append(", ");
+		builder.append(price);
+		
+		return builder.toString();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		ShoppingListItem item = (ShoppingListItem) obj;
+		return (id == item.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)id;
+	}
+	
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	public static class Unit {
+		
+		public static final int CODE_PC = 1;
+		public static final int CODE_LB = 2;
+		public static final int CODE_GAL = 3;
+		
+		private static final String STR_PC = "pc.";
+		private static final String STR_LB = "lb.";
+		private static final String STR_GAL = "gal.";
+		
+		/**
+		 * Returns short string name of the unit measure by unit code
+		 * @param unitCode - code of the unit measure
+		 * @return short name of the unit measure
+		 * @throws IllegalArgumentException - if the given unit code if not valid
+		 */
+		public static String getUnitByCode(final int unitCode) 
+				throws IllegalArgumentException {
+			
+			if (unitCode < CODE_PC || unitCode > CODE_GAL) {
+				throw new IllegalArgumentException("Invalid Unit code");
+			}
+			
+			switch (unitCode) {
+			case CODE_PC:
+				return STR_PC;
+			case CODE_LB:
+				return STR_LB;
+			case CODE_GAL:
+				return STR_GAL;
+			}
+			
+			return null;
+		}
+		
 	}
 	
 }

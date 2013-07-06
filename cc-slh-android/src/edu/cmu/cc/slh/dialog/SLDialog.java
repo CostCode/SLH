@@ -7,7 +7,7 @@ package edu.cmu.cc.slh.dialog;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.view.adapter.ShoppingListViewAdapter;
+import edu.cmu.cc.slh.view.adapter.SLViewAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -27,7 +27,7 @@ import android.widget.Toast;
  *	@version 1.0
  *  Date: Jun 14, 2013
  */
-public class ShoppingListDialog extends DialogFragment {
+public class SLDialog extends DialogFragment {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -37,7 +37,7 @@ public class ShoppingListDialog extends DialogFragment {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private ShoppingListViewAdapter viewAdaptor;
+	private SLViewAdapter viewAdaptor;
 	
 	private IShoppingListDialogCaller caller;
 	
@@ -59,10 +59,10 @@ public class ShoppingListDialog extends DialogFragment {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static ShoppingListDialog newInstance(
+	public static SLDialog newInstance(
 			IShoppingListDialogCaller caller) {
 		
-		ShoppingListDialog dialog = new ShoppingListDialog();
+		SLDialog dialog = new SLDialog();
 		dialog.setCaller(caller);
 		
 		return dialog;
@@ -79,9 +79,9 @@ public class ShoppingListDialog extends DialogFragment {
 		
 		view = inflater.inflate(R.layout.allshoppinglists_detail, null);
 		
-		ShoppingListViewAdapter.updateView(view);
+		SLViewAdapter.updateView(view);
 		
-		viewAdaptor = new ShoppingListViewAdapter(view);
+		viewAdaptor = new SLViewAdapter(view);
 		
 		dialogBuilder.setView(view);
 		
@@ -90,7 +90,7 @@ public class ShoppingListDialog extends DialogFragment {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Logger.logDebug(ShoppingListDialog.class, "POSITIVE BUTTON!!!!");
+				Logger.logDebug(SLDialog.class, "POSITIVE BUTTON!!!!");
 			}
 		});
 		
@@ -99,7 +99,7 @@ public class ShoppingListDialog extends DialogFragment {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Logger.logDebug(ShoppingListDialog.class, "NEGATIVE BUTTON!!!!");
+				Logger.logDebug(SLDialog.class, "NEGATIVE BUTTON!!!!");
 			}
 		});
 		
@@ -111,7 +111,7 @@ public class ShoppingListDialog extends DialogFragment {
 			@Override
 			public void onShow(final DialogInterface dlg) {
 				
-				Logger.logDebug(ShoppingListDialog.class, "onShow WAS CALLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				Logger.logDebug(SLDialog.class, "onShow WAS CALLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				
 				if (dialog != null) {
 					
@@ -127,16 +127,16 @@ public class ShoppingListDialog extends DialogFragment {
 							
 							if (!viewAdaptor.areAllViewsValid()) {
 								
-								Logger.logDebug(ShoppingListDialog.class, "Fields are not valid!!!");
+								Logger.logDebug(SLDialog.class, "Fields are not valid!!!");
 								
 								Toast.makeText(getActivity(), 
 										R.string.shoppinglist_save_invalidFields, 
 										Toast.LENGTH_LONG).show();
 							} else {
-								Logger.logDebug(ShoppingListDialog.class, "Fields are valid!!!");
+								Logger.logDebug(SLDialog.class, "Fields are valid!!!");
 								
-								ShoppingListViewAdapter.updateModel(view);
-								caller.onShoppingListUpdated();
+								SLViewAdapter.updateModel(view);
+								caller.onShoppingListAdded();
 								
 								Toast.makeText(getActivity(), 
 										R.string.shoppinglist_save_success, 
@@ -154,7 +154,7 @@ public class ShoppingListDialog extends DialogFragment {
 						@Override
 						public void onClick(View v) {
 							
-							Logger.logDebug(ShoppingListDialog.class, "CANCEL BUTTON WAS PRESSED!!!!!!");
+							Logger.logDebug(SLDialog.class, "CANCEL BUTTON WAS PRESSED!!!!!!");
 							
 							ApplicationState.getInstance().setShoppingList(null);
 							dlg.dismiss();
@@ -174,7 +174,7 @@ public class ShoppingListDialog extends DialogFragment {
 
 	public interface IShoppingListDialogCaller {
 		
-		public void onShoppingListUpdated();
+		public void onShoppingListAdded();
 		
 	}
 
