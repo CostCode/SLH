@@ -7,7 +7,6 @@ package edu.cmu.cc.slh.adapter;
 import android.content.Context;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.SharedPrefsAdapter;
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -18,7 +17,7 @@ import edu.cmu.cc.slh.R;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class SLAdapter {
+public class SLAdapter extends AbstractSharedPrefsAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -46,14 +45,14 @@ public class SLAdapter {
 		
 		return saveToSharedPrefs(ApplicationState.getContext(), 
 				KEY_SHOPPINGLISTS_VERSION, String.valueOf(version), 
-				R.string.shoppinglist_all_error_versionPersist);
+				R.string.sl_all_error_versionPersist);
 	}
 	
 	public static int retrieveVersion() {
 		
 		String strValue = retrieveFromSharedPrefs(ApplicationState.getContext(), 
 				KEY_SHOPPINGLISTS_VERSION, 
-				R.string.shoppinglist_all_error_versionRetrieve);
+				R.string.sl_all_error_versionRetrieve);
 		
 		return Integer.parseInt(strValue);
 	}
@@ -92,13 +91,6 @@ public class SLAdapter {
 		}
 		
 		return null;
-	}
-	
-	private static String getErrorMessage(Context ctx, 
-			int errMsgResID, Throwable t) {
-		
-		return StringUtils.getLimitedString(
-				ctx.getString(errMsgResID, t.getMessage()), 200, "...");
 	}
 
 }

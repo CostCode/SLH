@@ -90,7 +90,7 @@ public class AllSLViewListAdapter extends BaseAdapter {
 		
 		if (convertView == null) {
 			convertView = 
-					inflater.inflate(R.layout.allshoppinglists_row, null);
+					inflater.inflate(R.layout.all_sl_row, null);
 			viewHolder = getViewHolder(convertView);
 			convertView.setTag(viewHolder);
 		} else {
@@ -131,7 +131,8 @@ public class AllSLViewListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				
-				DialogInterface.OnClickListener deleteListener = new DialogInterface.OnClickListener() {
+				DialogInterface.OnClickListener deleteListener = 
+						new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -139,7 +140,7 @@ public class AllSLViewListAdapter extends BaseAdapter {
 						new SLDAO().delete(sl);
 						
 						Toast.makeText(ctx, 
-								R.string.shoppinglist_delete_success, 
+								R.string.sl_delete_success, 
 								Toast.LENGTH_LONG).show();
 						
 						deleteCaller.onShoppingListDeleted();
@@ -147,11 +148,11 @@ public class AllSLViewListAdapter extends BaseAdapter {
 				};
 				
 				final String deleteMessage = getDeleteMessage(
-						R.string.shoppinglist_delete_message, sl);
+						R.string.sl_delete_message, sl);
 				
 				WidgetUtils.createYesNoAlertDialog(ctx, 
 						edu.cmu.cc.android.R.drawable.cancel, 
-						R.string.shoppinglist_delete_title, 
+						R.string.sl_delete_title, 
 						deleteMessage, deleteListener).show();
 			}
 			

@@ -57,7 +57,7 @@ public class SLViewAdapter {
 	public static void updateView(View view) {
 		
 		ShoppingList sl = 
-				ApplicationState.getInstance().getShoppingList();
+				ApplicationState.getInstance().getCurrentSL();
 		
 		WidgetUtils.getEditText(view, R.id.etShoppingListName)
 			.setText(sl.getName());
@@ -74,7 +74,7 @@ public class SLViewAdapter {
 	public static void updateModel(View view) {
 		
 		ShoppingList sl = 
-				ApplicationState.getInstance().getShoppingList();
+				ApplicationState.getInstance().getCurrentSL();
 		
 		sl.setName(WidgetUtils
 				.getEditTextAsString(view, R.id.etShoppingListName));
@@ -82,7 +82,7 @@ public class SLViewAdapter {
 		sl.setDescription(WidgetUtils
 				.getEditTextAsString(view, R.id.etShoppingListComments));
 		
-		ApplicationState.getInstance().setShoppingList(sl);
+		ApplicationState.getInstance().setCurrentSL(sl);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -148,10 +148,10 @@ public class SLViewAdapter {
 		
 		synchronized (validatingViews) {
 			assignValidatorToView(parentView, R.id.etShoppingListName, 
-					R.string.shoppinglist_name, 
+					R.string.sl_name, 
 					new RegexValidator(ctx, ".{3,10}", R.string.validation_shoppinglist_name));
 			assignValidatorToView(parentView, R.id.etShoppingListComments, 
-					R.string.shoppinglist_comments, 
+					R.string.sl_comment, 
 					new RegexValidator(ctx, ".{0,20}", R.string.validation_shoppinglist_comment));
 		}
 	}

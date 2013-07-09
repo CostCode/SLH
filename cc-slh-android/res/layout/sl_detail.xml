@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/shoppinglist_name" />
+        android:text="@string/sl_name" />
     
     <edu.cmu.cc.android.view.ValidatingEditText 
         android:id="@+id/etShoppingListName"
@@ -27,14 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/shoppinglist_date" />
+        android:text="@string/sl_date" />
     
     <TextView
         android:id="@+id/tvShoppingListDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/shoppinglist_date" />
+        android:text="@string/sl_date" />
     
     <!-- COMMENT -->
     
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/shoppinglist_comments" />
+        android:text="@string/sl_comment" />
     
     <edu.cmu.cc.android.view.ValidatingEditText 
         android:id="@+id/etShoppingListComments"

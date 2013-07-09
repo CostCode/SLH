@@ -9,9 +9,13 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.SLDAO;
+import edu.cmu.cc.slh.dao.ItemCategoryDAO;
+import edu.cmu.cc.slh.dao.SLItemDAO;
+import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
+import edu.cmu.cc.slh.model.ShoppingListItem;
 
 /**
  *  DESCRIPTION: 
@@ -20,8 +24,8 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class FetchSLTask 
-extends AsyncTask<Void, Void, List<ShoppingList>>{
+public class FetchSLItemsTask 
+extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -31,7 +35,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private IFetchSLTaskCaller caller;
+	private IFetchSLItemsTaskCaller caller;
 	
 	private boolean errorState;
 
@@ -39,7 +43,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public FetchSLTask(IFetchSLTaskCaller caller) {
+	public FetchSLItemsTask(IFetchSLItemsTaskCaller caller) {
 		
 		this.caller = caller;
 	}
@@ -56,17 +60,21 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	protected void onPreExecute() {
 		super.onPreExecute();
 		caller.showProgressDialog(
-				R.string.sl_all_loading);
+				R.string.sl_item_loading);
 	}
 	
 	@Override
-	protected List<ShoppingList> doInBackground(Void... params) {
+	protected List<ShoppingListItem> doInBackground(ShoppingList... slList) {
 		
 		errorState = false;
 		
 		try {
 			
-			return retrieveFromLocal();
+			fetchItemCategories();
+			
+			ShoppingList sl = slList[0];
+			
+			return retrieveFromLocal(sl);
 			
 		} catch (Exception e) {
 			errorState = true;
@@ -77,12 +85,12 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	}
 	
 	@Override
-	protected void onPostExecute(List<ShoppingList> list) {
-		super.onPostExecute(list);
+	protected void onPostExecute(List<ShoppingListItem> items) {
+		super.onPostExecute(items);
 		
 		caller.dismissProgressDialog();
 		if (!errorState) {
-			caller.onFetchSLTaskSucceeded(list);
+			caller.onFetchSLItemsTaskSucceeded(items);
 		}
 	}
 
@@ -91,9 +99,14 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-	private List<ShoppingList> retrieveFromLocal() {
+	private void fetchItemCategories() {
+		List<ItemCategory> categories = new ItemCategoryDAO().getAll();
+		ApplicationState.getInstance().setCategories(categories);
+	}
+	
+	private List<ShoppingListItem> retrieveFromLocal(ShoppingList sl) {
 		
-		return new SLDAO().getAll();
+		return new SLItemDAO().getAll(sl.getId());
 	}
 	
 	
@@ -101,9 +114,9 @@ extends AsyncTask<Void, Void, List<ShoppingList>>{
 	// INNER INTERFACE
 	//-------------------------------------------------------------------------
 	
-	public interface IFetchSLTaskCaller extends IAsyncActivity {
+	public interface IFetchSLItemsTaskCaller extends IAsyncActivity {
 		
-		public void onFetchSLTaskSucceeded(List<ShoppingList> list);
+		public void onFetchSLItemsTaskSucceeded(List<ShoppingListItem> items);
 		
 	}
 

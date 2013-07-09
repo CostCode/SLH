@@ -4,28 +4,30 @@
  */
 package edu.cmu.cc.slh.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.SharedPrefsAdapter;
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.model.ShoppingList;
 
 /**
  *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 19, 2013
+ *  Date: Jun 21, 2013
  */
-public class ActivationAdapter extends AbstractSharedPrefsAdapter {
+public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_ACTIVATION_STATUS = "activation-status";
-
+	private static String KEY_ACTIVE_SHOPPINGLIST = "active-shoppinglist";
+	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
@@ -42,59 +44,70 @@ public class ActivationAdapter extends AbstractSharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistActivationStatus(boolean status) {
+	public static synchronized boolean persistActiveSL(ShoppingList sl) {
 		
 		return saveToSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS, String.valueOf(status));
+				KEY_ACTIVE_SHOPPINGLIST, String.valueOf(sl.getId()), 
+				R.string.sl_active_error_persist);
 	}
 	
-	public static boolean retrieveActivationStatus() {
+	public static ShoppingList retrieveActiveShoppingList() {
 		
-		return retrieveFromSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS);
+		String strId = retrieveFromSharedPrefs(ApplicationState.getContext(), 
+				KEY_ACTIVE_SHOPPINGLIST, 
+				R.string.sl_active_error_retrieve);
+		
+		long id = Long.parseLong(strId);
+		
+		List<ShoppingList> list = 
+				ApplicationState.getInstance().getShoppingLists();
+		
+		if (list != null && list.size() > 0) {
+			for (ShoppingList sl : list) {
+				if (sl.getId() == id) {
+					return sl;
+				}
+			}
+			
+			return list.get(0);
+		}
+		
+		return null;
 	}
+	
 
 	//-------------------------------------------------------------------------
-	// HELPER METHODS
+	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
 	private static boolean saveToSharedPrefs(Context ctx, 
-			String key, String value) {
+			String key, String value, int errMsgResID) {
 		
 		try {
 			
 			return SharedPrefsAdapter.persist(ctx, key, value);
 			
 		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_persist, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
+			String errMsg = getErrorMessage(ctx, errMsgResID, t);
+			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
 		}
 		
 		return false;
 	}
 	
-	private static boolean retrieveFromSharedPrefs(Context ctx, String key) {
+	private static String retrieveFromSharedPrefs(Context ctx, String key, 
+			int errMsgResID) {
 		
 		try {
 			
-			String strValue = SharedPrefsAdapter.retrieve(ctx, key);
-			
-			if (!StringUtils.isNullOrEmpty(strValue)) {
-				return Boolean.valueOf(strValue);
-			}
+			return SharedPrefsAdapter.retrieve(ctx, key);
 			
 		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_retrieve, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
+			String errMsg = getErrorMessage(ctx, errMsgResID, t);
+			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
 		}
 		
-		return false;
+		return null;
 	}
 
 }

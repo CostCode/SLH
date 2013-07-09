@@ -7,6 +7,7 @@ package edu.cmu.cc.slh;
 import java.util.List;
 
 import edu.cmu.cc.android.util.Logger;
+import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
 import android.app.Application;
 import android.content.Context;
@@ -33,7 +34,11 @@ public class ApplicationState extends Application {
 	
 	private List<ShoppingList> shoppingLists;
 	
-	private ShoppingList shoppingList;
+	private ShoppingList currentSL;
+	
+	private ShoppingList activeSL;
+	
+	private List<ItemCategory> categories;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -60,11 +65,25 @@ public class ApplicationState extends Application {
 		this.shoppingLists = shoppingLists;
 	}
 
-	public ShoppingList getShoppingList() {
-		return shoppingList;
+	public ShoppingList getCurrentSL() {
+		return currentSL;
 	}
-	public void setShoppingList(ShoppingList shoppingList) {
-		this.shoppingList = shoppingList;
+	public void setCurrentSL(ShoppingList currentSL) {
+		this.currentSL = currentSL;
+	}
+	
+	public ShoppingList getActiveSL() {
+		return activeSL;
+	}
+	public void setActiveSL(ShoppingList activeSL) {
+		this.activeSL = activeSL;
+	}
+	
+	public List<ItemCategory> getCategories() {
+		return categories;
+	}
+	public void setCategories(List<ItemCategory> categories) {
+		this.categories = categories;
 	}
 	
 	//-------------------------------------------------------------------------

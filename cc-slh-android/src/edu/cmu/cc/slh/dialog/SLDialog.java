@@ -77,7 +77,7 @@ public class SLDialog extends DialogFragment {
 		LayoutInflater inflater = (LayoutInflater) 
 				getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		view = inflater.inflate(R.layout.allshoppinglists_detail, null);
+		view = inflater.inflate(R.layout.sl_detail, null);
 		
 		SLViewAdapter.updateView(view);
 		
@@ -85,7 +85,7 @@ public class SLDialog extends DialogFragment {
 		
 		dialogBuilder.setView(view);
 		
-		dialogBuilder.setPositiveButton(R.string.shoppinglist_save, 
+		dialogBuilder.setPositiveButton(R.string.sl_save, 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -94,7 +94,7 @@ public class SLDialog extends DialogFragment {
 			}
 		});
 		
-		dialogBuilder.setNegativeButton(R.string.shoppinglist_cancel, 
+		dialogBuilder.setNegativeButton(R.string.sl_cancel, 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -130,7 +130,7 @@ public class SLDialog extends DialogFragment {
 								Logger.logDebug(SLDialog.class, "Fields are not valid!!!");
 								
 								Toast.makeText(getActivity(), 
-										R.string.shoppinglist_save_invalidFields, 
+										R.string.sl_save_invalidFields, 
 										Toast.LENGTH_LONG).show();
 							} else {
 								Logger.logDebug(SLDialog.class, "Fields are valid!!!");
@@ -139,7 +139,7 @@ public class SLDialog extends DialogFragment {
 								caller.onShoppingListAdded();
 								
 								Toast.makeText(getActivity(), 
-										R.string.shoppinglist_save_success, 
+										R.string.sl_save_success, 
 										Toast.LENGTH_LONG).show();
 								
 								dlg.dismiss();
@@ -156,7 +156,7 @@ public class SLDialog extends DialogFragment {
 							
 							Logger.logDebug(SLDialog.class, "CANCEL BUTTON WAS PRESSED!!!!!!");
 							
-							ApplicationState.getInstance().setShoppingList(null);
+							ApplicationState.getInstance().setCurrentSL(null);
 							dlg.dismiss();
 						}
 					});

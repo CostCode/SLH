@@ -5,6 +5,7 @@
 package edu.cmu.cc.slh.model;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.cmu.cc.android.util.StringUtils;
 
@@ -38,6 +39,8 @@ public class ShoppingList extends BaseEntity {
 	/** Description information */
 	private String description;
 	
+	private List<ShoppingListItem> items;
+	
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -61,8 +64,6 @@ public class ShoppingList extends BaseEntity {
 	public String getName() {
 		return name;
 	}
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -71,8 +72,6 @@ public class ShoppingList extends BaseEntity {
 	public Date getDate() {
 		return date;
 	}
-
-
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -81,18 +80,22 @@ public class ShoppingList extends BaseEntity {
 	public String getDescription() {
 		return description;
 	}
-
-
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	
+	public List<ShoppingListItem> getItems() {
+		return items;
+	}
+	public void setItems(List<ShoppingListItem> items) {
+		this.items = items;
 	}
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-	
-	
-	
+
 	@Override
 	public String toString() {
 		

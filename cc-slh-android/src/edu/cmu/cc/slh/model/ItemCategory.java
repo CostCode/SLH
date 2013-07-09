@@ -4,6 +4,8 @@
  */
 package edu.cmu.cc.slh.model;
 
+import java.util.List;
+
 
 /**
  *  DESCRIPTION: This class specifies Costco products category.
@@ -20,15 +22,14 @@ public class ItemCategory extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 	
-	/** Parent Category of this product category*/
-	private ItemCategory category;
-	
 	/** Name of the product category */
 	private String name;
 	
 	/** Description of this product category */
 	private String description;
 	
+	/** Shopping List items belonging to this category */
+	private List<ShoppingListItem> items;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -43,21 +44,9 @@ public class ItemCategory extends BaseEntity {
 	//-------------------------------------------------------------------------
 	
 	
-	public ItemCategory getCategory() {
-		return category;
-	}
-
-
-	public void setCategory(ItemCategory category) {
-		this.category = category;
-	}
-
-
 	public String getName() {
 		return name;
 	}
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -66,10 +55,32 @@ public class ItemCategory extends BaseEntity {
 	public String getDescription() {
 		return description;
 	}
-
-
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	
+	public List<ShoppingListItem> getItems() {
+		return items;
+	}
+	public void setItems(List<ShoppingListItem> items) {
+		this.items = items;
+	}
+	
+	
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append(id);
+		builder.append(", ");
+		builder.append(name);
+		
+		return builder.toString();
 	}
 	
 }

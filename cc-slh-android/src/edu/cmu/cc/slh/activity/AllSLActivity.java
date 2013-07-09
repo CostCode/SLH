@@ -29,7 +29,7 @@ import edu.cmu.cc.slh.dialog.SLDialog;
 import edu.cmu.cc.slh.dialog.SLDialog.IShoppingListDialogCaller;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.task.FetchSLTask;
-import edu.cmu.cc.slh.task.FetchSLTask.IFetchShoppingListsTaskCaller;
+import edu.cmu.cc.slh.task.FetchSLTask.IFetchSLTaskCaller;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter.IDeleteSLCaller;
 
@@ -42,7 +42,7 @@ import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter.IDeleteSLCaller;
  */
 @SuppressLint("UseSparseArrays")
 public class AllSLActivity extends AbstractAsyncListActivity
-implements IFetchShoppingListsTaskCaller, IShoppingListDialogCaller, 
+implements IFetchSLTaskCaller, IShoppingListDialogCaller, 
 IDeleteSLCaller {
 
 	//-------------------------------------------------------------------------
@@ -77,7 +77,7 @@ IDeleteSLCaller {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.allshoppinglists);
+		setContentView(R.layout.all_sl);
 		
 		fetchShoppingLists();
 	}
@@ -89,7 +89,7 @@ IDeleteSLCaller {
 	}
 	
 	@Override
-	public void onFetchShoppingListsTaskSucceeded(List<ShoppingList> list) {
+	public void onFetchSLTaskSucceeded(List<ShoppingList> list) {
 		
 		ApplicationState.getInstance().setShoppingLists(list);
 		
@@ -130,8 +130,8 @@ IDeleteSLCaller {
 		
 		menuItems = new HashMap<Integer, MenuItem>(1);
 		
-		menuItems.put(R.string.shoppinglist_all_add, 
-				menu.add(R.string.shoppinglist_all_add).setIcon(R.drawable.add));
+		menuItems.put(R.string.sl_all_add, 
+				menu.add(R.string.sl_all_add).setIcon(R.drawable.add));
 		
 		return true;
 	}
@@ -139,7 +139,7 @@ IDeleteSLCaller {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		
-		setMenuItemState(R.string.shoppinglist_all_add, true, true);
+		setMenuItemState(R.string.sl_all_add, true, true);
 		
 		return true;
 	}
@@ -147,7 +147,7 @@ IDeleteSLCaller {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		if (item.getTitle().equals(getString(R.string.shoppinglist_all_add))) {
+		if (item.getTitle().equals(getString(R.string.sl_all_add))) {
 			ShoppingList newSL = new ShoppingList(
 					null, new Date(System.currentTimeMillis()), null);
 			showShoppingListDialog(newSL);
@@ -160,7 +160,7 @@ IDeleteSLCaller {
 	public void onShoppingListAdded() {
 		
 		ShoppingList sl = 
-				ApplicationState.getInstance().getShoppingList();
+				ApplicationState.getInstance().getCurrentSL();
 		
 		saveShoppingList(sl);
 		
@@ -202,7 +202,7 @@ IDeleteSLCaller {
 	 */
 	private void showShoppingListDialog(ShoppingList sl) {
 		
-		ApplicationState.getInstance().setShoppingList(sl);
+		ApplicationState.getInstance().setCurrentSL(sl);
 		
 		DialogFragment slDialog = SLDialog.newInstance(this);
 		slDialog.show(getFragmentManager(), null);
@@ -213,7 +213,7 @@ IDeleteSLCaller {
 		int msgResID = R.string.error_unspecified;
 		
 		if (taskClass == FetchSLTask.class) {
-			msgResID = R.string.shoppinglist_all_error_fetch;
+			msgResID = R.string.sl_all_error_fetch;
 		} else {
 			Logger.logErrorAndThrow(getClass(), 
 					new IllegalArgumentException("Unexpected class: " 
@@ -225,7 +225,7 @@ IDeleteSLCaller {
 	}
 
 	private void fetchShoppingLists() {
-		new FetchSLTask(this, this).execute();
+		new FetchSLTask(this).execute();
 	}
 	
 	/**
@@ -238,7 +238,7 @@ IDeleteSLCaller {
 			new SLDAO().save(sl);
 		} catch (Exception e) {
 			final String errMsg = StringUtils.getLimitedString(
-					getString(R.string.shoppinglist_save_failed, 
+					getString(R.string.sl_save_failed, 
 							e.getMessage()), 200, "...");
 			
 			Logger.logErrorAndAlert(this, getClass(), errMsg, e);
