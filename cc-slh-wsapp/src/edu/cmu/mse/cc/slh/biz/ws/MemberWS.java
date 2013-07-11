@@ -7,13 +7,13 @@
 
 package edu.cmu.mse.cc.slh.biz.ws;
 
-import java.util.Random;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.BindingType;
+
+import edu.cmu.mse.cc.slh.integration.dao.MembershipDAO;
 
 /**
  * WS offering membership related services
@@ -45,9 +45,12 @@ public class MemberWS {
 
 		if (membershipID == null || membershipID.isEmpty())
 			return null;
-
-		Random random = new Random();
-		return Boolean.toString(random.nextBoolean());
+		
+		MembershipDAO membershipDAO = MembershipDAO.getInstance();
+		
+		boolean validity = "1".equals(membershipDAO.validateMembership(membershipID));
+		
+		return Boolean.toString(validity);
 	}
 
 }

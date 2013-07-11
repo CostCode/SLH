@@ -19,30 +19,30 @@ import javax.naming.NamingException;
 import edu.cmu.mse.cc.slh.integration.dao.util.ResourceUtil;
 
 /**
- * DAO for Section entity.
+ * DAO for Memberships entity.
  * 
  * @version 1.0.0. 21 Jun 2013
  * @author M. A. Riveros T.
  */
-public class SectionDAO {
+public class MembershipDAO {
 
-	private final static Logger LOGGER = Logger.getLogger(SectionDAO.class
+	private final static Logger LOGGER = Logger.getLogger(MembershipDAO.class
 			.getSimpleName());
 
-	public static SectionDAO getInstance() {
-		return new SectionDAO();
+	public static MembershipDAO getInstance() {
+		return new MembershipDAO();
 	}
 
 	/**
-	 * Obtains sections of a particular warehouse
+	 * Obtains the version of the floor map for a particular warehouse
 	 * 
 	 * @param warehouseID Warehouse identifier.
 	 * 
-	 * @return sections A string of sections within the warehouse
+	 * @return version A string with the version.
 	 * 
 	 */
-	public String getSectionsLocation(String warehouseID) {
-		String sections = null;
+	public String validateMembership(String warehouseID) {
+		String validity = null;
 
 		Connection connection = null;
 		Statement statement = null;
@@ -51,24 +51,22 @@ public class SectionDAO {
 		try {
 			connection = ResourceUtil.getConnection();
 			statement = connection.createStatement();
-			String query = "SELECT " + "SID, " + "MID, " + "CID, "
-					+ "XCoordinates, " + "YCoordinates " + "FROM "
-					+ "TBL_Sections " + "WHERE " + "MID =  " + warehouseID;
+			String query = "SELECT " + 
+					"validity " +
+					"FROM " +
+					"TBL_Memberships " +
+					"WHERE " +
+					"ID = '" +
+					warehouseID +
+					"'";		
 
 			resultSet = statement.executeQuery(query);
-
+ 
 			while (resultSet.next()) {
-				sections = "<SID>";
-				sections = sections + resultSet.getString("SID");
-				sections = sections + "</SID>";
-				sections = sections + "<POSX>";
-				sections = sections + resultSet.getString("XCoordinates");
-				sections = sections + "</POSX>";
-				sections = sections + "<POSY>";
-				sections = sections + resultSet.getString("YCoordinates");
-				sections = sections + "</POSY>";
-				sections = sections + "\n";
+				validity = resultSet.getString("validity");
+				break;
 			}
+
 		} catch (NamingException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
 			e.printStackTrace();
@@ -79,7 +77,7 @@ public class SectionDAO {
 			ResourceUtil.closeResources(resultSet, statement, connection);
 		}
 
-		return sections;
+		return validity;
 	}
 
 }

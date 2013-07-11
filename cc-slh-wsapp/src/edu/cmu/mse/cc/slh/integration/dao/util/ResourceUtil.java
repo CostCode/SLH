@@ -8,6 +8,8 @@
 package edu.cmu.mse.cc.slh.integration.dao.util;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,6 +44,7 @@ public class ResourceUtil {
 	 */
 	public static Connection getConnection() throws NamingException,
 			SQLException {
+		
 		Context initialContext = new InitialContext();
 		DataSource dataSource = (javax.sql.DataSource) initialContext
 				.lookup(JNDI_NAME);
@@ -78,6 +81,18 @@ public class ResourceUtil {
 				LOGGER.log(Level.SEVERE, e.toString(), e);
 				e.printStackTrace();
 			}
+	}
+	
+	public static void main(String[] args){
+		try {
+			getConnection();
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

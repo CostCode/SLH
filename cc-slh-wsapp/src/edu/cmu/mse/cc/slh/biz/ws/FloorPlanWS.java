@@ -15,7 +15,6 @@ import javax.xml.ws.BindingType;
 
 import edu.cmu.mse.cc.slh.integration.dao.AccessPointDAO;
 import edu.cmu.mse.cc.slh.integration.dao.FloorPlanDAO;
-import edu.cmu.mse.cc.slh.integration.dao.SectionDAO;
 
 /**
  * WS offering floor plans related services
@@ -29,6 +28,8 @@ import edu.cmu.mse.cc.slh.integration.dao.SectionDAO;
 	endpointInterface = "edu.cmu.mse.cc.slh.biz.ws.FloorPlanWS")
 @BindingType(javax.xml.ws.soap.SOAPBinding.SOAP12HTTP_BINDING)
 public class FloorPlanWS {
+	
+	private final static String ACCESSPOINTS_CATEGORYNAME = "Access Points";
 
 	@WebMethod(action = "checkVersion")
 	@WebResult(name = "version")
@@ -67,7 +68,7 @@ public class FloorPlanWS {
 				+ "<ssid>ssid_d</ssid><posx>10</posx><posy>10</posy>";
 
 		AccessPointDAO accessPointDAO = AccessPointDAO.getInstance();
-		APsLocation = accessPointDAO.getAccessPoints(warehouseID);
+		APsLocation = accessPointDAO.getHotSpotsByCategoryName(warehouseID, ACCESSPOINTS_CATEGORYNAME);
 
 		return APsLocation;
 	}
@@ -94,8 +95,8 @@ public class FloorPlanWS {
 				+ "<ssid>ssid_c</ssid><posx>10</posx><posy>0</posy>"
 				+ "<ssid>ssid_d</ssid><posx>10</posx><posy>10</posy>";
 
-		SectionDAO sectionDAO = SectionDAO.getInstance();
-		sectionsLocation = sectionDAO.getSectionsLocation(warehouseID);
+		AccessPointDAO accessPointDAO = AccessPointDAO.getInstance();
+		sectionsLocation = accessPointDAO.getSectionsByWarehouseID(warehouseID);
 
 		return sectionsLocation;
 	}

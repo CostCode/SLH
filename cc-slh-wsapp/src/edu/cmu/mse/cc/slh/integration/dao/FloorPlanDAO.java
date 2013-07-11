@@ -52,7 +52,7 @@ public class FloorPlanDAO {
 			connection = ResourceUtil.getConnection();
 			statement = connection.createStatement();
 			String query = "SELECT " + "version " + "FROM " + "TBL_FloorMaps "
-					+ "WHERE " + "WID = " + warehouseID;
+					+ "WHERE " + "WID = " + warehouseID;			
 
 			resultSet = statement.executeQuery(query);
 
