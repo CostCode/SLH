@@ -351,7 +351,7 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 */
 	public String getTableName()
 	{
-		return "SLH_Web_DB.TBL_HotSpots";
+		return "TBL_HotSpots";
 	}
 
 	/** 

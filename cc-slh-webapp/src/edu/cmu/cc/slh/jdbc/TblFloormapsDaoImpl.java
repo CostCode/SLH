@@ -24,305 +24,326 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-public class TblFloormapsDaoImpl extends AbstractDAO implements TblFloormapsDao
-{
-	/** 
-	 * The factory class for this DAO has two versions of the create() method - one that
-takes no arguments and one that takes a Connection argument. If the Connection version
-is chosen then the connection will be stored in this attribute and will be used by all
-calls to this DAO, otherwise a new Connection will be allocated for each operation.
+public class TblFloormapsDaoImpl extends AbstractDAO implements TblFloormapsDao {
+	/**
+	 * The factory class for this DAO has two versions of the create() method -
+	 * one that takes no arguments and one that takes a Connection argument. If
+	 * the Connection version is chosen then the connection will be stored in
+	 * this attribute and will be used by all calls to this DAO, otherwise a new
+	 * Connection will be allocated for each operation.
 	 */
 	protected java.sql.Connection userConn;
 
-	/** 
-	 * All finder methods in this class use this SELECT constant to build their queries
+	/**
+	 * All finder methods in this class use this SELECT constant to build their
+	 * queries
 	 */
-	protected final String SQL_SELECT = "SELECT ID, WID, Path, Width, Version FROM " + getTableName() + "";
+	protected final String SQL_SELECT = "SELECT ID, WID, Path, Width, Version FROM "
+			+ getTableName() + "";
 
-	/** 
+	/**
 	 * Finder methods will pass this value to the JDBC setMaxRows method
 	 */
 	protected int maxRows;
 
-	/** 
+	/**
 	 * SQL INSERT statement for this table
 	 */
-	protected final String SQL_INSERT = "INSERT INTO " + getTableName() + " ( ID, WID, Path, Width, Version ) VALUES ( ?, ?, ?, ?, ? )";
+	protected final String SQL_INSERT = "INSERT INTO " + getTableName()
+			+ " ( ID, WID, Path, Width, Version ) VALUES ( ?, ?, ?, ?, ? )";
 
-	/** 
+	/**
 	 * SQL UPDATE statement for this table
 	 */
-	protected final String SQL_UPDATE = "UPDATE " + getTableName() + " SET ID = ?, WID = ?, Path = ?, Width = ?, Version = ? WHERE ID = ?";
+	protected final String SQL_UPDATE = "UPDATE "
+			+ getTableName()
+			+ " SET ID = ?, WID = ?, Path = ?, Width = ?, Version = ? WHERE ID = ?";
 
-	/** 
+	/**
 	 * SQL DELETE statement for this table
 	 */
-	protected final String SQL_DELETE = "DELETE FROM " + getTableName() + " WHERE ID = ?";
+	protected final String SQL_DELETE = "DELETE FROM " + getTableName()
+			+ " WHERE ID = ?";
 
-	/** 
+	/**
 	 * Index of column ID
 	 */
 	protected static final int COLUMN_ID = 1;
 
-	/** 
+	/**
 	 * Index of column WID
 	 */
 	protected static final int COLUMN_WID = 2;
 
-	/** 
+	/**
 	 * Index of column Path
 	 */
 	protected static final int COLUMN_PATH = 3;
 
-	/** 
+	/**
 	 * Index of column Width
 	 */
 	protected static final int COLUMN_WIDTH = 4;
 
-	/** 
+	/**
 	 * Index of column Version
 	 */
 	protected static final int COLUMN_VERSION = 5;
 
-	/** 
+	/**
 	 * Number of columns
 	 */
 	protected static final int NUMBER_OF_COLUMNS = 5;
 
-	/** 
+	/**
 	 * Index of primary-key column ID
 	 */
 	protected static final int PK_COLUMN_ID = 1;
 
-	/** 
+	/**
 	 * Inserts a new row in the TBL_FloorMaps table.
 	 */
-	public TblFloormapsPk insert(TblFloormaps dto) throws TblFloormapsDaoException
-	{
+	public TblFloormapsPk insert(TblFloormaps dto)
+			throws TblFloormapsDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			stmt = conn.prepareStatement( SQL_INSERT, Statement.RETURN_GENERATED_KEYS );
+
+			stmt = conn.prepareStatement(SQL_INSERT,
+					Statement.RETURN_GENERATED_KEYS);
 			int index = 1;
-			stmt.setInt( index++, dto.getId() );
+			stmt.setInt(index++, dto.getId());
 			if (dto.isWidNull()) {
-				stmt.setNull( index++, java.sql.Types.INTEGER );
+				stmt.setNull(index++, java.sql.Types.INTEGER);
 			} else {
-				stmt.setInt( index++, dto.getWid() );
+				stmt.setInt(index++, dto.getWid());
 			}
-		
-			stmt.setString( index++, dto.getPath() );
-			stmt.setString( index++, dto.getWidth() );
+
+			stmt.setString(index++, dto.getPath());
+			stmt.setString(index++, dto.getWidth());
 			if (dto.isVersionNull()) {
-				stmt.setNull( index++, java.sql.Types.INTEGER );
+				stmt.setNull(index++, java.sql.Types.INTEGER);
 			} else {
-				stmt.setInt( index++, dto.getVersion() );
+				stmt.setInt(index++, dto.getVersion());
 			}
-		
-			System.out.println( "Executing " + SQL_INSERT + " with DTO: " + dto );
+
+			System.out.println("Executing " + SQL_INSERT + " with DTO: " + dto);
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+
 			// retrieve values from auto-increment columns
 			rs = stmt.getGeneratedKeys();
 			if (rs != null && rs.next()) {
-				dto.setId( rs.getInt( 1 ) );
+				dto.setId(rs.getInt(1));
 			}
-		
+
 			reset(dto);
 			return dto.createPk();
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new TblFloormapsDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new TblFloormapsDaoException("Exception: " + _e.getMessage(),
+					_e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Updates a single row in the TBL_FloorMaps table.
 	 */
-	public void versionupdate(TblFloormaps pk, TblFloormaps dto) throws TblFloormapsDaoException
-	{
+	public void versionupdate(TblFloormaps pk, TblFloormaps dto)
+			throws TblFloormapsDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_UPDATE + " with DTO: " + dto );
-			stmt = conn.prepareStatement( SQL_UPDATE );
-			int index=1;
-			stmt.setInt( index++, dto.getId() );
+
+			System.out.println("Executing " + SQL_UPDATE + " with DTO: " + dto);
+			stmt = conn.prepareStatement(SQL_UPDATE);
+			int index = 1;
+			stmt.setInt(index++, dto.getId());
 			if (dto.isWidNull()) {
-				stmt.setNull( index++, java.sql.Types.INTEGER );
+				stmt.setNull(index++, java.sql.Types.INTEGER);
 			} else {
-				stmt.setInt( index++, dto.getWid() );
+				stmt.setInt(index++, dto.getWid());
 			}
-		
-			stmt.setString( index++, dto.getPath() );
-			stmt.setString( index++, dto.getWidth() );
+
+			stmt.setString(index++, dto.getPath());
+			stmt.setString(index++, dto.getWidth());
 			if (dto.isVersionNull()) {
-				stmt.setNull( index++, java.sql.Types.INTEGER );
+				stmt.setNull(index++, java.sql.Types.INTEGER);
 			} else {
-				stmt.setInt( index++, dto.getVersion() );
+				stmt.setInt(index++, dto.getVersion());
 			}
-		
-			stmt.setInt( 6, pk.getId() );
+
+			stmt.setInt(6, pk.getId());
 			int rows = stmt.executeUpdate();
 			reset(dto);
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new TblFloormapsDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new TblFloormapsDaoException("Exception: " + _e.getMessage(),
+					_e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Deletes a single row in the TBL_FloorMaps table.
 	 */
-	public void delete(TblFloormapsPk pk) throws TblFloormapsDaoException
-	{
+	public void delete(TblFloormapsPk pk) throws TblFloormapsDaoException {
 		long t1 = System.currentTimeMillis();
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
-			System.out.println( "Executing " + SQL_DELETE + " with PK: " + pk );
-			stmt = conn.prepareStatement( SQL_DELETE );
-			stmt.setInt( 1, pk.getId() );
+
+			System.out.println("Executing " + SQL_DELETE + " with PK: " + pk);
+			stmt = conn.prepareStatement(SQL_DELETE);
+			stmt.setInt(1, pk.getId());
 			int rows = stmt.executeUpdate();
 			long t2 = System.currentTimeMillis();
-			System.out.println( rows + " rows affected (" + (t2-t1) + " ms)" );
-		}
-		catch (Exception _e) {
+			System.out.println(rows + " rows affected (" + (t2 - t1) + " ms)");
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new TblFloormapsDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new TblFloormapsDaoException("Exception: " + _e.getMessage(),
+					_e);
+		} finally {
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns the rows from the TBL_FloorMaps table that matches the specified primary-key value.
+	/**
+	 * Returns the rows from the TBL_FloorMaps table that matches the specified
+	 * primary-key value.
 	 */
-	public TblFloormaps findByPrimaryKey(TblFloormapsPk pk) throws TblFloormapsDaoException
-	{
-		return findByPrimaryKey( pk.getId() );
+	public TblFloormaps findByPrimaryKey(TblFloormapsPk pk)
+			throws TblFloormapsDaoException {
+		return findByPrimaryKey(pk.getId());
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'ID = :id'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'ID
+	 * = :id'.
 	 */
-	public TblFloormaps findByPrimaryKey(int id) throws TblFloormapsDaoException
-	{
-		TblFloormaps ret[] = findByDynamicSelect( SQL_SELECT + " WHERE ID = ?", new Object[] {  new Integer(id) } );
-		return ret.length==0 ? null : ret[0];
+	public TblFloormaps findByPrimaryKey(int id)
+			throws TblFloormapsDaoException {
+		TblFloormaps ret[] = findByDynamicSelect(SQL_SELECT + " WHERE ID = ?",
+				new Object[] { new Integer(id) });
+		return ret.length == 0 ? null : ret[0];
 	}
 
-	/** 
+	/**
 	 * Returns all rows from the TBL_FloorMaps table that match the criteria ''.
 	 */
-	public TblFloormaps[] findAll() throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " ORDER BY ID", null );
+	public TblFloormaps[] findAll() throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT + " ORDER BY ID", null);
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'WID = :wid'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria
+	 * 'WID = :wid'.
 	 */
-	public TblFloormaps[] findByTblWarehouse(int wid) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE WID = ?", new Object[] {  new Integer(wid) } );
+	public TblFloormaps[] findByTblWarehouse(int wid)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT + " WHERE WID = ?",
+				new Object[] { new Integer(wid) });
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'ID = :id'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'ID
+	 * = :id'.
 	 */
-	public TblFloormaps[] findWhereIdEquals(int id) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE ID = ? ORDER BY ID", new Object[] {  new Integer(id) } );
+	public TblFloormaps[] findWhereIdEquals(int id)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT + " WHERE ID = ? ORDER BY ID",
+				new Object[] { new Integer(id) });
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'WID = :wid'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria
+	 * 'WID = :wid'.
 	 */
-	public TblFloormaps[] findWhereWidEquals(int wid) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE WID = ? ORDER BY WID", new Object[] {  new Integer(wid) } );
+	public TblFloormaps[] findWhereWidEquals(int wid)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT + " WHERE WID = ? ORDER BY WID",
+				new Object[] { new Integer(wid) });
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'Path = :path'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria
+	 * 'Path = :path'.
 	 */
-	public TblFloormaps[] findWherePathEquals(String path) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Path = ? ORDER BY Path", new Object[] { path } );
+	public TblFloormaps[] findWherePathEquals(String path)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(
+				SQL_SELECT + " WHERE Path = ? ORDER BY Path",
+				new Object[] { path });
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'Width = :width'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria
+	 * 'Width = :width'.
 	 */
-	public TblFloormaps[] findWhereWidthEquals(String width) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Width = ? ORDER BY Width", new Object[] { width } );
+	public TblFloormaps[] findWhereWidthEquals(String width)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Width = ? ORDER BY Width", new Object[] { width });
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the criteria 'Version = :version'.
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the criteria
+	 * 'Version = :version'.
 	 */
-	public TblFloormaps[] findWhereVersionEquals(int version) throws TblFloormapsDaoException
-	{
-		return findByDynamicSelect( SQL_SELECT + " WHERE Version = ? ORDER BY Version", new Object[] {  new Integer(version) } );
+	public TblFloormaps[] findWhereVersionEquals(int version)
+			throws TblFloormapsDaoException {
+		return findByDynamicSelect(SQL_SELECT
+				+ " WHERE Version = ? ORDER BY Version",
+				new Object[] { new Integer(version) });
 	}
 
 	/**
 	 * Method 'TblFloormapsDaoImpl'
 	 * 
 	 */
-	public TblFloormapsDaoImpl()
-	{
+	public TblFloormapsDaoImpl() {
 	}
 
 	/**
@@ -330,24 +351,21 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @param userConn
 	 */
-	public TblFloormapsDaoImpl(final java.sql.Connection userConn)
-	{
+	public TblFloormapsDaoImpl(final java.sql.Connection userConn) {
 		this.userConn = userConn;
 	}
 
-	/** 
+	/**
 	 * Sets the value of maxRows
 	 */
-	public void setMaxRows(int maxRows)
-	{
+	public void setMaxRows(int maxRows) {
 		this.maxRows = maxRows;
 	}
 
-	/** 
+	/**
 	 * Gets the value of maxRows
 	 */
-	public int getMaxRows()
-	{
+	public int getMaxRows() {
 		return maxRows;
 	}
 
@@ -356,177 +374,170 @@ calls to this DAO, otherwise a new Connection will be allocated for each operati
 	 * 
 	 * @return String
 	 */
-	public String getTableName()
-	{
-		return "SLH_Web_DB.TBL_FloorMaps";
+	public String getTableName() {
+		return "TBL_FloorMaps";
 	}
 
-	/** 
+	/**
 	 * Fetches a single row from the result set
 	 */
-	protected TblFloormaps fetchSingleResult(ResultSet rs) throws SQLException
-	{
+	protected TblFloormaps fetchSingleResult(ResultSet rs) throws SQLException {
 		if (rs.next()) {
 			TblFloormaps dto = new TblFloormaps();
-			populateDto( dto, rs);
+			populateDto(dto, rs);
 			return dto;
 		} else {
 			return null;
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Fetches multiple rows from the result set
 	 */
-	protected TblFloormaps[] fetchMultiResults(ResultSet rs) throws SQLException
-	{
+	protected TblFloormaps[] fetchMultiResults(ResultSet rs)
+			throws SQLException {
 		Collection resultList = new ArrayList();
 		while (rs.next()) {
 			TblFloormaps dto = new TblFloormaps();
-			populateDto( dto, rs);
-			resultList.add( dto );
+			populateDto(dto, rs);
+			resultList.add(dto);
 		}
-		
-		TblFloormaps ret[] = new TblFloormaps[ resultList.size() ];
-		resultList.toArray( ret );
+
+		TblFloormaps ret[] = new TblFloormaps[resultList.size()];
+		resultList.toArray(ret);
 		return ret;
 	}
 
-	/** 
+	/**
 	 * Populates a DTO with data from a ResultSet
 	 */
-	protected void populateDto(TblFloormaps dto, ResultSet rs) throws SQLException
-	{
-		dto.setId( rs.getInt( COLUMN_ID ) );
-		dto.setWid( rs.getInt( COLUMN_WID ) );
+	protected void populateDto(TblFloormaps dto, ResultSet rs)
+			throws SQLException {
+		dto.setId(rs.getInt(COLUMN_ID));
+		dto.setWid(rs.getInt(COLUMN_WID));
 		if (rs.wasNull()) {
-			dto.setWidNull( true );
+			dto.setWidNull(true);
 		}
-		
-		dto.setPath( rs.getString( COLUMN_PATH ) );
-		dto.setWidth( rs.getString( COLUMN_WIDTH ) );
-		dto.setVersion( rs.getInt( COLUMN_VERSION ) );
+
+		dto.setPath(rs.getString(COLUMN_PATH));
+		dto.setWidth(rs.getString(COLUMN_WIDTH));
+		dto.setVersion(rs.getInt(COLUMN_VERSION));
 		if (rs.wasNull()) {
-			dto.setVersionNull( true );
+			dto.setVersionNull(true);
 		}
-		
+
 	}
 
-	/** 
+	/**
 	 * Resets the modified attributes in the DTO
 	 */
-	protected void reset(TblFloormaps dto)
-	{
+	protected void reset(TblFloormaps dto) {
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the specified
+	 * arbitrary SQL statement
 	 */
-	public TblFloormaps[] findByDynamicSelect(String sql, Object[] sqlParams) throws TblFloormapsDaoException
-	{
+	public TblFloormaps[] findByDynamicSelect(String sql, Object[] sqlParams)
+			throws TblFloormapsDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new TblFloormapsDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new TblFloormapsDaoException("Exception: " + _e.getMessage(),
+					_e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
-	/** 
-	 * Returns all rows from the TBL_FloorMaps table that match the specified arbitrary SQL statement
+	/**
+	 * Returns all rows from the TBL_FloorMaps table that match the specified
+	 * arbitrary SQL statement
 	 */
-	public TblFloormaps[] findByDynamicWhere(String sql, Object[] sqlParams) throws TblFloormapsDaoException
-	{
+	public TblFloormaps[] findByDynamicWhere(String sql, Object[] sqlParams)
+			throws TblFloormapsDaoException {
 		// declare variables
 		final boolean isConnSupplied = (userConn != null);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
-			// get the user-specified connection or get a connection from the ResourceManager
+			// get the user-specified connection or get a connection from the
+			// ResourceManager
 			conn = isConnSupplied ? userConn : ResourceManager.getConnection();
-		
+
 			// construct the SQL statement
 			final String SQL = SQL_SELECT + " WHERE " + sql;
-		
-		
-			System.out.println( "Executing " + SQL );
+
+			System.out.println("Executing " + SQL);
 			// prepare statement
-			stmt = conn.prepareStatement( SQL );
-			stmt.setMaxRows( maxRows );
-		
+			stmt = conn.prepareStatement(SQL);
+			stmt.setMaxRows(maxRows);
+
 			// bind parameters
-			for (int i=0; sqlParams!=null && i<sqlParams.length; i++ ) {
-				stmt.setObject( i+1, sqlParams[i] );
+			for (int i = 0; sqlParams != null && i < sqlParams.length; i++) {
+				stmt.setObject(i + 1, sqlParams[i]);
 			}
-		
-		
+
 			rs = stmt.executeQuery();
-		
+
 			// fetch the results
 			return fetchMultiResults(rs);
-		}
-		catch (Exception _e) {
+		} catch (Exception _e) {
 			_e.printStackTrace();
-			throw new TblFloormapsDaoException( "Exception: " + _e.getMessage(), _e );
-		}
-		finally {
+			throw new TblFloormapsDaoException("Exception: " + _e.getMessage(),
+					_e);
+		} finally {
 			ResourceManager.close(rs);
 			ResourceManager.close(stmt);
 			if (!isConnSupplied) {
 				ResourceManager.close(conn);
 			}
-		
+
 		}
-		
+
 	}
 
 	@Override
 	public void update(TblFloormapsPk pk, TblFloormaps dto)
 			throws TblFloormapsDaoException {
 		// TODO Auto-generated method stub
-		
-	}
 
-	
+	}
 
 }
