@@ -47,17 +47,23 @@ public class ItemCategoryDAO {
 			COLUMN_NAME + " TEXT UNIQUE, " +
 			COLUMN_DESC + " TEXT)";
 	
-	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
+	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
+	
+	private SQLiteDatabase db;
 
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
 	public ItemCategoryDAO() {}
+	
+	public ItemCategoryDAO(SQLiteDatabase db) {
+		this.db = db;
+	}
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -72,6 +78,10 @@ public class ItemCategoryDAO {
 	 * @return - item categories list
 	 */
 	public List<ItemCategory> getAll() {
+		
+		if (db == null) {
+			db = new DBHelper().getWritableDatabase();
+		}
 		
 		SQLiteDatabase db = new DBHelper().getWritableDatabase();
 		

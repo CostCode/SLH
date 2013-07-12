@@ -8,7 +8,7 @@
     <TableRow>
         
         <TextView 
-            android:id="@+id/tv_allshoppinglists_row_name" 
+            android:id="@+id/tv_sl_all_row_name" 
             android:text="@string/sl_name"
             android:layout_width="160dip"
             android:layout_height="wrap_content"
@@ -24,8 +24,17 @@
             android:gravity="right"
             android:layout_gravity="right">
   			
+            <ImageView
+  			    android:id="@+id/btn_sl_all_row_items_edit"
+  			    android:layout_width="wrap_content" 
+  			    android:layout_height="wrap_content"
+  			    android:src="@drawable/edit"
+  			    android:paddingLeft="5sp"
+  			    android:contentDescription="@string/sl_items_edit"
+  			    android:layout_gravity="right"/>
+            
   			<ImageView
-  			    android:id="@+id/btn_allshoppinglists_row_delete"
+  			    android:id="@+id/btn_sl_all_row_delete"
   			    android:layout_width="wrap_content" 
   			    android:layout_height="wrap_content"
   			    android:src="@drawable/delete"
@@ -40,7 +49,7 @@
     <TableRow>
         
         <TextView 
-            android:id="@+id/tv_allshoppinglists_row_date" 
+            android:id="@+id/tv_sl_all_row_date" 
             android:layout_width="0dip" 
             android:layout_height="wrap_content" 
             android:text="@string/sl_date" 

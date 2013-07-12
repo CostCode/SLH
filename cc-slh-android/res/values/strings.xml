@@ -6,5 +6,9 @@
     <string name="app_name">SLH</string>
     <string name="image_logo">Logo</string>
     <string name="error_unspecified">Unspecified error.</string>
+    
+    <string name="tab_sl_all">All Lists</string>
+    <string name="tab_sl_active">Active List</string>
+    <string name="tab_sl_settings">Settings</string>
 	
 </resources>

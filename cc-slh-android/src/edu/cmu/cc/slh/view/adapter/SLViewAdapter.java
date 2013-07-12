@@ -5,20 +5,18 @@
 package edu.cmu.cc.slh.view.adapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.EditText;
 
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.android.view.IValidatingView;
-import edu.cmu.cc.android.view.validation.IViewValidator;
-import edu.cmu.cc.android.view.validation.textview.RegexValidator;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.ShoppingList;
+import edu.cmu.cc.slh.view.validator.textview.CommentValidator;
+import edu.cmu.cc.slh.view.validator.textview.NameValidator;
 
 /**
  *  DESCRIPTION: 
@@ -27,19 +25,19 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 27, 2013
  */
-public class SLViewAdapter {
+public class SLViewAdapter extends AbstractViewAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
+	
+	private static final int VALIDATING_VIEWS_COUNT = 1;
 	
 	private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
-	
-	private List<IValidatingView> validatingViews;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -51,7 +49,7 @@ public class SLViewAdapter {
 	}
 
 	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
+	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
 	public static void updateView(View view) {
@@ -86,54 +84,6 @@ public class SLViewAdapter {
 	}
 	
 	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
-	//-------------------------------------------------------------------------
-	
-	/**
-	 * Performs validation on all views
-	 */
-	public void validateAllViews() {
-		
-		synchronized (validatingViews) {
-			for (IValidatingView view : validatingViews) {
-				view.flagOrUnflagValidationError();
-			}
-		}
-	}
-	
-	/**
-	 * Checks whether all the views are valid or not
-	 * @return
-	 */
-	public boolean areAllViewsValid() {
-		
-		synchronized (validatingViews) {
-			for (IValidatingView view : validatingViews) {
-				if (!view.isValid()) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * Resets the values of the views and removes validation errors
-	 */
-	public void resetAllViewsValues() {
-		
-		synchronized (validatingViews) {
-			for (IValidatingView view : validatingViews) {
-				if (view instanceof EditText) {
-					((EditText) view).setText("");
-				}
-				view.unflagValidationError();
-			}
-		}
-	}
-
-	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
@@ -144,37 +94,15 @@ public class SLViewAdapter {
 	private void initializeValidators(View parentView) {
 		
 		Context ctx = parentView.getContext();
-		validatingViews = new ArrayList<IValidatingView>(1);
+		validatingViews = 
+				new ArrayList<IValidatingView>(VALIDATING_VIEWS_COUNT);
 		
 		synchronized (validatingViews) {
 			assignValidatorToView(parentView, R.id.etShoppingListName, 
-					R.string.sl_name, 
-					new RegexValidator(ctx, ".{3,10}", R.string.validation_shoppinglist_name));
+					R.string.sl_name, new NameValidator(ctx));
 			assignValidatorToView(parentView, R.id.etShoppingListComments, 
-					R.string.sl_comment, 
-					new RegexValidator(ctx, ".{0,20}", R.string.validation_shoppinglist_comment));
+					R.string.sl_comment, new CommentValidator(ctx));
 		}
-	}
-	
-	/**
-	 * Assigns a given validator to the view
-	 * @param parentView
-	 * @param viewResID
-	 * @param viewDisplayNameResID
-	 * @param validator
-	 */
-	private void assignValidatorToView(View parentView, int viewResID, 
-			int viewDisplayNameResID, IViewValidator validator) {
-		
-		IValidatingView validatingView = 
-				(IValidatingView) parentView.findViewById(viewResID);
-		
-		String viewDisplayName = parentView.getContext().getResources()
-				.getString(viewDisplayNameResID);
-		
-		validatingView.setValidator(validator, viewDisplayName);
-		
-		validatingViews.add(validatingView);
 	}
 
 }

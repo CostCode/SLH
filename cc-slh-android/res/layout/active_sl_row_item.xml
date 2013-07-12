@@ -10,7 +10,7 @@
         <TextView 
             android:id="@+id/tv_active_sl_row_item_mark" 
             android:text="@string/sl_item_mark"
-            android:layout_width="50dip"
+            android:layout_width="10dip"
             android:layout_height="wrap_content"
             android:paddingLeft="5sp"
             android:gravity="left"/>

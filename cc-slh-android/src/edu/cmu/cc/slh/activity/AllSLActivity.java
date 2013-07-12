@@ -12,6 +12,7 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,12 +27,10 @@ import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.dao.SLDAO;
 import edu.cmu.cc.slh.dialog.SLDialog;
-import edu.cmu.cc.slh.dialog.SLDialog.IShoppingListDialogCaller;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.task.FetchSLTask;
 import edu.cmu.cc.slh.task.FetchSLTask.IFetchSLTaskCaller;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
-import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter.IDeleteSLCaller;
 
 /**
  *  DESCRIPTION: 
@@ -42,8 +41,7 @@ import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter.IDeleteSLCaller;
  */
 @SuppressLint("UseSparseArrays")
 public class AllSLActivity extends AbstractAsyncListActivity
-implements IFetchSLTaskCaller, IShoppingListDialogCaller, 
-IDeleteSLCaller {
+implements IFetchSLTaskCaller, ISLStateListener, IOptionsMenuHandler {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -126,38 +124,47 @@ IDeleteSLCaller {
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
+	public boolean prepareOptionsMenu(Menu menu) {
 		menuItems = new HashMap<Integer, MenuItem>(1);
 		
 		menuItems.put(R.string.sl_all_add, 
 				menu.add(R.string.sl_all_add).setIcon(R.drawable.add));
 		
-		return true;
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		
 		setMenuItemState(R.string.sl_all_add, true, true);
 		
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean handleOptionsMenuItemSelection(final MenuItem item) {
 		
-		if (item.getTitle().equals(getString(R.string.sl_all_add))) {
-			ShoppingList newSL = new ShoppingList(
-					null, new Date(System.currentTimeMillis()), null);
-			showShoppingListDialog(newSL);
-		}
+		Runnable callback = new Runnable() {
+			
+			@Override
+			public void run() {
+				if (item.getTitle().equals(getString(R.string.sl_all_add))) {
+					ShoppingList newSL = new ShoppingList(
+							null, new Date(System.currentTimeMillis()), null);
+					showShoppingListDialog(newSL);
+				}
+			}
+		};
+		
+		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
+		osMessage.sendToTarget();
 		
 		return true;
 	}
+
+	
+	//-------------------------------------------------------------------------
+	// ISLStateListener methods
+	//-------------------------------------------------------------------------
+	
+	
 	
 	@Override
-	public void onShoppingListAdded() {
+	public void onSLUpdated() {
 		
 		ShoppingList sl = 
 				ApplicationState.getInstance().getCurrentSL();
@@ -177,8 +184,17 @@ IDeleteSLCaller {
 	}
 
 	@Override
-	public void onShoppingListDeleted() {
+	public void onSLDeleted() {
 		fetchShoppingLists();
+	}
+	
+	@Override
+	public void onSLEditItems(ShoppingList selectedSL) {
+		
+		ApplicationState.getInstance().setCurrentSL(selectedSL);
+		
+		Intent intent = new Intent(this, ActiveSLActivity.class);
+		startActivity(intent);
 	}
 	
 	
@@ -200,7 +216,7 @@ IDeleteSLCaller {
 	/**
 	 * Displays a detail shopping list dialog
 	 */
-	private void showShoppingListDialog(ShoppingList sl) {
+	private void showShoppingListDialog(final ShoppingList sl) {
 		
 		ApplicationState.getInstance().setCurrentSL(sl);
 		

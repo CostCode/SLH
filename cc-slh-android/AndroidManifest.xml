@@ -36,8 +36,13 @@
         </activity>
         
         <activity 
-            android:name="edu.cmu.cc.slh.activity.AllSLActivity" 
-            android:label="test"/>
+            android:name="edu.cmu.cc.slh.activity.SLHTabLayouActivity" />
+        
+        <activity 
+            android:name="edu.cmu.cc.slh.activity.AllSLActivity" />
+        
+        <activity 
+            android:name="edu.cmu.cc.slh.activity.ActiveSLActivity" />
         
     </application>
 

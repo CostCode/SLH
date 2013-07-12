@@ -7,6 +7,7 @@ package edu.cmu.cc.slh.dialog;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.activity.ISLStateListener;
 import edu.cmu.cc.slh.view.adapter.SLViewAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,9 +38,9 @@ public class SLDialog extends DialogFragment {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private SLViewAdapter viewAdaptor;
+	private SLViewAdapter viewAdapter;
 	
-	private IShoppingListDialogCaller caller;
+	private ISLStateListener slStateListener;
 	
 	private View view;
 	
@@ -51,28 +52,24 @@ public class SLDialog extends DialogFragment {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
-	private void setCaller(IShoppingListDialogCaller caller) {
-		this.caller = caller;
+	private void setCaller(ISLStateListener slStateListener) {
+		this.slStateListener = slStateListener;
 	}
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static SLDialog newInstance(
-			IShoppingListDialogCaller caller) {
+	public static SLDialog newInstance(ISLStateListener slStateListener) {
 		
 		SLDialog dialog = new SLDialog();
-		dialog.setCaller(caller);
+		dialog.setCaller(slStateListener);
 		
 		return dialog;
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		
-		AlertDialog.Builder dialogBuilder = 
-				new AlertDialog.Builder(getActivity());
 		
 		LayoutInflater inflater = (LayoutInflater) 
 				getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +78,10 @@ public class SLDialog extends DialogFragment {
 		
 		SLViewAdapter.updateView(view);
 		
-		viewAdaptor = new SLViewAdapter(view);
+		viewAdapter = new SLViewAdapter(view);
+		
+		AlertDialog.Builder dialogBuilder = 
+				new AlertDialog.Builder(getActivity());
 		
 		dialogBuilder.setView(view);
 		
@@ -111,8 +111,6 @@ public class SLDialog extends DialogFragment {
 			@Override
 			public void onShow(final DialogInterface dlg) {
 				
-				Logger.logDebug(SLDialog.class, "onShow WAS CALLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				
 				if (dialog != null) {
 					
 					// Positive button
@@ -122,10 +120,10 @@ public class SLDialog extends DialogFragment {
 						
 						@Override
 						public void onClick(View v) {
-							viewAdaptor.validateAllViews();
+							viewAdapter.validateAllViews();
 							view.invalidate();
 							
-							if (!viewAdaptor.areAllViewsValid()) {
+							if (!viewAdapter.areAllViewsValid()) {
 								
 								Logger.logDebug(SLDialog.class, "Fields are not valid!!!");
 								
@@ -136,7 +134,7 @@ public class SLDialog extends DialogFragment {
 								Logger.logDebug(SLDialog.class, "Fields are valid!!!");
 								
 								SLViewAdapter.updateModel(view);
-								caller.onShoppingListAdded();
+								slStateListener.onSLUpdated();
 								
 								Toast.makeText(getActivity(), 
 										R.string.sl_save_success, 
@@ -148,6 +146,7 @@ public class SLDialog extends DialogFragment {
 					});
 					
 					// Negative button
+					
 					Button btnNegative = dialog.getButton(Dialog.BUTTON_NEGATIVE);
 					btnNegative.setOnClickListener(new View.OnClickListener() {
 						
@@ -168,14 +167,4 @@ public class SLDialog extends DialogFragment {
 		return dialog;
 	}
 	
-	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
-	//-------------------------------------------------------------------------
-
-	public interface IShoppingListDialogCaller {
-		
-		public void onShoppingListAdded();
-		
-	}
-
 }

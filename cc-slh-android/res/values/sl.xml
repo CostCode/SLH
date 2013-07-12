@@ -9,6 +9,7 @@
     
     <!-- Shopping list: commands -->
     <string name="sl_delete">Delete</string>
+    <string name="sl_items_edit">Edit items</string>
     <string name="sl_save">Save</string>
     <string name="sl_cancel">Cancel</string>
     <string name="sl_show_summary">Show summary</string>

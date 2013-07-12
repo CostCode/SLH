@@ -4,12 +4,12 @@
  */
 package edu.cmu.cc.slh.view.adapter;
 
-import java.text.DateFormat;
 import java.util.List;
 
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.activity.ISLStateListener;
 import edu.cmu.cc.slh.dao.SLDAO;
 import edu.cmu.cc.slh.model.ShoppingList;
 import android.content.Context;
@@ -47,20 +47,20 @@ public class AllSLViewListAdapter extends BaseAdapter {
 	
 	private List<ShoppingList> list;
 	
-	private IDeleteSLCaller deleteCaller;
+	private ISLStateListener slStateListener;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
 	public AllSLViewListAdapter(Context ctx, List<ShoppingList> list, 
-			IDeleteSLCaller deleteCaller) {
+			ISLStateListener slStateListener) {
 		
 		super();
 		
 		this.ctx = ctx;
 		this.list = list;
-		this.deleteCaller = deleteCaller;
+		this.slStateListener = slStateListener;
 		this.inflater = LayoutInflater.from(ctx);
 	}
 
@@ -113,14 +113,29 @@ public class AllSLViewListAdapter extends BaseAdapter {
 	}
 	
 	private void customizeView(ShoppingList sl, ViewHolder viewHolder) {
-		DateFormat dateFormat = DateFormat.getDateTimeInstance();
 		
 		viewHolder.getNameView().setText(sl.getName());
-		viewHolder.getDateView().setText(dateFormat.format(sl.getDate()));
 		viewHolder.getDateView().setText(
 				StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
 		
+		customizeEditItemsImage(viewHolder.getEditItemsView(), sl);
 		customizeDeleteImage(viewHolder.getDeleteView(), sl);
+	}
+	
+	private void customizeEditItemsImage(ImageView editItemsImage, 
+			final ShoppingList sl) {
+		
+		editItemsImage.setVisibility(View.VISIBLE);
+		editItemsImage.setClickable(true);
+		editItemsImage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				slStateListener.onSLEditItems(sl);
+			}
+			
+		});
 	}
 	
 	private void customizeDeleteImage(ImageView deleteImage, final ShoppingList sl) {
@@ -143,7 +158,7 @@ public class AllSLViewListAdapter extends BaseAdapter {
 								R.string.sl_delete_success, 
 								Toast.LENGTH_LONG).show();
 						
-						deleteCaller.onShoppingListDeleted();
+						slStateListener.onSLDeleted();
 					}
 				};
 				
@@ -162,15 +177,19 @@ public class AllSLViewListAdapter extends BaseAdapter {
 	private ViewHolder getViewHolder(View view) {
 		
 		TextView nameView = (TextView) 
-				view.findViewById(R.id.tv_allshoppinglists_row_name);
+				view.findViewById(R.id.tv_sl_all_row_name);
 		
 		TextView dateView = (TextView) 
-				view.findViewById(R.id.tv_allshoppinglists_row_date);
+				view.findViewById(R.id.tv_sl_all_row_date);
+		
+		ImageView editItemsView = (ImageView)
+				view.findViewById(R.id.btn_sl_all_row_items_edit);
 		
 		ImageView deleteView = (ImageView)
-				view.findViewById(R.id.btn_allshoppinglists_row_delete);
+				view.findViewById(R.id.btn_sl_all_row_delete);
 		
-		ViewHolder viewHolder = new ViewHolder(nameView, dateView, deleteView);
+		ViewHolder viewHolder = new ViewHolder(nameView, dateView, 
+				editItemsView, deleteView);
 		
 		return viewHolder;
 	}
@@ -192,14 +211,17 @@ public class AllSLViewListAdapter extends BaseAdapter {
 		
 		private TextView dateView;
 		
+		private ImageView editItemsView;
+		
 		private ImageView deleteView;
 		
 		
 		public ViewHolder(TextView nameView, TextView dateView, 
-				ImageView deleteView) {
+				ImageView editItemsView, ImageView deleteView) {
 			
 			this.nameView = nameView;
 			this.dateView = dateView;
+			this.editItemsView = editItemsView;
 			this.deleteView = deleteView;
 		}
 
@@ -212,20 +234,14 @@ public class AllSLViewListAdapter extends BaseAdapter {
 			return dateView;
 		}
 
+		public ImageView getEditItemsView() {
+			return editItemsView;
+		}
+
 		public ImageView getDeleteView() {
 			return deleteView;
 		}
 		
 	}
 	
-	//-------------------------------------------------------------------------
-	// INTERFACE
-	//-------------------------------------------------------------------------
-	
-	public interface IDeleteSLCaller {
-		
-		public void onShoppingListDeleted();
-		
-	}
-
 }

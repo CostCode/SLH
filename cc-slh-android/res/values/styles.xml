@@ -9,4 +9,25 @@
 	    <item name="android:textStyle">bold|italic</item>
 	</style>
 	
+	<style name="formFieldLabel">
+	    <item name="android:paddingLeft">5dip</item>
+  		<item name="android:paddingRight">10dip</item>
+  		<item name="android:layout_height">wrap_content</item>
+  	</style>
+  	
+	<style name="formField">
+  		<item name="android:layout_width">0dip</item>
+  		<item name="android:layout_height">wrap_content</item>
+  		<item name="android:layout_weight">1</item>
+  	</style>
+  	
+	<style name="formField.text">
+  		<item name="android:singleLine">true</item>
+  		<item name="android:maxLength">50</item>
+  	</style>
+  	
+	<style name="formField.spinner">
+	    <item name="android:checkMark">?android:attr/listChoiceIndicatorSingle</item>
+  	</style>
+	
 </resources>

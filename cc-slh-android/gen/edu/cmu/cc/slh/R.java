@@ -26,28 +26,43 @@ public final class R {
         public static final int cancel=0x7f020002;
         public static final int costco_logo=0x7f020003;
         public static final int delete=0x7f020004;
-        public static final int ellipse=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int repeat_bg=0x7f020007;
+        public static final int edit=0x7f020005;
+        public static final int ellipse=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int icon_photos_tab=0x7f020008;
+        public static final int icon_songs_tab=0x7f020009;
+        public static final int indicator_input_error=0x7f02000a;
+        public static final int photos_gray=0x7f02000b;
+        public static final int photos_white=0x7f02000c;
+        public static final int repeat_bg=0x7f02000d;
+        public static final int songs_gray=0x7f02000e;
+        public static final int songs_white=0x7f02000f;
     }
     public static final class id {
         public static final int allshoppinglists_title=0x7f07000a;
         public static final int btnActivationActivate=0x7f070003;
         public static final int btn_active_sl_row_item_delete=0x7f070008;
-        public static final int btn_allshoppinglists_row_delete=0x7f07000c;
+        public static final int btn_sl_all_row_delete=0x7f07000d;
+        public static final int btn_sl_all_row_items_edit=0x7f07000c;
         public static final int etActivationMembershipID=0x7f070002;
-        public static final int etShoppingListComments=0x7f070010;
-        public static final int etShoppingListName=0x7f07000e;
+        public static final int etShoppingListComments=0x7f070011;
+        public static final int etShoppingListName=0x7f07000f;
+        public static final int et_sl_item_comment=0x7f070017;
+        public static final int et_sl_item_name=0x7f070013;
+        public static final int et_sl_item_price=0x7f070016;
+        public static final int et_sl_item_quantity=0x7f070014;
         public static final int footer=0x7f070001;
         public static final int header=0x7f070000;
-        public static final int tvShoppingListDate=0x7f07000f;
+        public static final int sp_sl_item_category=0x7f070012;
+        public static final int sp_sl_item_unit=0x7f070015;
+        public static final int tvShoppingListDate=0x7f070010;
         public static final int tv_active_sl_group_name=0x7f070005;
         public static final int tv_active_sl_row_item_details=0x7f070009;
         public static final int tv_active_sl_row_item_mark=0x7f070006;
         public static final int tv_active_sl_row_item_name=0x7f070007;
         public static final int tv_active_sl_title=0x7f070004;
-        public static final int tv_allshoppinglists_row_date=0x7f07000d;
-        public static final int tv_allshoppinglists_row_name=0x7f07000b;
+        public static final int tv_sl_all_row_date=0x7f07000e;
+        public static final int tv_sl_all_row_name=0x7f07000b;
     }
     public static final class layout {
         public static final int activation=0x7f030000;
@@ -59,6 +74,12 @@ public final class R {
         public static final int all_sl=0x7f030006;
         public static final int all_sl_row=0x7f030007;
         public static final int sl_detail=0x7f030008;
+        public static final int sl_item_category_dropdownview=0x7f030009;
+        public static final int sl_item_category_textview=0x7f03000a;
+        public static final int sl_item_detail=0x7f03000b;
+        public static final int sl_item_unit_dropdownview=0x7f03000c;
+        public static final int sl_item_unit_textview=0x7f03000d;
+        public static final int slh_tabhost=0x7f03000e;
     }
     public static final class string {
         public static final int activation_activate=0x7f04000b;
@@ -84,77 +105,91 @@ public final class R {
         /**  Global Application Sources 
          */
         public static final int app_name=0x7f040006;
-        public static final int error_unspecified=0x7f04003b;
-        public static final int image_logo=0x7f04003a;
+        public static final int error_unspecified=0x7f040044;
+        public static final int image_logo=0x7f040043;
         public static final int settings_triangulation_onOff=0x7f040015;
-        public static final int sl_active_error_persist=0x7f040024;
-        public static final int sl_active_error_retrieve=0x7f040025;
-        public static final int sl_active_title=0x7f040023;
-        public static final int sl_all_add=0x7f04002a;
-        public static final int sl_all_error_fetch=0x7f040029;
-        public static final int sl_all_error_versionPersist=0x7f040027;
-        public static final int sl_all_error_versionRetrieve=0x7f040028;
-        public static final int sl_all_loading=0x7f04002b;
+        public static final int sl_active_error_persist=0x7f040025;
+        public static final int sl_active_error_retrieve=0x7f040026;
+        public static final int sl_active_title=0x7f040024;
+        public static final int sl_all_add=0x7f04002b;
+        public static final int sl_all_error_fetch=0x7f04002a;
+        public static final int sl_all_error_versionPersist=0x7f040028;
+        public static final int sl_all_error_versionRetrieve=0x7f040029;
+        public static final int sl_all_loading=0x7f04002c;
         /**  Shopping lists 
          */
-        public static final int sl_all_title=0x7f040026;
-        public static final int sl_cancel=0x7f04001b;
+        public static final int sl_all_title=0x7f040027;
+        public static final int sl_cancel=0x7f04001c;
         public static final int sl_comment=0x7f040018;
         public static final int sl_date=0x7f040017;
         /**  Shopping list: commands 
          */
         public static final int sl_delete=0x7f040019;
-        public static final int sl_delete_message=0x7f040021;
-        public static final int sl_delete_success=0x7f040022;
-        public static final int sl_delete_title=0x7f040020;
+        public static final int sl_delete_message=0x7f040022;
+        public static final int sl_delete_success=0x7f040023;
+        public static final int sl_delete_title=0x7f040021;
         /**  Shopping list Item: Buttons
          */
-        public static final int sl_item_add=0x7f040031;
-        public static final int sl_item_cancel=0x7f040034;
+        public static final int sl_item_add=0x7f040035;
+        public static final int sl_item_cancel=0x7f040038;
         /**  Shopping list Item: Fields
          */
-        public static final int sl_item_category=0x7f04002c;
-        public static final int sl_item_comment=0x7f040030;
-        public static final int sl_item_delete=0x7f040032;
-        public static final int sl_item_delete_message=0x7f040037;
-        public static final int sl_item_delete_success=0x7f040038;
-        public static final int sl_item_delete_title=0x7f040036;
-        /**  Shopping list Item: Dialogs
-         */
-        public static final int sl_item_loading=0x7f040035;
+        public static final int sl_item_category=0x7f04002d;
+        public static final int sl_item_category_empty=0x7f040033;
+        public static final int sl_item_comment=0x7f040032;
+        public static final int sl_item_delete=0x7f040036;
+        public static final int sl_item_delete_message=0x7f04003e;
+        public static final int sl_item_delete_success=0x7f04003f;
+        public static final int sl_item_delete_title=0x7f04003d;
+        public static final int sl_item_error_fetch=0x7f040040;
+        public static final int sl_item_loading=0x7f04003a;
         /**  Shopping list Item: Others
          */
-        public static final int sl_item_mark=0x7f040039;
-        public static final int sl_item_name=0x7f04002d;
-        public static final int sl_item_price=0x7f04002f;
-        public static final int sl_item_quantity=0x7f04002e;
-        public static final int sl_item_save=0x7f040033;
+        public static final int sl_item_mark=0x7f040042;
+        public static final int sl_item_name=0x7f04002e;
+        public static final int sl_item_price=0x7f040031;
+        public static final int sl_item_quantity=0x7f04002f;
+        public static final int sl_item_save=0x7f040037;
+        public static final int sl_item_save_failed=0x7f04003c;
+        public static final int sl_item_save_invalidFields=0x7f040041;
+        public static final int sl_item_save_success=0x7f04003b;
+        /**  Shopping list Item: Dialogs
+         */
+        public static final int sl_item_title=0x7f040039;
+        public static final int sl_item_unit=0x7f040030;
+        public static final int sl_item_unit_empty=0x7f040034;
+        public static final int sl_items_edit=0x7f04001a;
         /**  Shopping list 
          */
         public static final int sl_name=0x7f040016;
-        public static final int sl_save=0x7f04001a;
-        public static final int sl_save_failed=0x7f04001f;
-        public static final int sl_save_invalidFields=0x7f04001e;
-        public static final int sl_save_success=0x7f04001d;
-        public static final int sl_show_summary=0x7f04001c;
-        public static final int validation_membership=0x7f04003c;
+        public static final int sl_save=0x7f04001b;
+        public static final int sl_save_failed=0x7f040020;
+        public static final int sl_save_invalidFields=0x7f04001f;
+        public static final int sl_save_success=0x7f04001e;
+        public static final int sl_show_summary=0x7f04001d;
+        public static final int tab_sl_active=0x7f040046;
+        public static final int tab_sl_all=0x7f040045;
+        public static final int tab_sl_settings=0x7f040047;
+        public static final int validation_comment=0x7f04004a;
+        public static final int validation_membership=0x7f040048;
+        public static final int validation_money=0x7f04004c;
+        public static final int validation_name=0x7f040049;
+        public static final int validation_quantity=0x7f04004b;
         public static final int validation_regex=0x7f040007;
-        public static final int validation_shoppinglist_comment=0x7f04003e;
-        public static final int validation_shoppinglist_name=0x7f04003d;
         public static final int validation_username=0x7f040008;
-        public static final int ws_activation_memberid=0x7f040043;
+        public static final int ws_activation_memberid=0x7f040051;
         /**  Web Service: Activation 
          */
-        public static final int ws_activation_validate=0x7f040041;
-        public static final int ws_activation_validity=0x7f040042;
-        public static final int ws_namespace=0x7f040040;
+        public static final int ws_activation_validate=0x7f04004f;
+        public static final int ws_activation_validity=0x7f040050;
+        public static final int ws_namespace=0x7f04004e;
         /**  Web Service: Shopping Lists  
          */
-        public static final int ws_shoppinglists_retrieveVersion=0x7f040044;
-        public static final int ws_shoppinglists_version=0x7f040045;
+        public static final int ws_shoppinglists_retrieveVersion=0x7f040052;
+        public static final int ws_shoppinglists_version=0x7f040053;
         /**  Web Service: Connection details 
          */
-        public static final int ws_url=0x7f04003f;
+        public static final int ws_url=0x7f04004d;
     }
     public static final class style {
         /** 
@@ -178,11 +213,15 @@ public final class R {
             backward-compatibility can go here.
         
          */
-        public static final int AppBaseTheme=0x7f060001;
+        public static final int AppBaseTheme=0x7f060005;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int SLHTheme=0x7f060002;
+        public static final int SLHTheme=0x7f060006;
+        public static final int formField=0x7f060002;
+        public static final int formField_spinner=0x7f060004;
+        public static final int formField_text=0x7f060003;
+        public static final int formFieldLabel=0x7f060001;
         public static final int formHeader=0x7f060000;
     }
 }

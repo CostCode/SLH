@@ -232,7 +232,7 @@ implements IActivationTaskCaller {
 	 * Shows ShoppingListsActivity
 	 */
 	private void showMainActivity() {
-		Intent intent = new Intent(this, AllSLActivity.class);
+		Intent intent = new Intent(this, SLHTabLayouActivity.class);
 		startActivity(intent);
 	}
 

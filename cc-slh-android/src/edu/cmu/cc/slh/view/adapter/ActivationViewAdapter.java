@@ -73,7 +73,7 @@ public class ActivationViewAdapter {
 		
 		synchronized (validatingViews) {
 			for (IValidatingView view : validatingViews) {
-				view.flagOrUnflagValidationError();
+				view.flagOrUnflagValidationError(true);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class ActivationViewAdapter {
 				if (view instanceof EditText) {
 					((EditText) view).setText("");
 				}
-				view.unflagValidationError();
+				view.flagOrUnflagValidationError(false);
 			}
 		}
 	}

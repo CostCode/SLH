@@ -34,6 +34,8 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 	
 	private String fieldDisplayName;
 	
+	private boolean validationMode;
+	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -60,6 +62,7 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 		
 		this.validator = validator;
 		this.fieldDisplayName = fieldDisplayName;
+		this.validationMode = false;
 		
 		initInputType(validator);
 		registerListerners();
@@ -67,22 +70,26 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 
 	@Override
 	public boolean isValid() {
+		
+		if (validator == null || !validationMode) {
+			return true;
+		}
+		
 		return validator.validate(this);
 	}
 
 	@Override
-	public void flagOrUnflagValidationError() {
+	public void flagOrUnflagValidationError(boolean validationMode) {
+		
+		this.validationMode = validationMode;
+		
 		String errMsg = (isValid()) ? null : 
 			validator.getErrorMessage(fieldDisplayName);
+		
 		setError(errMsg);
 		invalidate();
 	}
 
-	@Override
-	public void unflagValidationError() {
-		setError(null);
-	}
-	
 	//-------------------------------------------------------------------------
 	// PROTECTED METHODS
 	//-------------------------------------------------------------------------
@@ -112,7 +119,7 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus) {
-					flagOrUnflagValidationError();
+					flagOrUnflagValidationError(validationMode);
 				}
 			}
 		});
@@ -127,7 +134,7 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 				boolean consumed = false;
 				if (keyCode == KEY_CODE_ENTER && 
 						event.getAction() == KeyEvent.ACTION_DOWN) {
-					flagOrUnflagValidationError();
+					flagOrUnflagValidationError(validationMode);
 					consumed = true;
 				}
 				return consumed;
@@ -140,7 +147,7 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 			
 			@Override
 			public boolean onLongClick(View v) {
-				flagOrUnflagValidationError();
+				flagOrUnflagValidationError(validationMode);
 				return true;
 			}
 		});

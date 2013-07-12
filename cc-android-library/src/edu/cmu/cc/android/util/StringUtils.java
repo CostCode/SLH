@@ -4,6 +4,7 @@
  */
 package edu.cmu.cc.android.util;
 
+import android.annotation.SuppressLint;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -113,6 +114,12 @@ public class StringUtils {
 				+ appendChars;
 		
 		return limitedValue;
+	}
+	
+	@SuppressLint("DefaultLocale")
+	public static String getMoneyFormatString(double value) {
+		
+		return String.format("%.2f", value);
 	}
 
 	//-------------------------------------------------------------------------

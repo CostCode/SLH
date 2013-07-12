@@ -4,7 +4,10 @@
  */
 package edu.cmu.cc.slh.model;
 
+import android.annotation.SuppressLint;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -21,8 +24,11 @@ public class ShoppingListItem extends BaseEntity {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	/** Product category id of this item */
-	private long categoryId;
+	/** Shopping list to which this item belongs */
+	private ShoppingList shoppingList;
+	
+	/** Product category of this item */
+	private ItemCategory category;
 	
 	/** Name of the shopping list item */
 	private String name;
@@ -52,20 +58,25 @@ public class ShoppingListItem extends BaseEntity {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 
-
-	public long getCategoryId() {
-		return categoryId;
+	public ShoppingList getShoppingList() {
+		return shoppingList;
+	}
+	public void setShoppingList(ShoppingList shoppingList) {
+		this.shoppingList = shoppingList;
+	}
+	
+	
+	public ItemCategory getCategory() {
+		return category;
+	}
+	public void setCategory(ItemCategory category) {
+		this.category = category;
 	}
 
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
-	}
-
-
+	
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -74,7 +85,6 @@ public class ShoppingListItem extends BaseEntity {
 	public int getQuantity() {
 		return quantity;
 	}
-
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
@@ -83,7 +93,6 @@ public class ShoppingListItem extends BaseEntity {
 	public BigDecimal getPrice() {
 		return price;
 	}
-	
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
@@ -92,7 +101,6 @@ public class ShoppingListItem extends BaseEntity {
 	public int getUnit() {
 		return unit;
 	}
-
 	public void setUnit(int unit) {
 		this.unit = unit;
 	}
@@ -101,7 +109,6 @@ public class ShoppingListItem extends BaseEntity {
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -117,7 +124,9 @@ public class ShoppingListItem extends BaseEntity {
 		StringBuilder builder = new StringBuilder();
 		builder.append(id);
 		builder.append(", ");
-		builder.append(categoryId);
+		builder.append((shoppingList != null) ? shoppingList.getName() : "null");
+		builder.append(", ");
+		builder.append((category != null) ? category.getName() : "null");
 		builder.append(", ");
 		builder.append(name);
 		builder.append(", ");
@@ -143,6 +152,7 @@ public class ShoppingListItem extends BaseEntity {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
+	@SuppressLint("UseSparseArrays")
 	public static class Unit {
 		
 		public static final int CODE_PC = 1;
@@ -153,29 +163,38 @@ public class ShoppingListItem extends BaseEntity {
 		private static final String STR_LB = "lb.";
 		private static final String STR_GAL = "gal.";
 		
+		private static Map<Integer, String> units;
+		
+		static {
+			units = new HashMap<Integer, String>(3);
+			units.put(CODE_PC, STR_PC);
+			units.put(CODE_LB, STR_LB);
+			units.put(CODE_GAL, STR_GAL);
+		}
+		
 		/**
 		 * Returns short string name of the unit measure by unit code
 		 * @param unitCode - code of the unit measure
 		 * @return short name of the unit measure
 		 * @throws IllegalArgumentException - if the given unit code if not valid
 		 */
-		public static String getUnitByCode(final int unitCode) 
-				throws IllegalArgumentException {
+		public static synchronized String getUnitNameByCode(final int unitCode) {
+			return units.get(unitCode);
+		}
+		
+		public static synchronized int getUnitCodeByName(final String unitName) {
 			
-			if (unitCode < CODE_PC || unitCode > CODE_GAL) {
-				throw new IllegalArgumentException("Invalid Unit code");
+			for (int key : units.keySet()) {
+				if (units.get(key).equals(unitName)) {
+					return key;
+				}
 			}
 			
-			switch (unitCode) {
-			case CODE_PC:
-				return STR_PC;
-			case CODE_LB:
-				return STR_LB;
-			case CODE_GAL:
-				return STR_GAL;
-			}
-			
-			return null;
+			return -1;
+		}
+		
+		public static  Map<Integer, String> getUnitsMap() {
+			return units;
 		}
 		
 	}

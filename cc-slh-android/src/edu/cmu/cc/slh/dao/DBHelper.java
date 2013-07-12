@@ -26,7 +26,7 @@ final class DBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "cc.slh.db";
 	
 	/** Database version number. Used to check for updates */
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 3;
 	
 
 	
@@ -60,7 +60,9 @@ final class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL("PRAGMA foreign_keys=ON;");
+		db.execSQL(ItemCategoryDAO.SQL_CREATE_TABLE);
 		db.execSQL(SLDAO.SQL_CREATE_TABLE);
+		db.execSQL(SLItemDAO.SQL_CREATE_TABLE);
 		
 		Logger.logDebug(getClass(), DATABASE_NAME + 
 				" tables have been created...");
@@ -77,13 +79,15 @@ final class DBHelper extends SQLiteOpenHelper {
 						DATABASE_NAME, oldVersion, newVersion));
 		
 		db.execSQL("PRAGMA foreign_keys=OFF;");
+		db.execSQL(SLItemDAO.SQL_DROP_TABLE);
 		db.execSQL(SLDAO.SQL_DROP_TABLE);
+		db.execSQL(ItemCategoryDAO.SQL_DROP_TABLE);
 		
 		onCreate(db);
 	}
 	
 	//-------------------------------------------------------------------------
-	// HELPER METHODS
+	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
-
+	
 }

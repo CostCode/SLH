@@ -34,11 +34,6 @@ public interface IValidatingView {
 	/**
 	 * Shows a validation error sign if the view is not valid
 	 */
-	public void flagOrUnflagValidationError();
+	public void flagOrUnflagValidationError(boolean validationMode);
 	
-	/**
-	 * Removes validation error visual signs
-	 */
-	public void unflagValidationError();
-
 }

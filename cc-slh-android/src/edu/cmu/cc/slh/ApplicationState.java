@@ -5,10 +5,12 @@
 package edu.cmu.cc.slh;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
+import edu.cmu.cc.slh.model.ShoppingListItem;
 import android.app.Application;
 import android.content.Context;
 
@@ -38,7 +40,9 @@ public class ApplicationState extends Application {
 	
 	private ShoppingList activeSL;
 	
-	private List<ItemCategory> categories;
+	private Map<Long,ItemCategory> categories;
+	
+	private ShoppingListItem currentSLItem;
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -79,17 +83,24 @@ public class ApplicationState extends Application {
 		this.activeSL = activeSL;
 	}
 	
-	public List<ItemCategory> getCategories() {
+	public Map<Long,ItemCategory> getCategories() {
 		return categories;
 	}
-	public void setCategories(List<ItemCategory> categories) {
+	public void setCategories(Map<Long,ItemCategory> categories) {
 		this.categories = categories;
+	}
+	
+	public ShoppingListItem getCurrentSLItem() {
+		return currentSLItem;
+	}
+	public void setCurrentSLItem(ShoppingListItem currentSLItem) {
+		this.currentSLItem = currentSLItem;
 	}
 	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();

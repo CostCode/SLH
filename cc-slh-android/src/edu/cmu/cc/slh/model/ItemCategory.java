@@ -75,12 +75,23 @@ public class ItemCategory extends BaseEntity {
 	@Override
 	public String toString() {
 		
-		StringBuilder builder = new StringBuilder();
-		builder.append(id);
-		builder.append(", ");
-		builder.append(name);
+		return name;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
 		
-		return builder.toString();
+		if (obj instanceof ItemCategory) {
+			ItemCategory anotherCategory = (ItemCategory) obj;
+			return (id == anotherCategory.getId());
+		}
+		
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return (int)id;
 	}
 	
 }

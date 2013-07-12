@@ -12,7 +12,7 @@ public final class R {
     }
     public static final class drawable {
         public static int cancel=0x7f020000;
-        public static int ic_launcher=0x7f020001;
+        public static int indicator_input_error=0x7f020001;
     }
     public static final class string {
         public static int androidUtil_cancel=0x7f030001;

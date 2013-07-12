@@ -52,7 +52,7 @@ public class SLDAO {
 			COLUMN_DATE + " INTEGER, " +
 			COLUMN_DESC + " TEXT)";
 	
-	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
+	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
 	//-------------------------------------------------------------------------
 	// FIELDS

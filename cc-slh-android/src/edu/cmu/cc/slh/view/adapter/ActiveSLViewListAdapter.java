@@ -4,8 +4,8 @@
  */
 package edu.cmu.cc.slh.view.adapter;
 
+import java.util.Collection;
 import java.util.Currency;
-import java.util.List;
 import java.util.Locale;
 
 import edu.cmu.cc.android.util.WidgetUtils;
@@ -52,7 +52,7 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 	
 	private Context ctx;
 	
-	private List<ItemCategory> categories;
+	private Collection<ItemCategory> categories;
 	
 	private LayoutInflater inflater;
 	
@@ -63,7 +63,8 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public ActiveSLViewListAdapter(Context ctx, List<ItemCategory> categories, 
+	public ActiveSLViewListAdapter(Context ctx, 
+			Collection<ItemCategory> categories, 
 			IDeleteSLItemCaller deleteCaller) {
 		
 		super();
@@ -259,7 +260,7 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 		
 		builder.append(item.getQuantity());
 		builder.append(" ");
-		builder.append(ShoppingListItem.Unit.getUnitByCode(item.getUnit()));
+		builder.append(ShoppingListItem.Unit.getUnitNameByCode(item.getUnit()));
 		builder.append(" - ");
 		builder.append(Currency.getInstance(Locale.US).getSymbol());
 		builder.append(String.format("%.2f", item.getPrice().doubleValue()));

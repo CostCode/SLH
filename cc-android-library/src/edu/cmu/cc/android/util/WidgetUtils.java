@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -25,6 +26,8 @@ public class WidgetUtils {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
+	// VIEWS
 	
 	/**
 	 * Retrieve EditText widget from the parent view
@@ -67,6 +70,26 @@ public class WidgetUtils {
 	}
 	
 	
+	public static Spinner getSpinner(View parentView, int id) {
+		return (Spinner) parentView.findViewById(id);
+	}
+	
+	public static <T> boolean setSpinnerSelectedItem(Spinner spinner, T item) {
+		
+		int count = spinner.getCount();
+		for (int i = 0; i < count; i++) {
+			@SuppressWarnings("unchecked")
+			T spinnerItem = (T) spinner.getItemAtPosition(i);
+			if (spinnerItem.equals(item)) {
+				spinner.setSelection(i);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	// DIALOGS
 	
 	public static AlertDialog createOkAlertDialog(Context ctx, int iconResID, 
 			int titleResID, String message) {
