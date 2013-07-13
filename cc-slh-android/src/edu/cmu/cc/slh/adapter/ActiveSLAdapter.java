@@ -9,6 +9,7 @@ import java.util.List;
 import android.content.Context;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.SharedPrefsAdapter;
+import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -51,25 +52,14 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 				R.string.sl_active_error_persist);
 	}
 	
-	public static ShoppingList retrieveActiveShoppingList() {
+	public static ShoppingList retrieveActiveSL() {
 		
 		String strId = retrieveFromSharedPrefs(ApplicationState.getContext(), 
 				KEY_ACTIVE_SHOPPINGLIST, 
 				R.string.sl_active_error_retrieve);
 		
-		long id = Long.parseLong(strId);
-		
-		List<ShoppingList> list = 
-				ApplicationState.getInstance().getShoppingLists();
-		
-		if (list != null && list.size() > 0) {
-			for (ShoppingList sl : list) {
-				if (sl.getId() == id) {
-					return sl;
-				}
-			}
-			
-			return list.get(0);
+		if (!StringUtils.isNullOrEmpty(strId)) {
+			return findSLById(Long.parseLong(strId));
 		}
 		
 		return null;
@@ -105,6 +95,22 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 		} catch (Throwable t) {
 			String errMsg = getErrorMessage(ctx, errMsgResID, t);
 			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
+		}
+		
+		return null;
+	}
+	
+	private static ShoppingList findSLById(long id) {
+		
+		List<ShoppingList> list = 
+				ApplicationState.getInstance().getShoppingLists();
+		
+		if (list != null && list.size() > 0) {
+			for (ShoppingList sl : list) {
+				if (sl.getId() == id) {
+					return sl;
+				}
+			}
 		}
 		
 		return null;

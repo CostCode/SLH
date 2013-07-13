@@ -4,14 +4,19 @@
  */
 package edu.cmu.cc.slh.activity;
 
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 
 /**
  *  DESCRIPTION: 
@@ -26,6 +31,10 @@ public class SLHTabLayouActivity extends TabActivity {
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
+	
+	private static final String TAB_SL_ALL = "tab_sl_all";
+	
+	private static final String TAB_SL_ACTIVE = "tab_sl_active";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -52,38 +61,25 @@ public class SLHTabLayouActivity extends TabActivity {
 		
 		tabHost = getTabHost();
 		
-		//---------------------------------------------------
-		// TAB: All shopping lists
-		//---------------------------------------------------
+		setupTab(TAB_SL_ALL, getString(R.string.tab_sl_all), 
+				R.drawable.icon_photos_tab, AllSLActivity.class);
 		
-		TabSpec allSLTab = tabHost.newTabSpec(getString(R.string.tab_sl_all));
-		allSLTab.setIndicator(getString(R.string.tab_sl_all), 
-				getResources().getDrawable(R.drawable.icon_photos_tab));
-		Intent allSLIntent = new Intent(this, AllSLActivity.class);
-		allSLTab.setContent(allSLIntent);
-		
-		//---------------------------------------------------
-		// TAB: Active Shopping List
-		//---------------------------------------------------
-		
-		TabSpec activeSLTab = tabHost.newTabSpec(getString(R.string.tab_sl_active));
-		activeSLTab.setIndicator(getString(R.string.tab_sl_active), 
-				getResources().getDrawable(R.drawable.icon_songs_tab));
-		Intent activeSLIntent = new Intent(this, ActiveSLActivity.class);
-		activeSLTab.setContent(activeSLIntent);
-		
-		//---------------------------------------------------
-		// TABHOST: Adding tabs into tab host
-		//---------------------------------------------------
-		
-		tabHost.addTab(allSLTab);
-		tabHost.addTab(activeSLTab);
+		setupTab(TAB_SL_ACTIVE, getString(R.string.tab_sl_active), 
+				R.drawable.icon_songs_tab, ActiveSLActivity.class);
 		
 		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			
 			@Override
 			public void onTabChanged(String tabId) {
+				
 				invalidateOptionsMenu();
+				
+				if (tabId.equals(TAB_SL_ACTIVE)) {
+					ApplicationState.getInstance().setCurrentSL(
+							ActiveSLAdapter.retrieveActiveSL());
+					
+					getCurrentTabActivity().refresh();
+				}
 			}
 		});
 	}
@@ -93,25 +89,63 @@ public class SLHTabLayouActivity extends TabActivity {
 		
 		menu.clear();
 		
-		IOptionsMenuHandler menuHandler = getCurrentMenuHandler();
+		ITabActivity tabActivity = getCurrentTabActivity();
 		
-		return menuHandler.prepareOptionsMenu(menu);
+		return tabActivity.prepareOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		IOptionsMenuHandler menuHandler = getCurrentMenuHandler();
+		ITabActivity tabActivity = getCurrentTabActivity();
 		
-		return menuHandler.handleOptionsMenuItemSelection(item);
+		return tabActivity.handleOptionsMenuItemSelection(item);
 	}
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-	private IOptionsMenuHandler getCurrentMenuHandler() {
-		return (IOptionsMenuHandler) getLocalActivityManager()
+	private void setupTab(final String tag, final String label, 
+			int iconResId, Class<?> activity) {
+		
+		TabSpec tabSpec = tabHost.newTabSpec(tag);
+		
+		//---------------------------------------------------
+		// TAB: Setting up tab indicator
+		//---------------------------------------------------
+		
+		tabSpec.setIndicator(createTabIndicator(label, iconResId));
+		
+		//---------------------------------------------------
+		// TAB: Setting up tab activity
+		//---------------------------------------------------
+		
+		Intent tabIntent = new Intent(this, activity);
+		tabSpec.setContent(tabIntent);
+		
+		//---------------------------------------------------
+		// TAB: Adding to the tab host
+		//---------------------------------------------------
+		
+		tabHost.addTab(tabSpec);
+	}
+	
+	private View createTabIndicator(final String label, int iconResId) {
+		
+		View tabIndicator = getLayoutInflater().inflate(R.layout.tab_indicator, null);
+		
+		ImageView ivIcon = (ImageView) tabIndicator.findViewById(R.id.iv_tab_indicator_icon);
+		ivIcon.setImageResource(iconResId);
+		
+		TextView tvTitle = (TextView) tabIndicator.findViewById(R.id.tv_tab_indicator_title);
+		tvTitle.setText(label);
+		
+		return tabIndicator;
+	}
+	
+	private ITabActivity getCurrentTabActivity() {
+		return (ITabActivity) getLocalActivityManager()
 				.getActivity(getTabHost().getCurrentTabTag());
 	}
 

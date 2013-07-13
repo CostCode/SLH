@@ -14,10 +14,12 @@ import android.view.MenuItem;
  *	@version 1.0
  *  Date: Jul 12, 2013
  */
-public interface IOptionsMenuHandler {
+public interface ITabActivity {
 
 	public boolean prepareOptionsMenu(Menu menu);
 	
 	public boolean handleOptionsMenuItemSelection(MenuItem item);
+	
+	public void refresh();
 	
 }

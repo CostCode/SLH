@@ -38,8 +38,6 @@ public class ApplicationState extends Application {
 	
 	private ShoppingList currentSL;
 	
-	private ShoppingList activeSL;
-	
 	private Map<Long,ItemCategory> categories;
 	
 	private ShoppingListItem currentSLItem;
@@ -74,13 +72,6 @@ public class ApplicationState extends Application {
 	}
 	public void setCurrentSL(ShoppingList currentSL) {
 		this.currentSL = currentSL;
-	}
-	
-	public ShoppingList getActiveSL() {
-		return activeSL;
-	}
-	public void setActiveSL(ShoppingList activeSL) {
-		this.activeSL = activeSL;
 	}
 	
 	public Map<Long,ItemCategory> getCategories() {

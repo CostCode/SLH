@@ -3,6 +3,8 @@
 
     <!-- Shopping list -->
     
+    <string name="sl_title">Shopping List Details</string>
+    
     <string name="sl_name">Name</string>
     <string name="sl_date">Date</string>
     <string name="sl_comment">Comments</string>
@@ -22,7 +24,6 @@
     <string name="sl_delete_message">Are you sure to delete this shopping list?\n All the date of the shopping list \"%1$s\" will be permanently removed</string>
     <string name="sl_delete_success">Shopping list was deleted</string>
     
-    <string name="sl_active_title">Active Shopping List</string>
     <string name="sl_active_error_persist">Cannot store active shopping list.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     <string name="sl_active_error_retrieve">Cannot retrieve active shopping list.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     

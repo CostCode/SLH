@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<TableLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="1"
+    android:shrinkColumns="0">
+    
+    <!-- HEADER -->
+    
+    <TableRow>
+        <TextView
+            style="@style/formHeader"
+            android:layout_span="2"
+            android:text="@string/sl_title" />
+    </TableRow>
+    
+    <!-- SEPARATOR -->
+    
+    <View 
+        android:layout_width="fill_parent" 
+        android:layout_height="4sp" />
     
     <!-- NAME -->
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/sl_name" />
-    
-    <edu.cmu.cc.android.view.ValidatingEditText 
-        android:id="@+id/etShoppingListName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="20dip"
-        android:singleLine="true"/>
+    <TableRow>
+        <TextView 
+            style="@style/formFieldLabel" 
+            android:text="@string/sl_name" />
+        <edu.cmu.cc.android.view.ValidatingEditText 
+        	android:id="@+id/et_sl_name"
+        	style="@style/formField.text" />
+    </TableRow>
     
     <!-- DATE -->
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/sl_date" />
-    
-    <TextView
-        android:id="@+id/tvShoppingListDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/sl_date" />
+    <TableRow>
+        <TextView 
+            style="@style/formFieldLabel" 
+            android:text="@string/sl_date" />
+        
+        <TextView 
+            android:id="@+id/tv_sl_date"
+            style="@style/formField.text" 
+            android:text="@string/sl_date" />
+    </TableRow>
     
     <!-- COMMENT -->
     
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/sl_comment" />
+    <TableRow>
+        <TextView 
+            style="@style/formFieldLabel" 
+            android:text="@string/sl_comment" />
+        <edu.cmu.cc.android.view.ValidatingEditText 
+        	android:id="@+id/et_sl_comment"
+        	style="@style/formField.text" />
+    </TableRow>
     
-    <edu.cmu.cc.android.view.ValidatingEditText 
-        android:id="@+id/etShoppingListComments"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="20dip"
-        android:singleLine="true"
-        android:lines="5" />
-    
-</LinearLayout>
+</TableLayout>

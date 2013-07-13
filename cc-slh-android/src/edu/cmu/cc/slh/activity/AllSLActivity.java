@@ -41,7 +41,7 @@ import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
  */
 @SuppressLint("UseSparseArrays")
 public class AllSLActivity extends AbstractAsyncListActivity
-implements IFetchSLTaskCaller, ISLStateListener, IOptionsMenuHandler {
+implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -156,12 +156,13 @@ implements IFetchSLTaskCaller, ISLStateListener, IOptionsMenuHandler {
 		return true;
 	}
 
+	@Override
+	public void refresh() {}
+	
 	
 	//-------------------------------------------------------------------------
 	// ISLStateListener methods
 	//-------------------------------------------------------------------------
-	
-	
 	
 	@Override
 	public void onSLUpdated() {

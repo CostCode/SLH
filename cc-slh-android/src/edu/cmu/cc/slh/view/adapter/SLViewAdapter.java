@@ -57,15 +57,13 @@ public class SLViewAdapter extends AbstractViewAdapter {
 		ShoppingList sl = 
 				ApplicationState.getInstance().getCurrentSL();
 		
-		WidgetUtils.getEditText(view, R.id.etShoppingListName)
+		WidgetUtils.getEditText(view, R.id.et_sl_name)
 			.setText(sl.getName());
-		WidgetUtils.getEditText(view, R.id.etShoppingListComments)
+		WidgetUtils.getEditText(view, R.id.et_sl_comment)
 			.setText(sl.getDescription());
 		
-		WidgetUtils.getTextView(view, R.id.tvShoppingListDate)
+		WidgetUtils.getTextView(view, R.id.tv_sl_date)
 			.setText(StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
-		WidgetUtils.getTextView(view, R.id.tvShoppingListDate)
-			.setTag(sl.getDate());
 	}
 	
 	
@@ -75,10 +73,10 @@ public class SLViewAdapter extends AbstractViewAdapter {
 				ApplicationState.getInstance().getCurrentSL();
 		
 		sl.setName(WidgetUtils
-				.getEditTextAsString(view, R.id.etShoppingListName));
+				.getEditTextAsString(view, R.id.et_sl_name));
 		
 		sl.setDescription(WidgetUtils
-				.getEditTextAsString(view, R.id.etShoppingListComments));
+				.getEditTextAsString(view, R.id.et_sl_comment));
 		
 		ApplicationState.getInstance().setCurrentSL(sl);
 	}
@@ -98,9 +96,9 @@ public class SLViewAdapter extends AbstractViewAdapter {
 				new ArrayList<IValidatingView>(VALIDATING_VIEWS_COUNT);
 		
 		synchronized (validatingViews) {
-			assignValidatorToView(parentView, R.id.etShoppingListName, 
+			assignValidatorToView(parentView, R.id.et_sl_name, 
 					R.string.sl_name, new NameValidator(ctx));
-			assignValidatorToView(parentView, R.id.etShoppingListComments, 
+			assignValidatorToView(parentView, R.id.et_sl_comment, 
 					R.string.sl_comment, new CommentValidator(ctx));
 		}
 	}

@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 /**
  *  DESCRIPTION: Active shopping list activity
@@ -46,7 +47,7 @@ import android.widget.AdapterView;
 @SuppressLint("UseSparseArrays")
 public class ActiveSLActivity extends AbstractAsyncListActivity
 implements IFetchSLItemsTaskCaller, IDeleteSLItemCaller, ISLItemDialogCaller,
-IOptionsMenuHandler {
+ITabActivity {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -89,7 +90,9 @@ IOptionsMenuHandler {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		asyncTaskHandler = new Handler();
+		setActivityTitle();
 	}
 	
 	@Override
@@ -101,8 +104,7 @@ IOptionsMenuHandler {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return handleOptionsMenuItemSelection(item);
 	}
-
-
+	
 	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
 		
@@ -160,6 +162,21 @@ IOptionsMenuHandler {
 		
 		return true;
 	}
+	
+	@Override
+	public void refresh() {
+		Runnable callback = new Runnable() {
+			
+			@Override
+			public void run() {
+				refreshGUI();
+			}
+		};
+		
+		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
+		osMessage.sendToTarget();
+	}
+
 
 	@Override
 	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
@@ -284,9 +301,11 @@ IOptionsMenuHandler {
 		
 		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
 		
-		for (ShoppingListItem item : currentSL.getItems()) {
-			if (category.equals(item.getCategory())) {
-				categoryItems.add(item);
+		if (currentSL != null) {
+			for (ShoppingListItem item : currentSL.getItems()) {
+				if (category.equals(item.getCategory())) {
+					categoryItems.add(item);
+				}
 			}
 		}
 		
@@ -334,7 +353,21 @@ IOptionsMenuHandler {
 		});
 	}
 	
+	private void setActivityTitle() {
+		
+		TextView tvTitle = (TextView) findViewById(R.id.tv_active_sl_title);
+		
+		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
+		
+		if (currentSL != null) {
+			tvTitle.setText(currentSL.getName());
+		} else {
+			tvTitle.setText("");
+		}
+	}
+	
 	private void refreshGUI() {
+		setActivityTitle();
 		setListAdapter();
 		onContentChanged();
 		prepareListClick();
