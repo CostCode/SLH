@@ -57,20 +57,20 @@ public class FloorPlanWS {
 	 */
 	@WebMethod(action = "APsLocation")
 	@WebResult(name = "APsLocation")
-	public String APsLocation(@WebParam(name = "warehouseID") String warehouseID) {
+	public String aPsLocation(@WebParam(name = "warehouseID") String warehouseID) {
 
 		if (warehouseID == null || warehouseID.isEmpty())
 			return null;
 
-		String APsLocation = "<ssid>ssid_a</ssid><posx>0</posx><posy>0</posy>"
+		String aPsLocation = "<ssid>ssid_a</ssid><posx>0</posx><posy>0</posy>"
 				+ "<ssid>ssid_b</ssid><posx>0</posx><posy>10</posy>"
 				+ "<ssid>ssid_c</ssid><posx>10</posx><posy>0</posy>"
 				+ "<ssid>ssid_d</ssid><posx>10</posx><posy>10</posy>";
 
 		AccessPointDAO accessPointDAO = AccessPointDAO.getInstance();
-		APsLocation = accessPointDAO.getHotSpotsByCategoryName(warehouseID, ACCESSPOINTS_CATEGORYNAME);
+		aPsLocation = accessPointDAO.getHotSpotsByCategoryName(warehouseID, ACCESSPOINTS_CATEGORYNAME);
 
-		return APsLocation;
+		return aPsLocation;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class FloorPlanWS {
 	 */
 	@WebMethod(action = "SectionsLocation")
 	@WebResult(name = "SectionsLocation")
-	public String SectionsLocation(
+	public String sectionsLocation(
 			@WebParam(name = "warehouseID") String warehouseID) {
 
 		if (warehouseID == null || warehouseID.isEmpty())

@@ -64,7 +64,6 @@ public class MembershipDAO {
  
 			while (resultSet.next()) {
 				validity = resultSet.getString("validity");
-				break;
 			}
 
 		} catch (NamingException e) {

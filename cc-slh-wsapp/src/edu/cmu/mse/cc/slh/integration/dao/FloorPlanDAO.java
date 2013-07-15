@@ -58,15 +58,12 @@ public class FloorPlanDAO {
 
 			while (resultSet.next()) {
 				version = resultSet.getString("version");
-				break;
 			}
 
 		} catch (NamingException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		} catch (SQLException e) {
 			LOGGER.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		} finally {
 			ResourceUtil.closeResources(resultSet, statement, connection);
 		}
