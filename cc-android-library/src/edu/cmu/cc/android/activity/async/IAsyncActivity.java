@@ -30,6 +30,9 @@ public interface IAsyncActivity {
 	 */
 	public void dismissProgressDialog();
 	
+	
+	public void onAsyncTaskSucceeded(Class<?> taskClass);
+	
 	/**
 	 * This method will be called by the Async Task classes to notify the
 	 * async activity about the error happened during the task execution.

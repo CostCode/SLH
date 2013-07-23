@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Method: deleteShoppingList -->
+<deleteShoppingList>
+    <member-id>123456789012</member-id>
+    <id>1</id>
+</deleteShoppingList>

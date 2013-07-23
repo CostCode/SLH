@@ -11,7 +11,6 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
@@ -27,7 +26,7 @@ import edu.cmu.cc.slh.model.ShoppingListItem;
  *  Date: Jun 21, 2013
  */
 @SuppressLint("DefaultLocale")
-public class SLItemDAO {
+public class SLItemDAO extends BaseDAO {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -63,15 +62,17 @@ public class SLItemDAO {
 	
 	/** Create ShoppingListItem table SQL script */
 	static final String SQL_CREATE_TABLE =
-			"CREATE TABLE " + TABLE_NAME + "(" +
-			COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
+			COLUMN_ID + " INTEGER PRIMARY KEY, " +
 			COLUMN_SHOPPINGLIST + " INTEGER, " +
 			COLUMN_CATEGORY + " INTEGER, " +
 			COLUMN_NAME + " TEXT, " +
 			COLUMN_QUANTITY + " INTEGER, " +
 			COLUMN_PRICE + " REAL, " +
 			COLUMN_UNIT + " INTEGER, " +
-			COLUMN_DESC + " TEXT)";
+			COLUMN_DESC + " TEXT," +
+			"FOREIGN KEY (" + COLUMN_SHOPPINGLIST + ") REFERENCES " +
+			SLDAO.TABLE_NAME + "(" + SLDAO.COLUMN_ID + "))"; 
 	
 	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -105,12 +106,14 @@ public class SLItemDAO {
 					new RuntimeException("Parent shopping list is null"));
 		}
 		
-		SQLiteDatabase db = null;
 		Cursor cursor = null;
 		List<ShoppingListItem> list = null;
 		
 		try {
-			db = new DBHelper().getWritableDatabase();
+			
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
 			
 			final String sqlWhere = String.format("%s=%d", 
 					COLUMN_SHOPPINGLIST, parent.getId());
@@ -154,13 +157,13 @@ public class SLItemDAO {
 				list.add(slItem);
 			}
 		} catch (Throwable t) {
+			if (db != null) {
+				db.close();
+			}
 			Logger.logErrorAndThrow(getClass(), t);
 		} finally {
 			if (cursor != null) {
 				cursor.close();
-			}
-			if (db != null) {
-				db.close();
 			}
 		}
 		
@@ -174,19 +177,22 @@ public class SLItemDAO {
 	 */
 	public ShoppingListItem save(ShoppingListItem slItem) {
 		
-		Logger.logDebug(getClass(), 
+		Logger.logDebug(getClass(),
 				String.format("Trying to save ShoppingListItem [%s]", slItem));
 		
-		if (slItem == null) {
-			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException("Saving null " +
-							"ShoppingListItem is not allowed"));
+		if (!isValid(slItem)) {
+			Logger.logErrorAndThrow(getClass(),
+					new RuntimeException(String.format("ShoppingListItem[%s]" +
+							" has wrong value", slItem)));
 		}
 		
-		SQLiteDatabase db = null;
+		Cursor cursor = null;
 		
 		try {
-			db = new DBHelper().getWritableDatabase();
+			
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
 			
 			ContentValues values = new ContentValues();
 			values.put(COLUMN_SHOPPINGLIST, slItem.getShoppingList().getId());
@@ -197,66 +203,105 @@ public class SLItemDAO {
 			values.put(COLUMN_UNIT, slItem.getUnit());
 			values.put(COLUMN_DESC, slItem.getDescription());
 			
-			if (slItem.getId() > 0) {
+			if (alreadyExists(cursor, slItem)) {
 				db.update(TABLE_NAME, values, 
-						String.format("%s=%d", COLUMN_ID, slItem.getId()), null);
+						COLUMN_ID + "=" + slItem.getId(), null);
 			} else {
-				long id = db.insert(TABLE_NAME, null, values);
-				slItem.setId(id);
+				values.put(COLUMN_ID, slItem.getId());
+				db.insert(TABLE_NAME, null, values);
 			}
 			
-			Logger.logDebug(getClass(), String.format("ShoppingListItem " +
-					"was saved in the local DB. [%s]", slItem));
+			Logger.logDebug(getClass(), String.format("ShoppingListItem[%s] " +
+					"was saved into the local DB", slItem));
 			
 		} catch (Throwable t) {
-			Logger.logErrorAndThrow(getClass(), t);
-		} finally {
 			if (db != null) {
 				db.close();
+			}
+			Logger.logErrorAndThrow(getClass(), t);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
 			}
 		}
 		
 		return slItem;
 	}
 	
-	/**
-	 * Removes the given Shopping list item from the local DB
-	 * @param slItem - shopping list item to be removed
-	 */
-	public void delete(ShoppingListItem slItem) {
+	public void delete(ShoppingListItem item) {
 		
 		Logger.logDebug(getClass(), 
-				String.format("Trying to delete ShoppingListItem [%s]", slItem));
+				String.format("Trying to delete ShoppingListItem [%s]", item));
 		
-		SQLiteDatabase db = null;
+		if (!isValid(item)) {
+			Logger.logErrorAndThrow(getClass(),
+					new RuntimeException(String.format("ShoppingListItem[%s]" +
+							" has wrong value", item)));
+		}
+		
 		try {
-			db = new DBHelper().getWritableDatabase();
 			
-			int deleted = db.delete(TABLE_NAME, 
-					String.format("%s=%d", COLUMN_ID, slItem.getId()), null);
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
+			
+			int deleted = db
+					.delete(TABLE_NAME, COLUMN_ID + "=" + item.getId(), null);
 			
 			Logger.logDebug(getClass(), String.format("[%d] " +
-					"ShoppingListItem records were deleted from the DB", deleted));
+					"ShoppingListItem records were deleted from the DB", 
+					deleted));
 		} catch (Throwable t) {
-			Logger.logErrorAndThrow(getClass(), t);
-		} finally {
 			if (db != null) {
 				db.close();
 			}
+			Logger.logErrorAndThrow(getClass(), t);
 		}
+		
 	}
+	
 	
 	/**
 	 * Removes all the shopping list items from the local DB
 	 */
 	public void deleteAll() {
-		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		
+		if (db == null || !db.isOpen()) {
+			db = new DBHelper().getWritableDatabase();
+		}
+		
 		db.delete(TABLE_NAME, null, null);
-		db.close();
 	}
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
+	
+	private boolean isValid(ShoppingListItem item) {
+		
+		if (item == null || item.getId() <= 0 
+				|| item.getShoppingList() == null 
+				|| item.getCategory() == null) {
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean alreadyExists(Cursor cursor, ShoppingListItem slItem) {
+		
+		if (slItem == null) {
+			return false;
+		}
+		
+		if (cursor == null || cursor.isClosed()) {
+			cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID}, 
+					String.format("%s=%d", COLUMN_ID, slItem.getId()),
+					null, null, null, null);
+		}
+		
+		return (cursor.getCount() > 0);
+	}
 
 }

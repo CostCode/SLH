@@ -17,6 +17,7 @@ import android.widget.Toast;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
 import edu.cmu.cc.slh.view.adapter.SLItemViewAdapter;
 
 
@@ -40,7 +41,7 @@ public class SLItemDialog extends DialogFragment {
 	
 	private SLItemViewAdapter viewAdapter;
 	
-	private ISLItemDialogCaller caller;
+	private ISLItemStateListener caller;
 	
 	private View view;
 	
@@ -52,7 +53,7 @@ public class SLItemDialog extends DialogFragment {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
-	private void setCaller(ISLItemDialogCaller caller) {
+	private void setCaller(ISLItemStateListener caller) {
 		this.caller = caller;
 	} 
 
@@ -60,7 +61,7 @@ public class SLItemDialog extends DialogFragment {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static SLItemDialog newInstance(ISLItemDialogCaller caller) {
+	public static SLItemDialog newInstance(ISLItemStateListener caller) {
 		
 		SLItemDialog dialog = new SLItemDialog();
 		dialog.setCaller(caller);
@@ -177,14 +178,4 @@ public class SLItemDialog extends DialogFragment {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-	//-------------------------------------------------------------------------
-	// INTERFACE
-	//-------------------------------------------------------------------------
-	
-	public interface ISLItemDialogCaller {
-		
-		public void onSLItemUpdated();
-		
-	}
-
 }

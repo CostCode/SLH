@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveCategoriesResponse -->
+<retrieveCategoriesResponse>
+    <categories>
+        <category>
+            <id>1</id>
+            <name>Food</name>
+            <description>General food</description>
+        </category>
+        <category>
+            <id>2</id>
+            <name>Electronics</name>
+            <description>Appliances and other stuff</description>
+        </category>
+    </categories>
+</retrieveCategoriesResponse>

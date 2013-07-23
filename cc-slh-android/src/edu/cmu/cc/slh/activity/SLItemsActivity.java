@@ -15,27 +15,25 @@ import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.SLItemDAO;
+import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
 import edu.cmu.cc.slh.dialog.SLItemDialog;
-import edu.cmu.cc.slh.dialog.SLItemDialog.ISLItemDialogCaller;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.model.ShoppingListItem;
+import edu.cmu.cc.slh.task.DeleteSLItemTask;
 import edu.cmu.cc.slh.task.FetchSLItemsTask;
 import edu.cmu.cc.slh.task.FetchSLItemsTask.IFetchSLItemsTaskCaller;
+import edu.cmu.cc.slh.task.SaveSLItemTask;
 import edu.cmu.cc.slh.view.adapter.ActiveSLViewListAdapter;
-import edu.cmu.cc.slh.view.adapter.ActiveSLViewListAdapter.IDeleteSLItemCaller;
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  *  DESCRIPTION: Active shopping list activity
@@ -45,9 +43,8 @@ import android.widget.TextView;
  *  Date: Jul 5, 2013
  */
 @SuppressLint("UseSparseArrays")
-public class ActiveSLActivity extends AbstractAsyncListActivity
-implements IFetchSLItemsTaskCaller, IDeleteSLItemCaller, ISLItemDialogCaller,
-ITabActivity {
+public class SLItemsActivity extends AbstractAsyncListActivity
+implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -56,8 +53,6 @@ ITabActivity {
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
-	
-	private Handler asyncTaskHandler;
 	
 	private Map<Integer, MenuItem> menuItems;
 
@@ -83,16 +78,13 @@ ITabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.active_sl);
-		
-		fetchActiveShoppingListItems();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		asyncTaskHandler = new Handler();
 		setActivityTitle();
+		fetchActiveShoppingListItems();
 	}
 	
 	@Override
@@ -135,7 +127,7 @@ ITabActivity {
 			return false;
 		}
 		
-		Runnable callback = new Runnable() {
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -155,56 +147,61 @@ ITabActivity {
 					//TODO:
 				}
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 		
 		return true;
 	}
 	
 	@Override
 	public void refresh() {
-		Runnable callback = new Runnable() {
+		
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
 				refreshGUI();
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 	}
 
 
+	@Override
+	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
+		super.onAsyncTaskSucceeded(taskClass);
+		
+		addTaskToUIQueue(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				if (taskClass == SaveSLItemTask.class) {
+					Toast.makeText(SLItemsActivity.this,
+							R.string.sl_item_save_success, 
+							Toast.LENGTH_LONG).show();
+				} else if (taskClass == DeleteSLItemTask.class) {
+					Toast.makeText(SLItemsActivity.this,
+							R.string.sl_item_delete_success, 
+							Toast.LENGTH_LONG).show();
+				}
+				
+				fetchActiveShoppingListItems();
+			}
+		});
+	}
+	
 	@Override
 	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
 		
 		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
 		
-		Runnable callback = new Runnable() {
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
-				
-				DialogInterface.OnClickListener dialogListener =
-						new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, 
-									int which) {
-								ActiveSLActivity.this.finish();
-							}
-						};
-				
-				Logger.logErrorAndAlert(ActiveSLActivity.this, 
-						ActiveSLActivity.class, errorMsg, t, dialogListener);
+				Logger.logErrorAndAlert(SLItemsActivity.this, 
+						SLItemsActivity.class, errorMsg, t);
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 	}
 	
 	@Override
@@ -219,46 +216,28 @@ ITabActivity {
 	}
 	
 	@Override
-	public void onSLItemDeleted() {
-		fetchActiveShoppingListItems();
-	}
-	
-	@Override
 	public void onSLItemUpdated() {
 		
 		ShoppingListItem item = 
 				ApplicationState.getInstance().getCurrentSLItem();
 		
-		saveSLItem(item);
+		new SaveSLItemTask(SLItemsActivity.this, SLItemsActivity.this)
+			.execute(new ShoppingListItem[]{item});
+	}
+	
+	@Override
+	public void onSLItemDeleted() {
 		
-		Runnable callback = new Runnable() {
-			
-			@Override
-			public void run() {
-				fetchActiveShoppingListItems();
-			}
-		};
+		ShoppingListItem item = 
+				ApplicationState.getInstance().getCurrentSLItem();
 		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		new DeleteSLItemTask(SLItemsActivity.this, SLItemsActivity.this)
+			.execute(new ShoppingListItem[]{item});
 	}
 	
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
-	
-	private void saveSLItem(final ShoppingListItem item) {
-		
-		try {
-			new SLItemDAO().save(item);
-		} catch (Exception e) {
-			final String errMsg = StringUtils.getLimitedString(
-					getString(R.string.sl_item_save_failed, 
-							e.getMessage()), 200, "...");
-			
-			Logger.logErrorAndAlert(this, getClass(), errMsg, e);
-		}
-	}
 	
 	private void setMenuItemState(int menuItemTitleResID, 
 			boolean visible, boolean enabled) {

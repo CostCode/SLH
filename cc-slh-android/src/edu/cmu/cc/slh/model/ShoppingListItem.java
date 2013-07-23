@@ -137,20 +137,11 @@ public class ShoppingListItem extends BaseEntity {
 		return builder.toString();
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		ShoppingListItem item = (ShoppingListItem) obj;
-		return (id == item.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return (int)id;
-	}
 	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+	
 	
 	@SuppressLint("UseSparseArrays")
 	public static class Unit {

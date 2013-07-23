@@ -23,6 +23,10 @@ public class Logger {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
+	public static void logInfo(Class<?> caller, String message) {
+		Log.i(caller.getSimpleName(), message);
+	}
+	
 	public static void logDebug(Class<?> caller, String message) {
 		Log.d(caller.getSimpleName(), message);
 	}

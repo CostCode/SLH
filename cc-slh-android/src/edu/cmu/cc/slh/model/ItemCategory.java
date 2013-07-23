@@ -6,13 +6,12 @@ package edu.cmu.cc.slh.model;
 
 import java.util.List;
 
-
 /**
  *  DESCRIPTION: This class specifies Costco products category.
  *	
  *  @author Azamat Samiyev
- *	@version 1.0
- *  Date: May 31, 2013
+ *	@version 2.0
+ *  Date: Jul 15, 2013
  */
 public class ItemCategory extends BaseEntity {
 
@@ -30,6 +29,7 @@ public class ItemCategory extends BaseEntity {
 	
 	/** Shopping List items belonging to this category */
 	private List<ShoppingListItem> items;
+	
 	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -67,31 +67,14 @@ public class ItemCategory extends BaseEntity {
 		this.items = items;
 	}
 	
-	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-	
+
 	@Override
 	public String toString() {
 		
 		return name;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (obj instanceof ItemCategory) {
-			ItemCategory anotherCategory = (ItemCategory) obj;
-			return (id == anotherCategory.getId());
-		}
-		
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return (int)id;
 	}
 	
 }

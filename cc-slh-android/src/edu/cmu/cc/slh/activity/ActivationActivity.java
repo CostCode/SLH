@@ -9,6 +9,7 @@ import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.adapter.ActivationAdapter;
 import edu.cmu.cc.slh.task.ActivationTask;
@@ -18,8 +19,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,8 +40,6 @@ implements IActivationTaskCaller {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private Handler asyncTaskHandler;
-	
 	private ActivationViewAdapter activationViewAdapter;
 	
 	private View activationView;
@@ -60,8 +57,13 @@ implements IActivationTaskCaller {
 		super.onCreate(savedInstanceState);
 		
 		if (ActivationAdapter.retrieveActivationStatus()) {
-			showMainActivity();
-			this.finish();
+			
+			final String memberId = ActivationAdapter.retrieveMemberId();
+			if (!StringUtils.isNullOrEmpty(memberId)) {
+				ApplicationState.getInstance().setMemberId(memberId);
+				showMainActivity();
+				this.finish();
+			}
 		}
 		
 		activationView = initializeView();
@@ -69,12 +71,6 @@ implements IActivationTaskCaller {
 		activationViewAdapter = new ActivationViewAdapter(activationView);
 		
 		initializeButtons();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		asyncTaskHandler = new Handler();
 	}
 	
 	//-------------------------------------------------------------------------
@@ -94,11 +90,10 @@ implements IActivationTaskCaller {
 		
 		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
 		
-		Runnable callback = new Runnable() {
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
-				
 				DialogInterface.OnClickListener dialogListener =
 						new DialogInterface.OnClickListener() {
 							
@@ -112,20 +107,17 @@ implements IActivationTaskCaller {
 				Logger.logErrorAndAlert(ActivationActivity.this, 
 						ActivationActivity.class, errorMsg, t, dialogListener);
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 	}
 
 	@Override
-	public void onActivationTaskSucceeded(final boolean activated) {
+	public void onActivationTaskSucceeded(final String memberId, 
+			final boolean activated) {
 		
-		Runnable callback = new Runnable() {
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
-				
 				DialogInterface.OnClickListener dialogListener =
 						new DialogInterface.OnClickListener() {
 							
@@ -134,6 +126,7 @@ implements IActivationTaskCaller {
 									int which) {
 								
 								if (activated) {
+									saveMemberId(memberId);
 									showMainActivity();
 								}
 								dialog.dismiss();
@@ -151,10 +144,7 @@ implements IActivationTaskCaller {
 				
 				dialog.show();
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 		
 		ActivationAdapter.persistActivationStatus(activated);
 	}
@@ -162,6 +152,14 @@ implements IActivationTaskCaller {
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
+	
+	private void saveMemberId(final String memberId) {
+		
+		if (!StringUtils.isNullOrEmpty(memberId)) {
+			ApplicationState.getInstance().setMemberId(memberId);
+			ActivationAdapter.persistMemberId(memberId);
+		}
+	}
 	
 	private void initializeButtons() {
 		

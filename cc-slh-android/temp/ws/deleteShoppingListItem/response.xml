@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: deleteShoppingListItemResponse -->
+<deleteShoppingListItemResponse>
+    <method-status>true</method-status>
+    <sl-version>5</sl-version>
+</deleteShoppingListItemResponse>

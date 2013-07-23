@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013, Azamat Samiyev. All rights reserved.
+ * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
 package edu.cmu.cc.slh.dao;
@@ -26,7 +26,7 @@ final class DBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "cc.slh.db";
 	
 	/** Database version number. Used to check for updates */
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 1;
 	
 
 	

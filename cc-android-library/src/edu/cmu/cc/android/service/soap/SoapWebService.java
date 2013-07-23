@@ -8,46 +8,40 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-/*Just Test*/
-
 public class SoapWebService {
+	
 	private String nameSpace, url, methodName, soapAction;
 	
-	/** Default constructor
-	 * 
+	/**
+	 * Default constructor with sample interface definitions
 	 */
 	public SoapWebService() {
-		nameSpace = "http://costcode.mse.cmu.edu/";
+		nameSpace = "http://ws.biz.ws.cc.mse.cmu.edu/";
 		url = "http://shltestweb.appspot.com/shlappeng";	
 		methodName = "sayHello";
 		soapAction = nameSpace + methodName;
 	}
 	
 	/**
-	 * Constructor.
 	 * 
-	 * @param url The complete URL where the web service resides
 	 * @param nameSpace The web method namespace
 	 * @param methodName The method name for Web Service
+	 * @param url The complete URL where the web service resides 
 	 */
-	public SoapWebService(String url, String nameSpace, String methodName) {
-		
-		this.url = url;
+	public SoapWebService(String nameSpace, String methodName, String url) {
 		this.nameSpace = nameSpace;
 		this.methodName = methodName;
-		
+		this.url = url;
 		soapAction = nameSpace + methodName;
 	}
 	
-	/** 
-	 * Constructor with URL and namespace. 
-	 * 
-	 * @param url The complete URL where the web service resides
+	/** Constructor with namespace and URL
 	 * @param nameSpace The web method namespace
+	 * @param url The complete URL where the web service resides 
 	 */
-	public SoapWebService(String url, String nameSpace) {
-		this.url = url;
+	public SoapWebService(String nameSpace, String url) {
 		this.nameSpace = nameSpace;
+		this.url = url;
 	}
 	
 	/** Call the web service with methodName
@@ -72,8 +66,10 @@ public class SoapWebService {
 		SoapObject request = new SoapObject(nameSpace, methodName);
 		
 		// passing method arguments to SOAP request
-		for( Map.Entry<String, String> entry : arguments.entrySet()) {
-			request.addProperty(entry.getKey().toString(), entry.getValue().toString());
+		if(arguments != null) {
+			for( Map.Entry<String, String> entry : arguments.entrySet()) {
+				request.addProperty(entry.getKey().toString(), entry.getValue().toString());
+			}
 		}
 		
 		// get envelope
@@ -90,7 +86,7 @@ public class SoapWebService {
 	 * @throws Exception 
 	 */
 	private SoapObject makeCall(SoapSerializationEnvelope envelope) throws Exception {
-		SoapObject result; // Return object
+		SoapObject result = null; // Return object
 		
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
 

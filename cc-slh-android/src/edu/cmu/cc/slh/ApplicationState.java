@@ -34,6 +34,8 @@ public class ApplicationState extends Application {
 	
 	private static ApplicationState instance;
 	
+	private String memberId;
+	
 	private List<ShoppingList> shoppingLists;
 	
 	private ShoppingList currentSL;
@@ -52,10 +54,21 @@ public class ApplicationState extends Application {
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}	
+	
+	
+	
+	
 	public static ApplicationState getInstance() {
 		return instance;
 	}
 	
+
 	public static Context getContext() {
 		return instance.getApplicationContext();
 	}

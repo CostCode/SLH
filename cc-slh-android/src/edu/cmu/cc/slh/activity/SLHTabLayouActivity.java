@@ -62,10 +62,10 @@ public class SLHTabLayouActivity extends TabActivity {
 		tabHost = getTabHost();
 		
 		setupTab(TAB_SL_ALL, getString(R.string.tab_sl_all), 
-				R.drawable.icon_photos_tab, AllSLActivity.class);
+				R.drawable.icon_photos_tab, SLActivity.class);
 		
 		setupTab(TAB_SL_ACTIVE, getString(R.string.tab_sl_active), 
-				R.drawable.icon_songs_tab, ActiveSLActivity.class);
+				R.drawable.icon_songs_tab, SLItemsActivity.class);
 		
 		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			

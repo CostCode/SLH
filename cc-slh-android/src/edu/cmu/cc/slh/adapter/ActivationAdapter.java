@@ -4,9 +4,6 @@
  */
 package edu.cmu.cc.slh.adapter;
 
-import android.content.Context;
-import edu.cmu.cc.android.util.Logger;
-import edu.cmu.cc.android.util.SharedPrefsAdapter;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
@@ -25,6 +22,8 @@ public class ActivationAdapter extends AbstractSharedPrefsAdapter {
 	//-------------------------------------------------------------------------
 	
 	private static String KEY_ACTIVATION_STATUS = "activation-status";
+	
+	private static String KEY_ACTIVATION_MEMBERID = "activation-memberid";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -42,56 +41,36 @@ public class ActivationAdapter extends AbstractSharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
+	public static synchronized boolean persistMemberId(
+			final String memberId) {
+		
+		return saveToSharedPrefs(ActivationAdapter.class, 
+				ApplicationState.getContext(), KEY_ACTIVATION_MEMBERID, 
+				memberId, R.string.activation_error_memberid_persist);
+	}
+	
+	public static String retrieveMemberId() {
+		
+		return retrieveFromSharedPrefs(ActivationAdapter.class,
+				ApplicationState.getContext(), KEY_ACTIVATION_MEMBERID, 
+				R.string.activation_error_memberid_retrieve);
+	}
+	
 	public static synchronized boolean persistActivationStatus(boolean status) {
 		
-		return saveToSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS, String.valueOf(status));
+		return saveToSharedPrefs(ActivationAdapter.class,
+				ApplicationState.getContext(), KEY_ACTIVATION_STATUS, 
+				String.valueOf(status), R.string.activation_error_status_persist);
 	}
 	
 	public static boolean retrieveActivationStatus() {
 		
-		return retrieveFromSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVATION_STATUS);
-	}
-
-	//-------------------------------------------------------------------------
-	// HELPER METHODS
-	//-------------------------------------------------------------------------
-	
-	private static boolean saveToSharedPrefs(Context ctx, 
-			String key, String value) {
+		String strStatus = retrieveFromSharedPrefs(ActivationAdapter.class,
+				ApplicationState.getContext(), KEY_ACTIVATION_STATUS, 
+				R.string.activation_error_status_retrieve);
 		
-		try {
-			
-			return SharedPrefsAdapter.persist(ctx, key, value);
-			
-		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_persist, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
-		}
-		
-		return false;
-	}
-	
-	private static boolean retrieveFromSharedPrefs(Context ctx, String key) {
-		
-		try {
-			
-			String strValue = SharedPrefsAdapter.retrieve(ctx, key);
-			
-			if (!StringUtils.isNullOrEmpty(strValue)) {
-				return Boolean.valueOf(strValue);
-			}
-			
-		} catch (Throwable t) {
-			
-			String errMsg = getErrorMessage(
-					ctx, R.string.activation_error_status_retrieve, t);
-			
-			Logger.logErrorAndAlert(ctx, ActivationAdapter.class, errMsg, t);
+		if (!StringUtils.isNullOrEmpty(strStatus)) {
+			return Boolean.parseBoolean(strStatus);
 		}
 		
 		return false;

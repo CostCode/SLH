@@ -4,9 +4,7 @@
  */
 package edu.cmu.cc.slh.adapter;
 
-import android.content.Context;
-import edu.cmu.cc.android.util.Logger;
-import edu.cmu.cc.android.util.SharedPrefsAdapter;
+import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -23,7 +21,7 @@ public class SLAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_SHOPPINGLISTS_VERSION = "shoppinglists-version";
+	private static String KEY_MEMBER_VERSION = "version-member";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -41,56 +39,24 @@ public class SLAdapter extends AbstractSharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistVersion(int version) {
+	public static synchronized boolean persistMemberVersion(int version) {
 		
-		return saveToSharedPrefs(ApplicationState.getContext(), 
-				KEY_SHOPPINGLISTS_VERSION, String.valueOf(version), 
+		return saveToSharedPrefs(SLAdapter.class, ApplicationState.getContext(), 
+				KEY_MEMBER_VERSION, String.valueOf(version), 
 				R.string.sl_all_error_versionPersist);
 	}
 	
-	public static int retrieveVersion() {
+	public static int retrieveMemberVersion() {
 		
-		String strValue = retrieveFromSharedPrefs(ApplicationState.getContext(), 
-				KEY_SHOPPINGLISTS_VERSION, 
+		String strValue = retrieveFromSharedPrefs(SLAdapter.class, 
+				ApplicationState.getContext(), KEY_MEMBER_VERSION, 
 				R.string.sl_all_error_versionRetrieve);
 		
+		if (StringUtils.isNullOrEmpty(strValue)) {
+			return 0;
+		}
+		
 		return Integer.parseInt(strValue);
-	}
-	
-	
-
-	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
-	//-------------------------------------------------------------------------
-	
-	private static boolean saveToSharedPrefs(Context ctx, 
-			String key, String value, int errMsgResID) {
-		
-		try {
-			
-			return SharedPrefsAdapter.persist(ctx, key, value);
-			
-		} catch (Throwable t) {
-			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
-		}
-		
-		return false;
-	}
-	
-	private static String retrieveFromSharedPrefs(Context ctx, String key, 
-			int errMsgResID) {
-		
-		try {
-			
-			return SharedPrefsAdapter.retrieve(ctx, key);
-			
-		} catch (Throwable t) {
-			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
-		}
-		
-		return null;
 	}
 
 }

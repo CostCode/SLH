@@ -5,6 +5,8 @@
 package edu.cmu.cc.android.activity.async;
 
 import android.app.ListActivity;
+import android.os.Handler;
+import android.os.Message;
 
 /**
  *  DESCRIPTION: 
@@ -25,6 +27,8 @@ implements IAsyncActivity {
 	
 	private AsyncActivityHelper helper;
 	
+	private Handler asyncTaskHandler;
+	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -35,9 +39,24 @@ implements IAsyncActivity {
 	}
 
 	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// PROTECTED METHODS
 	//-------------------------------------------------------------------------
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		asyncTaskHandler = new Handler();
+	}
+	
+	protected void addTaskToUIQueue(Runnable callback) {
+		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
+		osMessage.sendToTarget();
+	}
+	
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
 	@Override
 	public void showProgressDialog(int titleResID, int textResID) {
 		helper.showProgressDialog(titleResID, textResID);
@@ -52,5 +71,11 @@ implements IAsyncActivity {
 	public void dismissProgressDialog() {
 		helper.dismissProgressDialog();
 	}
+
+	@Override
+	public void onAsyncTaskSucceeded(Class<?> taskClass) {}
+
+	@Override
+	public void onAsyncTaskFailed(Class<?> taskClass, Throwable t) {}
 	
 }

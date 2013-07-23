@@ -34,6 +34,8 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 	
 	private IFetchSLItemsTaskCaller caller;
 	
+	private SLItemDAO itemDAO;
+	
 	private boolean errorState;
 
 	//-------------------------------------------------------------------------
@@ -41,6 +43,7 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 	//-------------------------------------------------------------------------
 	
 	public FetchSLItemsTask(IFetchSLItemsTaskCaller caller) {
+		super();
 		
 		this.caller = caller;
 	}
@@ -58,22 +61,29 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 		super.onPreExecute();
 		caller.showProgressDialog(
 				R.string.sl_item_loading);
+		
+		itemDAO = new SLItemDAO();
+		
+		errorState = false;
 	}
 	
 	@Override
-	protected List<ShoppingListItem> doInBackground(ShoppingList... slList) {
-		
-		errorState = false;
+	protected List<ShoppingListItem> doInBackground(ShoppingList... params) {
 		
 		try {
 			
-			ShoppingList sl = slList[0];
+			if (params == null || params[0] == null) {
+				throw new RuntimeException("Invalid input parameter: " +
+						"ShoppingList is null");
+			}
+			
+			ShoppingList sl = params[0];
 			
 			return retrieveFromLocal(sl);
 			
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			errorState = true;
-			caller.onAsyncTaskFailed(this.getClass(), e);
+			caller.onAsyncTaskFailed(this.getClass(), t);
 		}
 		
 		return null;
@@ -82,6 +92,8 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 	@Override
 	protected void onPostExecute(List<ShoppingListItem> items) {
 		super.onPostExecute(items);
+		
+		itemDAO.close();
 		
 		caller.dismissProgressDialog();
 		if (!errorState) {
@@ -96,7 +108,7 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 	
 	private List<ShoppingListItem> retrieveFromLocal(final ShoppingList sl) {
 		
-		return new SLItemDAO().getAll(sl);
+		return itemDAO.getAll(sl);
 	}
 	
 	//-------------------------------------------------------------------------

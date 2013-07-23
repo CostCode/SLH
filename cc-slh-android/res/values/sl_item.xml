@@ -25,6 +25,8 @@
     <string name="sl_item_title">Shopping List Item</string>
     
     <string name="sl_item_loading">Loading items. Please wait&#8230;</string>
+    <string name="sl_item_saving">Saving item. Please wait&#8230;</string>
+    <string name="sl_item_deleting">Deleting item. Please wait&#8230;</string>
     
     <string name="sl_item_save_success">Item was saved</string>
     <string name="sl_item_save_failed">Cannot save the item.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>

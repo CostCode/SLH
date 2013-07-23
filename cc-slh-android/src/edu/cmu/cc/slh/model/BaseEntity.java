@@ -30,10 +30,31 @@ public abstract class BaseEntity {
 	public long getId() {
 		return id;
 	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
 	
-
+	
+	//-------------------------------------------------------------------------
+	// PUBLIC METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public int hashCode() {
+		return (int)id;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (obj != null) {
+			if (getClass().equals(obj.getClass())) {
+				BaseEntity anotherEntity = (BaseEntity) obj;
+				return (id == anotherEntity.getId());
+			}
+		}
+		
+		return false;
+	}
+	
 }

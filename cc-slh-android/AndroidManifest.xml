@@ -39,10 +39,10 @@
             android:name="edu.cmu.cc.slh.activity.SLHTabLayouActivity" />
         
         <activity 
-            android:name="edu.cmu.cc.slh.activity.AllSLActivity" />
+            android:name="edu.cmu.cc.slh.activity.SLActivity" />
         
         <activity 
-            android:name="edu.cmu.cc.slh.activity.ActiveSLActivity" />
+            android:name="edu.cmu.cc.slh.activity.SLItemsActivity" />
         
     </application>
 

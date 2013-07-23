@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: validateMembershipResponse -->
+<deleteShoppingListResponse>
+    <method-status>true</method-status>
+    <member-version>4</member-version>
+</deleteShoppingListResponse>

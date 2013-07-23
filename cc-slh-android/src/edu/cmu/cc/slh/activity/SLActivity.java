@@ -11,25 +11,25 @@ import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import edu.cmu.cc.android.activity.async.AbstractAsyncListActivity;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.SLDAO;
+import edu.cmu.cc.slh.activity.listener.ISLStateListener;
 import edu.cmu.cc.slh.dialog.SLDialog;
 import edu.cmu.cc.slh.model.ShoppingList;
+import edu.cmu.cc.slh.task.DeleteSLTask;
 import edu.cmu.cc.slh.task.FetchSLTask;
 import edu.cmu.cc.slh.task.FetchSLTask.IFetchSLTaskCaller;
+import edu.cmu.cc.slh.task.SaveSLTask;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
 
 /**
@@ -40,7 +40,7 @@ import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
  *  Date: Jun 21, 2013
  */
 @SuppressLint("UseSparseArrays")
-public class AllSLActivity extends AbstractAsyncListActivity
+public class SLActivity extends AbstractAsyncListActivity
 implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 
 	//-------------------------------------------------------------------------
@@ -50,8 +50,6 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
-	
-	private Handler asyncTaskHandler;
 	
 	private Map<Integer, MenuItem> menuItems;
 
@@ -76,14 +74,51 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.all_sl);
-		
-		fetchShoppingLists();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		asyncTaskHandler = new Handler();
+		fetchShoppingLists();
+	}
+	
+	@Override
+	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
+		super.onAsyncTaskSucceeded(taskClass);
+		
+		addTaskToUIQueue(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				if (taskClass == SaveSLTask.class) {
+					Toast.makeText(SLActivity.this,
+							R.string.sl_save_success, 
+							Toast.LENGTH_LONG).show();
+				} else if (taskClass == DeleteSLTask.class) {
+					Toast.makeText(SLActivity.this,
+							R.string.sl_delete_success, 
+							Toast.LENGTH_LONG).show();
+				}
+				
+				fetchShoppingLists();
+			}
+		});
+	}
+
+	@Override
+	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
+		
+		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
+		
+		addTaskToUIQueue(new Runnable() {
+			
+			@Override
+			public void run() {
+				Logger.logErrorAndAlert(SLActivity.this, 
+						SLActivity.class, errorMsg, t);
+			}
+		});
 	}
 	
 	@Override
@@ -93,35 +128,7 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		
 		refreshGUI();
 	}
-	
-	@Override
-	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
-		
-		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
-		
-		Runnable callback = new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				DialogInterface.OnClickListener dialogListener =
-						new DialogInterface.OnClickListener() {
-							
-							@Override
-							public void onClick(DialogInterface dialog, 
-									int which) {
-								AllSLActivity.this.finish();
-							}
-						};
-				
-				Logger.logErrorAndAlert(AllSLActivity.this, 
-						AllSLActivity.class, errorMsg, t, dialogListener);
-			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
-	}
+
 	
 	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
@@ -138,20 +145,17 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	@Override
 	public boolean handleOptionsMenuItemSelection(final MenuItem item) {
 		
-		Runnable callback = new Runnable() {
+		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
 				if (item.getTitle().equals(getString(R.string.sl_all_add))) {
-					ShoppingList newSL = new ShoppingList(
-							null, new Date(System.currentTimeMillis()), null);
+					ShoppingList newSL = new ShoppingList();
+					newSL.setDate(new Date(System.currentTimeMillis()));
 					showShoppingListDialog(newSL);
 				}
 			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		});
 		
 		return true;
 	}
@@ -170,23 +174,18 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		ShoppingList sl = 
 				ApplicationState.getInstance().getCurrentSL();
 		
-		saveShoppingList(sl);
-		
-		Runnable callback = new Runnable() {
-			
-			@Override
-			public void run() {
-				fetchShoppingLists();
-			}
-		};
-		
-		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
-		osMessage.sendToTarget();
+		new SaveSLTask(SLActivity.this, SLActivity.this)
+			.execute(new ShoppingList[]{sl});
 	}
 
 	@Override
 	public void onSLDeleted() {
-		fetchShoppingLists();
+		
+		ShoppingList sl = 
+				ApplicationState.getInstance().getCurrentSL();
+		
+		new DeleteSLTask(SLActivity.this, SLActivity.this)
+			.execute(new ShoppingList[]{sl});
 	}
 	
 	@Override
@@ -194,7 +193,7 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		
 		ApplicationState.getInstance().setCurrentSL(selectedSL);
 		
-		Intent intent = new Intent(this, ActiveSLActivity.class);
+		Intent intent = new Intent(this, SLItemsActivity.class);
 		startActivity(intent);
 	}
 	
@@ -203,7 +202,6 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-
 	private void setMenuItemState(int menuItemTitleResID, 
 			boolean visible, boolean enabled) {
 		
@@ -242,26 +240,9 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	}
 
 	private void fetchShoppingLists() {
-		new FetchSLTask(this).execute();
+		new FetchSLTask(this, this).execute();
 	}
 	
-	/**
-	 * Saves the shopping list in the local DB
-	 * @param sl - shopping list to be saved
-	 */
-	private void saveShoppingList(final ShoppingList sl) {
-		
-		try {
-			new SLDAO().save(sl);
-		} catch (Exception e) {
-			final String errMsg = StringUtils.getLimitedString(
-					getString(R.string.sl_save_failed, 
-							e.getMessage()), 200, "...");
-			
-			Logger.logErrorAndAlert(this, getClass(), errMsg, e);
-		}
-	}
-
 	/**
 	 * Setting the shopping lists adapter
 	 */

@@ -2,7 +2,7 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.activity;
+package edu.cmu.cc.slh.activity.listener;
 
 import edu.cmu.cc.slh.model.ShoppingList;
 

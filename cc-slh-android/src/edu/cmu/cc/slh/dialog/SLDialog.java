@@ -7,7 +7,7 @@ package edu.cmu.cc.slh.dialog;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.activity.ISLStateListener;
+import edu.cmu.cc.slh.activity.listener.ISLStateListener;
 import edu.cmu.cc.slh.view.adapter.SLViewAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;

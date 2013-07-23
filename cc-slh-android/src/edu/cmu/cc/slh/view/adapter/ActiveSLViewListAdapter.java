@@ -9,8 +9,9 @@ import java.util.Currency;
 import java.util.Locale;
 
 import edu.cmu.cc.android.util.WidgetUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.dao.SLItemDAO;
+import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingListItem;
 
@@ -22,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 /**
  *  DESCRIPTION: This adapter provides representation for the active 
@@ -56,7 +57,7 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 	
 	private LayoutInflater inflater;
 	
-	private IDeleteSLItemCaller deleteCaller;
+	private ISLItemStateListener deleteCaller;
 	
 
 	//-------------------------------------------------------------------------
@@ -65,7 +66,7 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 	
 	public ActiveSLViewListAdapter(Context ctx, 
 			Collection<ItemCategory> categories, 
-			IDeleteSLItemCaller deleteCaller) {
+			ISLItemStateListener deleteCaller) {
 		
 		super();
 		
@@ -284,11 +285,7 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						
-						new SLItemDAO().delete(item);
-						
-						Toast.makeText(ctx, 
-								R.string.sl_item_delete_success, 
-								Toast.LENGTH_LONG).show();
+						ApplicationState.getInstance().setCurrentSLItem(item);
 						
 						deleteCaller.onSLItemDeleted();
 					}
@@ -355,14 +352,4 @@ public class ActiveSLViewListAdapter extends BaseAdapter {
 		}
 	}
 	
-	//-------------------------------------------------------------------------
-	// INTERFACE
-	//-------------------------------------------------------------------------
-	
-	public interface IDeleteSLItemCaller {
-		
-		public void onSLItemDeleted();
-		
-	}
-
 }

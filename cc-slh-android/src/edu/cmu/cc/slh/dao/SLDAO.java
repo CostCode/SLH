@@ -10,7 +10,6 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -22,7 +21,7 @@ import edu.cmu.cc.slh.model.ShoppingList;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class SLDAO {
+public class SLDAO extends BaseDAO {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -40,17 +39,21 @@ public class SLDAO {
 	/** COLUMN: Shopping list creation date */
 	static final String COLUMN_DATE = "date";
 	
-	/** COLUMN: Item category description */
+	/** COLUMN: Shopping list description */
 	static final String COLUMN_DESC = "description";
+	
+	/** COLUMN: Shopping list version number */
+	static final String COLUMN_VERSION = "version";
 	
 	
 	/** Create ShoppingList table SQL script */
 	static final String SQL_CREATE_TABLE =
-			"CREATE TABLE " + TABLE_NAME + "(" +
-			COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			COLUMN_NAME + " TEXT UNIQUE, " +
+			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
+			COLUMN_ID + " INTEGER PRIMARY KEY, " +
+			COLUMN_NAME + " TEXT, " +
 			COLUMN_DATE + " INTEGER, " +
-			COLUMN_DESC + " TEXT)";
+			COLUMN_DESC + " TEXT, " +
+			COLUMN_VERSION + " INTEGER)";
 	
 	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -78,29 +81,46 @@ public class SLDAO {
 	 */
 	public List<ShoppingList> getAll() {
 		
-		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		Cursor cursor = null;
+		List<ShoppingList> list = null;
 		
-		Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, 
-				COLUMN_NAME);
-		
-		int rowCount = cursor.getCount();
-		Logger.logDebug(getClass(), 
-				String.format("Retrieved %d shopping lists...", rowCount));
-		
-		List<ShoppingList> list = new ArrayList<ShoppingList>(rowCount);
-		while(cursor.moveToNext()) {
-			ShoppingList sl = new ShoppingList();
+		try {
 			
-			sl.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
-			sl.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-			sl.setDate(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE))));
-			sl.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESC)));
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
 			
-			list.add(sl);
+			cursor = db.query(TABLE_NAME, null, null, null, null, null, 
+					COLUMN_NAME);
+			
+			int rowCount = cursor.getCount();
+			Logger.logDebug(getClass(), 
+					String.format("Retrieved %d shopping lists...", rowCount));
+			
+			list = new ArrayList<ShoppingList>(rowCount);
+			
+			while(cursor.moveToNext()) {
+				ShoppingList sl = new ShoppingList();
+				
+				sl.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+				sl.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+				sl.setDate(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE))));
+				sl.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESC)));
+				sl.setVersion(cursor.getInt(cursor.getColumnIndex(COLUMN_VERSION)));
+				
+				list.add(sl);
+			}
+			
+		} catch (Throwable t) {
+			if (db != null) {
+				db.close();
+			}
+			Logger.logErrorAndThrow(getClass(), t);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
-		
-		cursor.close();
-		db.close();
 		
 		return list;
 	}
@@ -108,61 +128,125 @@ public class SLDAO {
 	/**
 	 * Saves given shopping list object into the database.
 	 * @param sl - shopping list object to be saved
-	 * @return saved shopping list object with attached id number
 	 */
-	public ShoppingList save(ShoppingList sl) {
+	public void save(ShoppingList sl) {
 		
 		Logger.logDebug(getClass(), 
 				String.format("Trying to save ShoppingList [%s]", sl));
 		
-		SQLiteDatabase db = new DBHelper().getWritableDatabase();
-		
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_NAME, sl.getName());
-		values.put(COLUMN_DATE, sl.getDate().getTime());
-		values.put(COLUMN_DESC, sl.getDescription());
-		
-		if (sl.getId() > 0) {
-			db.update(TABLE_NAME, values, COLUMN_ID + "=" + sl.getId(), null);
-		} else {
-			long id = db.insert(TABLE_NAME, null, values);
-			sl.setId(id);
+		if (!isValid(sl)) {
+			Logger.logErrorAndThrow(getClass(), 
+					new RuntimeException(String.format("ShoppingList[%s]" +
+							" has wrong value", sl)));
 		}
 		
-		Logger.logDebug(getClass(), 
-				String.format("ShoppingList was saved in the local DB. [%s]", sl));
+		Cursor cursor = null;
 		
-		return sl;
+		try {
+			
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
+			
+			ContentValues values = new ContentValues();
+			values.put(COLUMN_NAME, sl.getName());
+			values.put(COLUMN_DATE, sl.getDate().getTime());
+			values.put(COLUMN_DESC, sl.getDescription());
+			values.put(COLUMN_VERSION, sl.getVersion());
+			
+			if (alreadyExists(cursor, sl)) {
+				db.update(TABLE_NAME, values, COLUMN_ID + "=" + sl.getId(), null);
+			} else {
+				values.put(COLUMN_ID, sl.getId());
+				db.insert(TABLE_NAME, null, values);
+			}
+			
+			Logger.logDebug(getClass(), String.format("ShoppingList[%s] " +
+					"was saved into the local DB", sl));
+			
+		} catch (Throwable t) {
+			if (db != null) {
+				db.close();
+			}
+			Logger.logErrorAndThrow(getClass(), t);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		
 	}
 	
-	/**
-	 * Removes the given Shopping list from the local DB
-	 * @param sl - shopping list to be removed
-	 */
 	public void delete(ShoppingList sl) {
 		
 		Logger.logDebug(getClass(), 
 				String.format("Trying to delete ShoppingList [%s]", sl));
 		
-		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		if (!isValid(sl)) {
+			Logger.logErrorAndThrow(getClass(), 
+					new RuntimeException(String.format("ShoppingList[%s]" +
+							" has wrong value", sl)));
+		}
 		
-		int deleted = db.delete(TABLE_NAME, COLUMN_ID + "=" + sl.getId(), null);
+		try {
 		
-		Logger.logDebug(getClass(), String.format("[%d] " +
-				"ShoppingList records were deleted from the DB", deleted));
+			if (db == null || !db.isOpen()) {
+				db = new DBHelper().getWritableDatabase();
+			}
+			
+			int deleted = 
+					db.delete(TABLE_NAME, COLUMN_ID + "=" + sl.getId(), null);
+			
+			Logger.logDebug(getClass(), String.format("[%d] " +
+					"ShoppingList records were deleted from the DB", deleted));
+			
+		}  catch (Throwable t) {
+			if (db != null) {
+				db.close();
+			}
+			Logger.logErrorAndThrow(getClass(), t);
+		}
+		
 	}
 	
 	/**
 	 * Removes all the shopping lists from the database
 	 */
 	public void deleteAll() {
-		SQLiteDatabase db = new DBHelper().getWritableDatabase();
+		
+		if (db == null || !db.isOpen()) {
+			db = new DBHelper().getWritableDatabase();
+		}
+		
 		db.delete(TABLE_NAME, null, null);
-		db.close();
 	}
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
+	
+	private boolean isValid(ShoppingList sl) {
+		
+		if (sl == null || sl.getId() <= 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean alreadyExists(Cursor cursor, ShoppingList sl) {
+		
+		if (sl == null) {
+			return false;
+		}
+		
+		if (cursor == null || cursor.isClosed()) {
+			cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID}, 
+					String.format("%s=%d", COLUMN_ID, sl.getId()), 
+					null, null, null, null);
+		}
+		
+		return (cursor.getCount() > 0);
+	}
 
 }

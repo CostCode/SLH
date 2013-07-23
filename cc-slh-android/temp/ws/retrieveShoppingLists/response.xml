@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveShoppingListsResponse -->
+<retrieveShoppingListsResponse>
+    <shoppinglists>
+        <sl>
+            <id>1</id>
+            <name>For weekend</name>
+            <date>123412322</date>
+            <description>Urgent</description>
+            <sl-version>2</sl-version>
+            <items>
+                <item>
+                    <id>1</id>
+                    <category-id>1</category-id>
+                    <name>Eggs</name>
+                    <quantity>10</quantity>
+                    <price>22.4</price>
+                    <unit-id>2</unit-id>
+                    <description>Red eggs</description>
+                </item>
+                <item>
+                    <id>2</id>
+                    <category-id>2</category-id>
+                    <name>TV</name>
+                    <quantity>1</quantity>
+                    <price>250.99</price>
+                    <unit-id>3</unit-id>
+                    <description>Plasma TV</description>
+                </item>
+            </items>
+        </sl>
+    </shoppinglists>
+</retrieveShoppingListsResponse>

@@ -4,6 +4,7 @@
  */
 package edu.cmu.cc.slh.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class ShoppingList extends BaseEntity {
 	/** Description information */
 	private String description;
 	
+	/** Version number */
+	private int version;
+	
+	/** Items of this shopping list */
 	private List<ShoppingListItem> items;
 	
 	
@@ -48,13 +53,6 @@ public class ShoppingList extends BaseEntity {
 	
 	
 	public ShoppingList() {}
-	
-	public ShoppingList(String name, Date date, String description) {
-		this.name = name;
-		this.date = date;
-		this.description = description;
-	}
-
 	
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -91,10 +89,26 @@ public class ShoppingList extends BaseEntity {
 	public void setItems(List<ShoppingListItem> items) {
 		this.items = items;
 	}
-
+	
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
+
+	public void addItem(ShoppingListItem item) {
+		if (items == null) {
+			items = new ArrayList<ShoppingListItem>();
+		}
+		items.add(item);
+	}
+	
 
 	@Override
 	public String toString() {
@@ -106,21 +120,9 @@ public class ShoppingList extends BaseEntity {
 		builder.append(", ");
 		builder.append(StringUtils.getDateAsString(date, DATE_PATTERN));
 		builder.append(", ");
-		builder.append(description);
+		builder.append(version);
 		
 		return builder.toString();
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		ShoppingList sl = (ShoppingList) obj;
-		return (id == sl.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return (int)id;
-	}
-
 	
 }

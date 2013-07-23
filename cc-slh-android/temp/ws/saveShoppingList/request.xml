@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Method: saveShoppingList -->
+<saveShoppingList>
+    <!-- Property: member-id -->
+    <member-id>123456789012</member-id>
+    
+    <id>1</id>
+    <name>Weekend list</name>
+    <date>123123123</date>
+    <description>Urgent</description>
+</saveShoppingList>

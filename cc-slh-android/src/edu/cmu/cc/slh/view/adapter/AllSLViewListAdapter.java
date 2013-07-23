@@ -8,9 +8,9 @@ import java.util.List;
 
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.android.util.WidgetUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.activity.ISLStateListener;
-import edu.cmu.cc.slh.dao.SLDAO;
+import edu.cmu.cc.slh.activity.listener.ISLStateListener;
 import edu.cmu.cc.slh.model.ShoppingList;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 /**
  *  DESCRIPTION: View adapter for the list of shopping lists
@@ -138,7 +138,9 @@ public class AllSLViewListAdapter extends BaseAdapter {
 		});
 	}
 	
-	private void customizeDeleteImage(ImageView deleteImage, final ShoppingList sl) {
+	private void customizeDeleteImage(ImageView deleteImage, 
+			final ShoppingList sl) {
+		
 		deleteImage.setVisibility(View.VISIBLE);
 		deleteImage.setClickable(true);
 		deleteImage.setOnClickListener(new View.OnClickListener() {
@@ -152,11 +154,7 @@ public class AllSLViewListAdapter extends BaseAdapter {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						
-						new SLDAO().delete(sl);
-						
-						Toast.makeText(ctx, 
-								R.string.sl_delete_success, 
-								Toast.LENGTH_LONG).show();
+						ApplicationState.getInstance().setCurrentSL(sl);
 						
 						slStateListener.onSLDeleted();
 					}

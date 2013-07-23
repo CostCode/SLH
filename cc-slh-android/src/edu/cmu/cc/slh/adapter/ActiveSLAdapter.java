@@ -6,9 +6,6 @@ package edu.cmu.cc.slh.adapter;
 
 import java.util.List;
 
-import android.content.Context;
-import edu.cmu.cc.android.util.Logger;
-import edu.cmu.cc.android.util.SharedPrefsAdapter;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
@@ -47,15 +44,15 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	
 	public static synchronized boolean persistActiveSL(ShoppingList sl) {
 		
-		return saveToSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVE_SHOPPINGLIST, String.valueOf(sl.getId()), 
-				R.string.sl_active_error_persist);
+		return saveToSharedPrefs(ActiveSLAdapter.class, 
+				ApplicationState.getContext(),KEY_ACTIVE_SHOPPINGLIST, 
+				String.valueOf(sl.getId()), R.string.sl_active_error_persist);
 	}
 	
 	public static ShoppingList retrieveActiveSL() {
 		
-		String strId = retrieveFromSharedPrefs(ApplicationState.getContext(), 
-				KEY_ACTIVE_SHOPPINGLIST, 
+		String strId = retrieveFromSharedPrefs(ActiveSLAdapter.class, 
+				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST, 
 				R.string.sl_active_error_retrieve);
 		
 		if (!StringUtils.isNullOrEmpty(strId)) {
@@ -69,36 +66,6 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
-	
-	private static boolean saveToSharedPrefs(Context ctx, 
-			String key, String value, int errMsgResID) {
-		
-		try {
-			
-			return SharedPrefsAdapter.persist(ctx, key, value);
-			
-		} catch (Throwable t) {
-			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
-		}
-		
-		return false;
-	}
-	
-	private static String retrieveFromSharedPrefs(Context ctx, String key, 
-			int errMsgResID) {
-		
-		try {
-			
-			return SharedPrefsAdapter.retrieve(ctx, key);
-			
-		} catch (Throwable t) {
-			String errMsg = getErrorMessage(ctx, errMsgResID, t);
-			Logger.logErrorAndAlert(ctx, SLAdapter.class, errMsg, t);
-		}
-		
-		return null;
-	}
 	
 	private static ShoppingList findSLById(long id) {
 		

@@ -38,6 +38,8 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	
 	private IActivationTaskCaller caller;
 	
+	private String memberId;
+	
 	private boolean errorState;
 	
 	//-------------------------------------------------------------------------
@@ -56,14 +58,18 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	
 	
 	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
+	// PROTECTED METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
+		
 		caller.showProgressDialog(R.string.activation_progressDialogTitle, 
 				R.string.activation_progressDialogText);
+		
+		errorState = false;
+		memberId = null;
 	}
 	
 	/**
@@ -72,39 +78,22 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(String... params) {
 		
-		errorState = false;
-		
-		
-		SoapWebService service = new SoapWebService(ctx.getString(R.string.ws_url), 
-				ctx.getString(R.string.ws_namespace));
-		
-		String membershipId = params[0];
-		
-		Logger.logDebug(this.getClass(), 
-				String.format("Validating user membership id " +
-				"[MEMBERSHIP ID: %s]", membershipId));
-		
-		Map<String, String> arguments = new HashMap<String, String>(1);
-		arguments.put(ctx.getString(R.string.ws_activation_memberid), membershipId);
-		
 		try {
 			
-			SoapObject soapResponse = service.invokeMethod(
-					ctx.getString(R.string.ws_activation_validate), arguments);
+			if (params == null || params[0] == null) {
+				throw new RuntimeException("Invalid input parameter: " +
+						"MembershipID is null");
+			}
 			
-			String strResult = soapResponse.getProperty(
-					ctx.getString(R.string.ws_activation_validity)).toString();
+			memberId = params[0];
 			
-			Boolean validationResult = Boolean.valueOf(strResult);
+			SoapObject response = validateMembership(memberId);
 			
-			Logger.logDebug(this.getClass(), String.format("Membership " +
-					"validation result: %s", validationResult));
+			return parseValidity(response);
 			
-			return validationResult;
-			
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			errorState = true;
-			caller.onAsyncTaskFailed(this.getClass(), e);
+			caller.onAsyncTaskFailed(this.getClass(), t);
 		}
 		
 		return null;
@@ -116,10 +105,45 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 		
 		caller.dismissProgressDialog();
 		if (!errorState) {
-			caller.onActivationTaskSucceeded(result);
+			caller.onActivationTaskSucceeded(memberId, result);
 		}
 	}
 
+	//-------------------------------------------------------------------------
+	// PRIVATE METHODS
+	//-------------------------------------------------------------------------
+	
+	private SoapObject validateMembership(final String memberId) 
+			throws Throwable {
+		
+		SoapWebService service = new SoapWebService(
+				ctx.getString(R.string.ws_activation_namespace), 
+				ctx.getString(R.string.ws_activation_url));
+		
+		Map<String, String> arguments = new HashMap<String, String>(1);
+		arguments.put(
+				ctx.getString(R.string.ws_activation_property_memberId), 
+				memberId);
+		
+		Logger.logDebug(this.getClass(), 
+				String.format("Validating MembershipID[%s] on the server...", 
+						memberId));
+		
+		return service.invokeMethod(
+				ctx.getString(R.string.ws_activation_method_validate), 
+				arguments);
+	}
+	
+	private boolean parseValidity(SoapObject root) {
+		
+		String strValidity = root.getPropertyAsString(
+				ctx.getString(R.string.ws_activation_property_validity));
+		
+		Logger.logDebug(this.getClass(), 
+				String.format("Membership validity: %s", strValidity));
+		
+		return Boolean.parseBoolean(strValidity);
+	}
 	
 	//-------------------------------------------------------------------------
 	// INNER INTERFACE
@@ -135,7 +159,7 @@ public class ActivationTask extends AsyncTask<String, Void, Boolean> {
 		 * Activation request was successfully handled
 		 * @param activated - activation result
 		 */
-		public void onActivationTaskSucceeded(boolean activated);
+		public void onActivationTaskSucceeded(String memberId, boolean activated);
 		
 	}
 	

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Method: saveShoppingList -->
+<saveShoppingListItem>
+    <member-id>123456789012</member-id>
+    
+    <id>1</id>
+    <shoppinglist-id>3</shoppinglist-id>
+    <category-id>1</category-id>
+    <name>Bread</name>
+    <quantity>3</quantity>
+    <price>24.22</price>
+    <unit-id>2</unit-id>
+    <description>Italian</description>
+</saveShoppingListItem>
