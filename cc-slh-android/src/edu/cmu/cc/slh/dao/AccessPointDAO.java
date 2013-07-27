@@ -12,6 +12,8 @@ import android.database.Cursor;
 
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.model.AccessPoint;
+import edu.cmu.cc.slh.model.BaseEntity;
+import edu.cmu.cc.slh.model.Warehouse;
 
 /**
  *  DESCRIPTION: 
@@ -29,8 +31,8 @@ public class AccessPointDAO extends BaseDAO {
 	/** TABLE NAME */
 	static final String TABLE_NAME = "accesspoint";
 	
-	/** PRIMARY KEY: Access point id */
-	static final String COLUMN_ID = "id";
+	/** COLUMN: Warehouse to which this access point belongs */
+	static final String COLUMN_WAREHOUSE = "warehouseId";
 	
 	/** COLUMN: Access point BSSID */
 	static final String COLUMN_BSSID = "bssid";
@@ -51,12 +53,15 @@ public class AccessPointDAO extends BaseDAO {
 	/** Create AccessPoint table SQL script */
 	static final String SQL_CREATE_TABLE =
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-			COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			COLUMN_ID + " INTEGER PRIMARY KEY, " +
 			COLUMN_BSSID + " TEXT, " +
 			COLUMN_SSID + " TEXT, " +
 			COLUMN_POSX + " FLOAT, " +
 			COLUMN_POSY + " FLOAT, " +
-			COLUMN_DESC + " TEXT)";
+			COLUMN_DESC + " TEXT, " +
+			"FOREIGN KEY (" + COLUMN_WAREHOUSE + ") REFERENCES " +
+			WarehouseDAO.TABLE_NAME + "(" + WarehouseDAO.COLUMN_ID + ") " +
+			"ON DELETE CASCADE)";
 	
 	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -78,33 +83,28 @@ public class AccessPointDAO extends BaseDAO {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	
-	
-	/**
-	 * Retrieves all the access points 
-	 * @return list of AccessPoint objects
-	 */
-	public List<AccessPoint> getAll() {
+	public List<AccessPoint> getAll(Warehouse wh) {
+		
+		if (!super.isValid(wh)) {
+			Logger.logErrorAndThrow(getClass(), 
+					new RuntimeException(String.format("Warehouse[%s]" +
+							" has wrong value", wh)));
+		}
 		
 		Cursor cursor = null;
 		List<AccessPoint> list = null;
 		
 		try {
 			
-			if (db == null || !db.isOpen()) {
-				db = new DBHelper().getWritableDatabase();
-			}
+			openConnectionIfClosed();
 			
-			cursor = db.query(true, TABLE_NAME, null, null, null, null, null, 
-					null, null, null);
+			cursor = db.query(TABLE_NAME, null, 
+					String.format("%s=%d", COLUMN_WAREHOUSE, wh.getId()), 
+					null, null, null, null);
 			
 			int rowCount = cursor.getCount();
 			Logger.logDebug(getClass(), String
 					.format("Retrieved [%d] AccessPoint objects...", rowCount));
-			
-			if (rowCount == 0) {
-				return null;
-			}
 			
 			list = new ArrayList<AccessPoint>(rowCount);
 			
@@ -112,13 +112,10 @@ public class AccessPointDAO extends BaseDAO {
 				AccessPoint ap = new AccessPoint();
 				
 				ap.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
-				
+				ap.setWarehouse(wh);
 				ap.setBssid(cursor.getString(cursor.getColumnIndex(COLUMN_BSSID)));
-				
 				ap.setSsid(cursor.getString(cursor.getColumnIndex(COLUMN_SSID)));
-				
 				ap.setPosX(cursor.getFloat(cursor.getColumnIndex(COLUMN_POSX)));
-				
 				ap.setPosY(cursor.getFloat(cursor.getColumnIndex(COLUMN_POSY)));
 				
 				list.add(ap);
@@ -143,23 +140,22 @@ public class AccessPointDAO extends BaseDAO {
 	 * @param ap - AccessPoint object to be saved
 	 * @return saved AccessPoint with attached id number
 	 */
-	public AccessPoint save(AccessPoint ap) {
+	public void save(AccessPoint ap) {
 		
 		Logger.logDebug(getClass(), 
-				String.format("Trying to save AccessPoint [%s] into " +
-						"the local DB", ap));
+				String.format("Trying to save AccessPoint [%s]", ap));
 		
-		if (ap == null) {
+		if (!isValid(ap)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException("Saving null " +
-							"AccessPoint object is not allowed"));
+					new RuntimeException(String.format("Section[%s]" +
+							" has wrong value", ap)));
 		}
+		
+		Cursor cursor = null;
 		
 		try {
 			
-			if (db == null || !db.isOpen()) {
-				db = new DBHelper().getWritableDatabase();
-			}
+			openConnectionIfClosed();
 			
 			ContentValues values = new ContentValues();
 			values.put(COLUMN_BSSID, ap.getBssid());
@@ -168,54 +164,50 @@ public class AccessPointDAO extends BaseDAO {
 			values.put(COLUMN_POSY, ap.getPosY());
 			values.put(COLUMN_DESC, ap.getDescription());
 			
-			if (ap.getId() > 0) {
+			if (alreadyExists(TABLE_NAME, ap, cursor)) {
 				db.update(TABLE_NAME, values, 
 						String.format("%s=%d", COLUMN_ID, ap.getId()), null);
 			} else {
-				long id = db.insert(TABLE_NAME, null, values);
-				ap.setId(id);
+				values.put(COLUMN_ID, ap.getId());
+				db.insert(TABLE_NAME, null, values);
 			}
 			
-			Logger.logDebug(getClass(), String.format("AccessPoint " +
-					"was saved in the local DB. [%s]", ap));
+			Logger.logDebug(getClass(), String.format("AccessPoint[%s] " +
+					"was saved into the local DB", ap));
 			
 		} catch (Throwable t) {
 			if (db != null) {
 				db.close();
 			}
 			Logger.logErrorAndThrow(getClass(), t);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
 		
-		return ap;
 	}
 	
-	/**
-	 * Saves the given list of AccessPoints into the local DB
-	 * @param apList - AccessPoint list
-	 */
-	public void saveAll(List<AccessPoint> apList) {
+	public void deleteAll(Warehouse wh) {
 		
-		if (apList == null || apList.size() == 0) {
-			Logger.logDebug(getClass(), "Access points list is empty or null");
-			return;
+		Logger.logDebug(getClass(), String
+				.format("Trying to delete AccessPoints of Warehouse: [%s]", wh));
+		
+		if (!super.isValid(wh)) {
+			Logger.logErrorAndThrow(getClass(), 
+					new RuntimeException(String.format("Warehouse[%s]" +
+							" has wrong value", wh)));
 		}
-		
-		Logger.logDebug(getClass(), 
-				String.format("Trying to save AccessPoints list [Size=%d] " +
-						"into the local DB", apList.size()));
 		
 		try {
 			
-			if (db == null || !db.isOpen()) {
-				db = new DBHelper().getWritableDatabase();
-			}
+			openConnectionIfClosed();
 			
-			for (AccessPoint ap : apList) {
-				save(ap);
-			}
+			int deleted = db.delete(TABLE_NAME, 
+					COLUMN_WAREHOUSE + "=" + wh.getId(), null);
 			
-			Logger.logDebug(getClass(), String.format("AccessPoint list was" +
-					"saved in the local DB"));
+			Logger.logDebug(getClass(), String.format("[%d] " +
+					"AccessPoints were deleted from the DB", deleted));
 			
 		} catch (Throwable t) {
 			if (db != null) {
@@ -225,14 +217,10 @@ public class AccessPointDAO extends BaseDAO {
 		}
 	}
 	
-	/**
-	 * Removes all the shopping list items from the local DB
-	 */
+	
 	public void deleteAll() {
 		
-		if (db == null || !db.isOpen()) {
-			db = new DBHelper().getWritableDatabase();
-		}
+		openConnectionIfClosed();
 		
 		db.delete(TABLE_NAME, null, null);
 	}
@@ -240,5 +228,11 @@ public class AccessPointDAO extends BaseDAO {
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
+	
+	@Override
+	protected boolean isValid(BaseEntity entity) {
+		return super.isValid(entity) 
+				&& super.isValid(((AccessPoint)entity).getWarehouse());
+	}
 
 }

@@ -60,6 +60,42 @@
     <string name="ws_sl_item_property_unit">unit-id</string>
     <string name="ws_sl_item_property_desc">description</string>
     
+    <!-- Web Service: Warehouse -->
+    
+    <string name="ws_warehouse_url">http://slhwsapp-costcode.rhcloud.com:80/MemberWS</string>
+    <string name="ws_warehouse_namespace">http://ws.biz.slh.cc.mse.cmu.edu/</string>
+    
+    <string name="ws_warehouse_method_retrieveWarehousesVersion">retrieveWarehousesVersion</string>
+    <string name="ws_warehouse_method_retrieveWarehouses">retrieveWarehouses</string>
+    <string name="ws_warehouse_method_retrieveVersion">retrieveWarehouseVersion</string>
+    
+    <string name="ws_warehouse_property_warehouses">warehouses</string>
+    <string name="ws_warehouse_property_id">id</string>
+    <string name="ws_warehouse_property_address">address</string>
+    <string name="ws_warehouse_property_version">version</string>
+    
+    <!-- Web Service: Section -->
+    
+    <string name="ws_section_method_retrieveSections">retrieveSections</string>
+    
+    <string name="ws_section_property_sections">sections</string>
+    <string name="ws_section_property_section">section</string>
+    <string name="ws_section_property_id">id</string>
+    <string name="ws_section_property_posx">posx</string>
+    <string name="ws_section_property_posy">posy</string>
+    
+    <!-- Web Service: AccessPoint -->
+    
+    <string name="ws_ap_method_retrieveAccessPoints">retrieveAccessPoints</string>
+    
+    <string name="ws_ap_property_accesspoints">accesspoints</string>
+    <string name="ws_ap_property_accesspoint">accesspoint</string>
+    <string name="ws_ap_property_id">id</string>
+    <string name="ws_ap_property_ssid">ssid</string>
+    <string name="ws_ap_property_posx">posx</string>
+    <string name="ws_ap_property_posy">posy</string>
+    
+    
     <!-- Web Service: Floor Plan -->
     
     <string name="ws_floorplan_url">http://slhwsapp-costcode.rhcloud.com:80/FloorPlanWS</string>

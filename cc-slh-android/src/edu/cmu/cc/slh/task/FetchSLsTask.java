@@ -39,7 +39,7 @@ import edu.cmu.cc.slh.model.ShoppingListItem;
  *	@version 1.0
  *  Date: Jun 21, 2013
  */
-public class FetchSLTask 
+public class FetchSLsTask 
 extends AsyncTask<Void, Void, List<ShoppingList>> {
 
 	//-------------------------------------------------------------------------
@@ -68,7 +68,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>> {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public FetchSLTask(Context ctx, IFetchSLTaskCaller caller) {
+	public FetchSLsTask(Context ctx, IFetchSLTaskCaller caller) {
 		super();
 		
 		this.ctx = ctx;
@@ -196,7 +196,7 @@ extends AsyncTask<Void, Void, List<ShoppingList>> {
 				ctx.getString(R.string.ws_category_property_version));
 		
 		Logger.logDebug(this.getClass(), 
-				String.format("Server CategoryVersion: [%s]", strVersion));
+				String.format("Server Categories Version: [%s]", strVersion));
 		
 		return Integer.parseInt(strVersion);
 	}

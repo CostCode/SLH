@@ -13,15 +13,15 @@ import edu.cmu.cc.slh.R;
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jul 22, 2013
+ *  Date: Jul 24, 2013
  */
-public class ProximityAlertAdapter extends AbstractSharedPrefsAdapter {
+public class WarehouseAdapter extends AbstractSharedPrefsAdapter {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_FLOORPLAN_VERSION = "version-floorplan";
+	private static String KEY_VERSION_WAREHOUSES = "version-warehouses";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -39,21 +39,22 @@ public class ProximityAlertAdapter extends AbstractSharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistFloorplanVersion(int version) {
+	public static synchronized boolean persistVersion(int version) {
 		
-		return saveToSharedPrefs(ProximityAlertAdapter.class, 
-				ApplicationState.getContext(), KEY_FLOORPLAN_VERSION, 
-				String.valueOf(version), R.string.sl_all_error_versionPersist);
+		return saveToSharedPrefs(WarehouseAdapter.class, 
+				ApplicationState.getContext(), KEY_VERSION_WAREHOUSES, 
+				String.valueOf(version), 
+				R.string.warehouse_error_versionPersist);
 	}
 	
-	public static int retrieveFloorplanVersion() {
+	public static int retrieveVersion() {
 		
-		String strValue = retrieveFromSharedPrefs(ProximityAlertAdapter.class,
-				ApplicationState.getContext(), KEY_FLOORPLAN_VERSION, 
-				R.string.sl_all_error_versionRetrieve);
+		String strValue = retrieveFromSharedPrefs(WarehouseAdapter.class, 
+				ApplicationState.getContext(), KEY_VERSION_WAREHOUSES, 
+				R.string.warehouse_error_versionRetrieve);
 		
 		if (StringUtils.isNullOrEmpty(strValue)) {
-			return 0;
+			return -1;
 		}
 		
 		return Integer.parseInt(strValue);

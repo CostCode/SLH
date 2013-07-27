@@ -4,47 +4,41 @@
  */
 package edu.cmu.cc.slh.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
- *  DESCRIPTION: AccessPoint model class
+ *  DESCRIPTION: 
  *	
- *  @author Nohsam Park, Azamat Samiyev
- *	@version 2.0
- *  Date: Jul 15, 2013
+ *  @author Azamat Samiyev
+ *	@version 1.0
+ *  Date: Jul 23, 2013
  */
-public class AccessPoint extends BaseEntity {
-	
+public class Section extends BaseEntity {
+
+	//-------------------------------------------------------------------------
+	// CONSTANTS
+	//-------------------------------------------------------------------------
+
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
 	private Warehouse warehouse;
 	
-	private String ssid;
-	
 	private double posX;
 	
 	private double posY;
 	
-	
-	private String bssid;
-	
-	private String capabilities;
-	
-	private int frequency;
-	
-	private float rssi;
-	
-	private double distance;
-	
-	private String description;
+	private List<ItemCategory> categories;
 
-	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public AccessPoint() {}
-	
+	public Section() {}
+
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
@@ -54,13 +48,6 @@ public class AccessPoint extends BaseEntity {
 	}
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
-	}
-	
-	public String getSsid() {
-		return ssid;
-	}
-	public void setSsid(String ssid) {
-		this.ssid = ssid;
 	}
 
 	public double getPosX() {
@@ -77,53 +64,26 @@ public class AccessPoint extends BaseEntity {
 		this.posY = posY;
 	}
 	
-	
-	public String getBssid() {
-		return bssid;
+	public List<ItemCategory> getCategories() {
+		return categories;
 	}
-	public void setBssid(String bssid) {
-		this.bssid = bssid;
+	public void setCategories(List<ItemCategory> categories) {
+		this.categories = categories;
 	}
-
-	public String getCapabilities() {
-		return capabilities;
-	}
-	public void setCapabilities(String capabilities) {
-		this.capabilities = capabilities;
-	}
-
-	public int getFrequency() {
-		return frequency;
-	}
-	public void setFrequency(int frequency) {
-		this.frequency = frequency;
-	}
-
-	public float getRssi() {
-		return rssi;
-	}
-	public void setRssi(float rssi) {
-		this.rssi = rssi;
-	}
-
-	public double getDistance() {
-		return distance;
-	}
-	public void setDistance(double distance) {
-		this.distance = distance;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}	
 	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-
+	
+	public void addCategory(ItemCategory category) {
+		
+		if (categories == null) {
+			categories = new ArrayList<ItemCategory>();
+		}
+		
+		categories.add(category);
+	}
+	
 	@Override
 	public String toString() {
 		
@@ -132,10 +92,6 @@ public class AccessPoint extends BaseEntity {
 		builder.append(", ");
 		builder.append((warehouse != null) ? warehouse.getId() : "null");
 		builder.append(", ");
-		builder.append(ssid);
-		builder.append(", ");
-		builder.append(bssid);
-		builder.append(", ");
 		builder.append(posX);
 		builder.append(", ");
 		builder.append(posY);
@@ -143,4 +99,8 @@ public class AccessPoint extends BaseEntity {
 		return builder.toString();
 	}
 	
+	//-------------------------------------------------------------------------
+	// PRIVATE METHODS
+	//-------------------------------------------------------------------------
+
 }

@@ -70,9 +70,9 @@ public class SLItemDAO extends BaseDAO {
 			COLUMN_QUANTITY + " INTEGER, " +
 			COLUMN_PRICE + " REAL, " +
 			COLUMN_UNIT + " INTEGER, " +
-			COLUMN_DESC + " TEXT," +
+			COLUMN_DESC + " TEXT, " +
 			"FOREIGN KEY (" + COLUMN_SHOPPINGLIST + ") REFERENCES " +
-			SLDAO.TABLE_NAME + "(" + SLDAO.COLUMN_ID + "))"; 
+			SLDAO.TABLE_NAME + "(" + SLDAO.COLUMN_ID + ") ON DELETE CASCADE)"; 
 	
 	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -99,11 +99,12 @@ public class SLItemDAO extends BaseDAO {
 	 * @param shoppingListID - id of the shopping list
 	 * @return list of items
 	 */
-	public List<ShoppingListItem> getAll(final ShoppingList parent) {
+	public List<ShoppingListItem> getAll(ShoppingList sl) {
 		
-		if (parent == null) {
+		if (!isValid(sl)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException("Parent shopping list is null"));
+					new RuntimeException(String.format("ShoppingList[%s]" +
+							" has wrong value", sl)));
 		}
 		
 		Cursor cursor = null;
@@ -116,7 +117,7 @@ public class SLItemDAO extends BaseDAO {
 			}
 			
 			final String sqlWhere = String.format("%s=%d", 
-					COLUMN_SHOPPINGLIST, parent.getId());
+					COLUMN_SHOPPINGLIST, sl.getId());
 			
 			cursor = db.query(TABLE_NAME, null, sqlWhere, 
 					null, null, null, COLUMN_NAME);
@@ -132,7 +133,7 @@ public class SLItemDAO extends BaseDAO {
 				
 				slItem.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 				
-				slItem.setShoppingList(parent);
+				slItem.setShoppingList(sl);
 				
 				slItem.setName(
 						cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -245,19 +246,18 @@ public class SLItemDAO extends BaseDAO {
 				db = new DBHelper().getWritableDatabase();
 			}
 			
-			int deleted = db
-					.delete(TABLE_NAME, COLUMN_ID + "=" + item.getId(), null);
+			int deleted = db.delete(TABLE_NAME, 
+					COLUMN_ID + "=" + item.getId(), null);
 			
 			Logger.logDebug(getClass(), String.format("[%d] " +
-					"ShoppingListItem records were deleted from the DB", 
-					deleted));
+					"ShoppingListItem were deleted from the DB", deleted));
+			
 		} catch (Throwable t) {
 			if (db != null) {
 				db.close();
 			}
 			Logger.logErrorAndThrow(getClass(), t);
 		}
-		
 	}
 	
 	

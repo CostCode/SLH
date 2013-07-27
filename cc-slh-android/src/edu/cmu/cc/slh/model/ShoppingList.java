@@ -103,9 +103,11 @@ public class ShoppingList extends BaseEntity {
 	//-------------------------------------------------------------------------
 
 	public void addItem(ShoppingListItem item) {
+		
 		if (items == null) {
 			items = new ArrayList<ShoppingListItem>();
 		}
+		
 		items.add(item);
 	}
 	

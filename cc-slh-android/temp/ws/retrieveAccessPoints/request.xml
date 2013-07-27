@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Method: retrieveAccessPoints -->
+<retrieveAccessPoints>
+    <!-- Property: member-id -->
+    <member-id>123456789012</member-id>
+    <!-- Warehouse ID -->
+    <id>3</id>
+</retrieveAccessPoints>

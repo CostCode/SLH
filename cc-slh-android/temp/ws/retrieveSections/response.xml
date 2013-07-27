@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveSectionsResponse -->
+<retrieveSectionsResponse>
+    <!-- Sections of the Requested Warehouse -->
+    <sections>
+        <section>
+            <id>1</id>
+            <posx>24.56</posx>
+            <posy>12.02</posy>
+        </section>
+        <section>
+            <id>2</id>
+            <posx>100.50</posx>
+            <posy>140.32</posy>
+        </section>
+    </sections>
+</retrieveSectionsResponse>

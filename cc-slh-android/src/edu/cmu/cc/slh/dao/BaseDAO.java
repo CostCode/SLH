@@ -4,6 +4,8 @@
  */
 package edu.cmu.cc.slh.dao;
 
+import edu.cmu.cc.slh.model.BaseEntity;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -15,23 +17,14 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public abstract class BaseDAO {
 
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
-
+	/** PRIMARY KEY: Shopping list id */
+	static final String COLUMN_ID = "id";
+	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
 	protected SQLiteDatabase db;
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -46,7 +39,39 @@ public abstract class BaseDAO {
 	}
 
 	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
+	// PROTECTED METHODS
 	//-------------------------------------------------------------------------
+	
+	protected void openConnectionIfClosed() {
+		
+		if (db == null || !db.isOpen()) {
+			db = new DBHelper().getWritableDatabase();
+		}
+	}
+	
+	protected boolean isValid(BaseEntity entity) {
+		
+		if (entity == null || entity.getId() <= 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	protected boolean alreadyExists(final String tableName, 
+			BaseEntity entity, Cursor cursor) {
+		
+		if (!isValid(entity)) {
+			return false;
+		}
+		
+		if (cursor == null || cursor.isClosed()) {
+			cursor = db.query(tableName, new String[]{COLUMN_ID}, 
+					String.format("%s=%d", COLUMN_ID, entity.getId()), 
+					null, null, null, null);
+		}
+		
+		return (cursor.getCount() > 0);
+	}
 
 }

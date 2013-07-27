@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveWarehouseVersionResponse -->
+<retrieveWarehouseVersionResponse>
+    <!-- Property: Version of the warehouse whose ID I passed in the request -->
+    <version>5</version>
+</retrieveWarehouseVersionResponse>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveWarehousesResponse -->
+<retrieveWarehousesResponse>
+    <warehouses>
+        <warehouse>
+            <id>1</id>
+            <name>Pittsburgh #1</name>
+            <version>1</version>
+        </warehouse>
+        <warehouse>
+            <id>1</id>
+            <name>New Your #4</name>
+            <version>5</version>
+        </warehouse>
+    </warehouses>
+</retrieveWarehousesResponse>

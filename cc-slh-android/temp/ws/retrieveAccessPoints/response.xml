@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root: retrieveAccessPointsResponse -->
+<retrieveAccessPointsResponse>
+    <!-- AccessPoints of the Requested Warehouse -->
+    <accesspoints>
+        <accesspoint>
+            <id>1</id>
+            <ssid>CMU Secure</ssid>
+            <posx>24.56</posx>
+            <posy>12.02</posy>
+        </accesspoint>
+        <accesspoint>
+            <id>2</id>
+            <ssid>CMU</ssid>
+            <posx>24.56</posx>
+            <posy>12.02</posy>
+        </accesspoint>
+    </accesspoints>
+</retrieveAccessPointsResponse>

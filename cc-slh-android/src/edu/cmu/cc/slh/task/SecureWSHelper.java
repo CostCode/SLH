@@ -2,38 +2,36 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.adapter;
+package edu.cmu.cc.slh.task;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import edu.cmu.cc.android.util.StringUtils;
-import edu.cmu.cc.slh.ApplicationState;
+import android.content.Context;
+
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.model.ShoppingList;
 
 /**
  *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 21, 2013
+ *  Date: Jul 24, 2013
  */
-public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
+public class SecureWSHelper {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
-	
-	private static String KEY_ACTIVE_SHOPPINGLIST = "active-shoppinglist";
-	
+
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
-
+	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
-
+	
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
@@ -41,46 +39,19 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
-	
-	public static synchronized boolean persistActiveSL(ShoppingList sl) {
-		
-		return saveToSharedPrefs(ActiveSLAdapter.class, 
-				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST, 
-				String.valueOf(sl.getId()), R.string.sl_active_error_persist);
-	}
-	
-	public static ShoppingList retrieveActiveSL() {
-		
-		String strId = retrieveFromSharedPrefs(ActiveSLAdapter.class, 
-				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST, 
-				R.string.sl_active_error_retrieve);
-		
-		if (!StringUtils.isNullOrEmpty(strId)) {
-			return findSLById(Long.parseLong(strId));
-		}
-		
-		return null;
-	}
-	
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-	private static ShoppingList findSLById(long id) {
+	public static synchronized Map<String, String> initWSArguments(
+			Context ctx, String memberId) {
 		
-		List<ShoppingList> list = 
-				ApplicationState.getInstance().getShoppingLists();
+		Map<String, String> args = new HashMap<String, String>(1);
+		args.put(ctx.getString(
+				R.string.ws_activation_property_memberId), memberId);
 		
-		if (list != null && list.size() > 0) {
-			for (ShoppingList sl : list) {
-				if (sl.getId() == id) {
-					return sl;
-				}
-			}
-		}
-		
-		return null;
+		return args;
 	}
 
 }

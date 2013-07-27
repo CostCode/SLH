@@ -27,8 +27,8 @@ import edu.cmu.cc.slh.activity.listener.ISLStateListener;
 import edu.cmu.cc.slh.dialog.SLDialog;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.task.DeleteSLTask;
-import edu.cmu.cc.slh.task.FetchSLTask;
-import edu.cmu.cc.slh.task.FetchSLTask.IFetchSLTaskCaller;
+import edu.cmu.cc.slh.task.FetchSLsTask;
+import edu.cmu.cc.slh.task.FetchSLsTask.IFetchSLTaskCaller;
 import edu.cmu.cc.slh.task.SaveSLTask;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
 
@@ -227,7 +227,7 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		
 		int msgResID = R.string.error_unspecified;
 		
-		if (taskClass == FetchSLTask.class) {
+		if (taskClass == FetchSLsTask.class) {
 			msgResID = R.string.sl_all_error_fetch;
 		} else {
 			Logger.logErrorAndThrow(getClass(), 
@@ -240,7 +240,7 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	}
 
 	private void fetchShoppingLists() {
-		new FetchSLTask(this, this).execute();
+		new FetchSLsTask(this, this).execute();
 	}
 	
 	/**

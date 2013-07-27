@@ -4,13 +4,15 @@
  */
 package edu.cmu.cc.slh.activity.test;
 
-import edu.cmu.cc.slh.R;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.ksoap2.serialization.SoapObject;
+
+import edu.cmu.cc.android.service.soap.SoapWebService;
+import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.activity.ActivationActivity;
-import edu.cmu.cc.slh.adapter.ActivationAdapter;
-import edu.cmu.cc.slh.view.adapter.ActivationViewAdapter;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.UiThreadTest;
-import android.widget.EditText;
 
 /**
  *  DESCRIPTION: Activation activity test class
@@ -54,89 +56,47 @@ extends ActivityInstrumentationTestCase2<ActivationActivity> {
 		super.setUp();
 		
 		activationActivity = getActivity();
-		
-		//-----------------------------------------------
-		// Assigning valid Costco membership id value:
-		// 12 digits, starting from 1,3, or 8.
-		//-----------------------------------------------
-		viewValues = new String[] {"123456789012"};
 	}
 	
-	/**
-	 * Testing Initial conditions
-	 */
-	public void testPreConditions() {
-		//-----------------------------------------------
-		// Initially, user app is not activated
-		//-----------------------------------------------
-		assertFalse(ActivationAdapter
-				.retrieveActivationStatus());
-	}
-	
-	@UiThreadTest
-	public void testValidValues() {
-		
-		assignViewValues(viewValues);
-		
-		//-----------------------------------------------
-		// Making sure that membership id was correctly 
-		// validated: expecting true
-		//-----------------------------------------------
-		assertTrue(isViewValid());
-	}
-	
-	@UiThreadTest
-	public void testInvalidValues() {
-		
-		//-----------------------------------------------
-		// Assigning incorrect membership id 
-		//-----------------------------------------------
-		assignViewValues(new String[] {"6542"});
-		
-		//-----------------------------------------------
-		// Making sure that membership id was correctly 
-		// validated: expecting false
-		//-----------------------------------------------
-		assertFalse(isViewValid());
-	}
-	
-	@UiThreadTest
-	public void testStateDestroyedAndCreated() {
-		
-		assignViewValues(viewValues);
-		
-		String membershipIDBefore = ActivationViewAdapter
-				.getMembershipID(activationActivity.getActivationView());
-		 
-		activationActivity.finish();
-		activationActivity = getActivity();
-		
-		String membershipIDAfter = ActivationViewAdapter
-				.getMembershipID(activationActivity.getActivationView());
-		
-		assertEquals(membershipIDBefore, membershipIDAfter);
+	public void testWebService() {
+		assertTrue(checkWS());
 	}
 	
 	//-------------------------------------------------------------------------
 	// HELPER METHODS
 	//-------------------------------------------------------------------------
 	
-	private void assignViewValues(String[] values) {
-		setEditText(R.id.etActivationMembershipID, values[0]);
-	}
-	
-	private void setEditText(int id, String value) {
-		EditText et = (EditText) activationActivity.findViewById(id);
-		et.setText(value);
-	}
-	
-	private boolean isViewValid() {
-		ActivationViewAdapter viewAdapter = 
-				activationActivity.getActivationViewAdapter();
+	private boolean checkWS() {
 		
-		viewAdapter.validateAllViews();
+		SoapWebService service = new SoapWebService(
+				"http://ws.biz.slh.cc.mse.cmu.edu/", 
+				"http://slhwsapp-costcode.rhcloud.com:80/MemberWS");
 		
-		return viewAdapter.areAllViewsValid();
+		Map<String, String> args = new HashMap<String, String>();
+		args.put("membershipID", "123456789012");
+		
+		try {
+			
+			SoapObject response = service.invokeMethod(
+					"retrieveMemberVersion", args);
+			
+			Object complexProperty = response.getProperty("RetrieveMemberVersionResponse");
+			
+			if (complexProperty instanceof SoapObject) {
+				SoapObject complexXML = (SoapObject) complexProperty;
+				
+				String version = complexXML.getPropertyAsString("memberVersion");
+				String exception = complexXML.getPropertyAsString("exception");
+				
+				Logger.logDebug(getClass(), String.format("%s : %s", version, exception));
+			}
+			
+		} catch (Throwable t) {
+			Logger.logError(getClass(), t);
+			return false;
+		}
+		
+		return true;
 	}
 
 }

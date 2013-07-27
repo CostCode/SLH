@@ -30,9 +30,6 @@ public class SLDAO extends BaseDAO {
 	/** TABLE NAME */
 	static final String TABLE_NAME = "shoppinglist";
 	
-	/** PRIMARY KEY: Shopping list id */
-	static final String COLUMN_ID = "id";
-	
 	/** COLUMN: Shopping list name */
 	static final String COLUMN_NAME = "name";
 	
@@ -66,10 +63,6 @@ public class SLDAO extends BaseDAO {
 	//-------------------------------------------------------------------------
 	
 	public SLDAO() {}
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -154,7 +147,7 @@ public class SLDAO extends BaseDAO {
 			values.put(COLUMN_DESC, sl.getDescription());
 			values.put(COLUMN_VERSION, sl.getVersion());
 			
-			if (alreadyExists(cursor, sl)) {
+			if (alreadyExists(TABLE_NAME, sl, cursor)) {
 				db.update(TABLE_NAME, values, COLUMN_ID + "=" + sl.getId(), null);
 			} else {
 				values.put(COLUMN_ID, sl.getId());
@@ -224,29 +217,5 @@ public class SLDAO extends BaseDAO {
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
-	
-	private boolean isValid(ShoppingList sl) {
-		
-		if (sl == null || sl.getId() <= 0) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private boolean alreadyExists(Cursor cursor, ShoppingList sl) {
-		
-		if (sl == null) {
-			return false;
-		}
-		
-		if (cursor == null || cursor.isClosed()) {
-			cursor = db.query(TABLE_NAME, new String[]{COLUMN_ID}, 
-					String.format("%s=%d", COLUMN_ID, sl.getId()), 
-					null, null, null, null);
-		}
-		
-		return (cursor.getCount() > 0);
-	}
 
 }

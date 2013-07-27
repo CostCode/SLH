@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Method: retrieveWarehouseVersion -->
+<retrieveWarehouseVersion>
+    <!-- Membership ID -->
+    <member-id>123456789012</member-id>
+    
+    <!-- Warehouse ID -->
+    <id>5</id>
+</retrieveWarehouseVersion>

@@ -2,26 +2,22 @@
  * Copyright (c) 2013, CostCode. All rights reserved.
  * Use is subject to license terms.
  */
-package edu.cmu.cc.slh.adapter;
+package edu.cmu.cc.android.service.soap.util;
 
-import edu.cmu.cc.android.util.StringUtils;
-import edu.cmu.cc.slh.ApplicationState;
-import edu.cmu.cc.slh.R;
+import org.ksoap2.serialization.SoapObject;
 
 /**
  *  DESCRIPTION: 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jul 18, 2013
+ *  Date: Jul 24, 2013
  */
-public class ItemCategoryAdapter extends AbstractSharedPrefsAdapter {
+public class SoapUtils {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
-	
-	private static String KEY_ITEMCATEGORIES_VERSION = "version-itemcategories";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -39,25 +35,32 @@ public class ItemCategoryAdapter extends AbstractSharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistVersion(int version) {
+	public static synchronized long getLongPropertyValue(SoapObject source, 
+			String attributeName) {
 		
-		return saveToSharedPrefs(ItemCategoryAdapter.class, 
-				ApplicationState.getContext(), KEY_ITEMCATEGORIES_VERSION, 
-				String.valueOf(version), 
-				R.string.itemcategory_error_versionPersist);
+		return Long.parseLong(source.getAttributeAsString(attributeName));
 	}
 	
-	public static int retrieveVersion() {
+	public static synchronized int getIntPropertyValue(SoapObject source, 
+			String attributeName) {
 		
-		String strValue = retrieveFromSharedPrefs(ItemCategoryAdapter.class, 
-				ApplicationState.getContext(), KEY_ITEMCATEGORIES_VERSION, 
-				R.string.itemcategory_error_versionRetrieve);
+		return Integer.parseInt(source.getAttributeAsString(attributeName));
+	}
+	
+	public static synchronized double getDoublePropertyValue(
+			SoapObject source, String attributeName) {
 		
-		if (StringUtils.isNullOrEmpty(strValue)) {
-			return -1;
-		}
+		return Double.parseDouble(source.getAttributeAsString(attributeName));
+	}
+	
+	public static synchronized boolean getBooleanPropertyValue(
+			SoapObject source, String attributeName) {
 		
-		return Integer.parseInt(strValue);
+		return Boolean.parseBoolean(source.getAttributeAsString(attributeName));
 	}
 
+	//-------------------------------------------------------------------------
+	// PRIVATE METHODS
+	//-------------------------------------------------------------------------
+	
 }
