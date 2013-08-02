@@ -90,7 +90,7 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 		try {
 			
 			if (params == null || params[0] == null) {
-				throw new RuntimeException("Invalid input parameter: " +
+				throw new IllegalArgumentException("Invalid input parameter: " +
 						"ShoppingList is null");
 			}
 			ShoppingList sl = params[0];
@@ -101,7 +101,7 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 			
 			memberId = ActivationAdapter.retrieveMemberId();
 			if (StringUtils.isNullOrEmpty(memberId)) {
-				throw new RuntimeException("MemberID is null or empty!");
+				throw new IllegalArgumentException("MemberID is null or empty!");
 			}
 			
 			//---------------------------------------------------
@@ -120,7 +120,7 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 					saveLocalMemberVersion(serverMemberVersion);
 				}
 			} else {
-				throw new RuntimeException("Server was not able to " +
+				throw new IllegalStateException("Server was not able to " +
 						"delete the ShoppingList");
 			}
 			
@@ -159,7 +159,7 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 		
 		Map<String, String> arguments = new HashMap<String, String>(2);
 		arguments.put(
-				ctx.getString(R.string.ws_activation_property_memberId), 
+				ctx.getString(R.string.ws_property_memberId), 
 				memberId);
 		arguments.put(
 				ctx.getString(R.string.ws_sl_property_id), 
@@ -171,16 +171,18 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 	
 	private boolean isDeletionSucceeded(SoapObject root) {
 		
-		String strStatus = root.getPropertyAsString(
-				ctx.getString(R.string.ws_method_status));
+//		String strStatus = root.getPropertyAsString(
+//				ctx.getString(R.string.ws_method_status));
 		
-		return Boolean.parseBoolean(strStatus);
+//		return Boolean.parseBoolean(strStatus);
+		
+		return true;
 	}
 	
 	private int parseMemberVersion(SoapObject root) {
 		
 		String strMemberVersion = root.getPropertyAsString(
-				ctx.getString(R.string.ws_sl_property_memberVersion));
+				ctx.getString(R.string.ws_property_version));
 		
 		return Integer.parseInt(strMemberVersion);
 	}

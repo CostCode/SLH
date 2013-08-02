@@ -21,7 +21,7 @@ public class SLAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_MEMBER_VERSION = "version-member";
+	private static final String KEY_MEMBER_VERSION = "version-member";
 
 	//-------------------------------------------------------------------------
 	// FIELDS

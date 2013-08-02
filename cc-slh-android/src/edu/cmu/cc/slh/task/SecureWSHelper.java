@@ -12,44 +12,34 @@ import android.content.Context;
 import edu.cmu.cc.slh.R;
 
 /**
- *  DESCRIPTION: 
+ *  This class enables web service communicating classes to include
+ *  user membership id into the request arguments.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 24, 2013
  */
-public class SecureWSHelper {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-	
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-	
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
+public abstract class SecureWSHelper {
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 
-	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
-	//-------------------------------------------------------------------------
-	
+	/**
+	 * All the web service communicating tasks call this method
+	 * to initialize web service request parameters with costco
+	 * membership id.
+	 * 
+	 * @param ctx - android context
+	 * @param memberId - membership id
+	 * @return initialized request arguments
+	 */
 	public static synchronized Map<String, String> initWSArguments(
 			Context ctx, String memberId) {
 		
 		Map<String, String> args = new HashMap<String, String>(1);
 		args.put(ctx.getString(
-				R.string.ws_activation_property_memberId), memberId);
+				R.string.ws_property_memberId), memberId);
 		
 		return args;
 	}

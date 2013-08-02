@@ -2,16 +2,20 @@
 
 <!-- Root: retrieveCategoriesResponse -->
 <retrieveCategoriesResponse>
-    <categories>
-        <category>
-            <id>1</id>
-            <name>Food</name>
-            <description>General food</description>
-        </category>
-        <category>
-            <id>2</id>
-            <name>Electronics</name>
-            <description>Appliances and other stuff</description>
-        </category>
-    </categories>
+    <response>
+        <categories>
+	        <category>
+	            <id>1</id>
+	            <name>Food</name>
+	            <description>General food</description>
+	        </category>
+	        <category>
+	            <id>2</id>
+	            <name>Electronics</name>
+	            <description>Appliances and other stuff</description>
+	        </category>
+	    </categories>
+        
+        <exception>asldaldsj</exception>
+    </response>
 </retrieveCategoriesResponse>

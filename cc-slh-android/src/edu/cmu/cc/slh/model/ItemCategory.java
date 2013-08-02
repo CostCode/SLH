@@ -24,9 +24,6 @@ public class ItemCategory extends BaseEntity {
 	/** Name of the product category */
 	private String name;
 	
-	/** Description of this product category */
-	private String description;
-	
 	/** Shopping List items belonging to this category */
 	private List<ShoppingListItem> items;
 	
@@ -52,14 +49,6 @@ public class ItemCategory extends BaseEntity {
 	}
 
 
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	
 	public List<ShoppingListItem> getItems() {
 		return items;
 	}

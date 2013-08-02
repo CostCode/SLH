@@ -31,11 +31,9 @@ public class AccessPointDAO extends BaseDAO {
 	/** TABLE NAME */
 	static final String TABLE_NAME = "accesspoint";
 	
+	
 	/** COLUMN: Warehouse to which this access point belongs */
 	static final String COLUMN_WAREHOUSE = "warehouseId";
-	
-	/** COLUMN: Access point BSSID */
-	static final String COLUMN_BSSID = "bssid";
 	
 	/** COLUMN: Access point SSID */
 	static final String COLUMN_SSID = "ssid";
@@ -46,19 +44,15 @@ public class AccessPointDAO extends BaseDAO {
 	/** COLUMN: Access point Y position */
 	static final String COLUMN_POSY = "posy";
 	
-	/** COLUMN: Access point description */
-	static final String COLUMN_DESC = "description";
-	
 	
 	/** Create AccessPoint table SQL script */
 	static final String SQL_CREATE_TABLE =
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
 			COLUMN_ID + " INTEGER PRIMARY KEY, " +
-			COLUMN_BSSID + " TEXT, " +
+			COLUMN_WAREHOUSE + " INTEGER, " +
 			COLUMN_SSID + " TEXT, " +
 			COLUMN_POSX + " FLOAT, " +
 			COLUMN_POSY + " FLOAT, " +
-			COLUMN_DESC + " TEXT, " +
 			"FOREIGN KEY (" + COLUMN_WAREHOUSE + ") REFERENCES " +
 			WarehouseDAO.TABLE_NAME + "(" + WarehouseDAO.COLUMN_ID + ") " +
 			"ON DELETE CASCADE)";
@@ -87,7 +81,7 @@ public class AccessPointDAO extends BaseDAO {
 		
 		if (!super.isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalArgumentException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		
@@ -113,7 +107,6 @@ public class AccessPointDAO extends BaseDAO {
 				
 				ap.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 				ap.setWarehouse(wh);
-				ap.setBssid(cursor.getString(cursor.getColumnIndex(COLUMN_BSSID)));
 				ap.setSsid(cursor.getString(cursor.getColumnIndex(COLUMN_SSID)));
 				ap.setPosX(cursor.getFloat(cursor.getColumnIndex(COLUMN_POSX)));
 				ap.setPosY(cursor.getFloat(cursor.getColumnIndex(COLUMN_POSY)));
@@ -147,7 +140,7 @@ public class AccessPointDAO extends BaseDAO {
 		
 		if (!isValid(ap)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Section[%s]" +
+					new IllegalArgumentException(String.format("Section[%s]" +
 							" has wrong value", ap)));
 		}
 		
@@ -158,11 +151,9 @@ public class AccessPointDAO extends BaseDAO {
 			openConnectionIfClosed();
 			
 			ContentValues values = new ContentValues();
-			values.put(COLUMN_BSSID, ap.getBssid());
 			values.put(COLUMN_SSID, ap.getSsid());
 			values.put(COLUMN_POSX, ap.getPosX());
 			values.put(COLUMN_POSY, ap.getPosY());
-			values.put(COLUMN_DESC, ap.getDescription());
 			
 			if (alreadyExists(TABLE_NAME, ap, cursor)) {
 				db.update(TABLE_NAME, values, 
@@ -195,7 +186,7 @@ public class AccessPointDAO extends BaseDAO {
 		
 		if (!super.isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalArgumentException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		

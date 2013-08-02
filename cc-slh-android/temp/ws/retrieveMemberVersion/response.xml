@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Root: retrieveMemberVersionResponse -->
 <retrieveMemberVersionResponse>
-    <!-- Property: member-version -->
-    <member-version>2</member-version>
+    <response>
+        <version>5</version>
+        <exception>asldaldsj</exception>
+    </response>
 </retrieveMemberVersionResponse>

@@ -8,6 +8,7 @@
     <string name="sl_name">Name</string>
     <string name="sl_date">Date</string>
     <string name="sl_comment">Comments</string>
+    <string name="sl_activate">Activate</string>
     
     <!-- Shopping list: commands -->
     <string name="sl_delete">Delete</string>

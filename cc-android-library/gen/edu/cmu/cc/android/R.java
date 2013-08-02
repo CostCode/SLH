@@ -24,5 +24,10 @@ public final class R {
         public static int app_name=0x7f030006;
         public static int validation_regex=0x7f030007;
         public static int validation_username=0x7f030008;
+        /**  Web Service: Common data 
+         */
+        public static int ws_error_noconnection=0x7f030009;
+        public static int ws_property_exception=0x7f03000b;
+        public static int ws_property_memberId=0x7f03000a;
     }
 }

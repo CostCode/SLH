@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_activity_title">
+    
+    <PreferenceCategory 
+        android:title="@string/settings_activity_header">
+        
+        <ListPreference 
+            android:key="@string/setting_warehouse_key" 
+            android:title="@string/setting_warehouse_title" 
+            android:summary="@string/setting_warehouse_summary" />
+        
+        <CheckBoxPreference
+            android:key="@string/setting_proximity_enable_key" 
+            android:title="@string/setting_proximity_enable_title" 
+            android:summary="@string/setting_proximity_enable_summary" 
+            android:defaultValue="false" />
+        
+        <ListPreference 
+            android:key="@string/setting_proximity_method_key" 
+            android:title="@string/setting_proximity_method_title" 
+            android:summary="@string/setting_proximity_method_summary"
+            android:entries="@array/setting_proximityenabled_entries"
+            android:entryValues="@array/setting_proximityenabled_values"
+            android:defaultValue="@string/setting_proximity_method_wifi" />
+        
+        <CheckBoxPreference
+            android:key="@string/setting_proximity_alert_vibration_key" 
+            android:title="@string/setting_proximity_alert_vibration_title" 
+            android:summary="@string/setting_proximity_alert_vibration_summary"
+            android:defaultValue="false" />
+        
+    </PreferenceCategory>
+    
+</PreferenceScreen>

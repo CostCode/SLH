@@ -129,7 +129,7 @@ public class SLDAO extends BaseDAO {
 		
 		if (!isValid(sl)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("ShoppingList[%s]" +
+					new IllegalArgumentException(String.format("ShoppingList[%s]" +
 							" has wrong value", sl)));
 		}
 		
@@ -177,7 +177,7 @@ public class SLDAO extends BaseDAO {
 		
 		if (!isValid(sl)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("ShoppingList[%s]" +
+					new IllegalArgumentException(String.format("ShoppingList[%s]" +
 							" has wrong value", sl)));
 		}
 		

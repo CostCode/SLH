@@ -27,7 +27,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 /**
- *  DESCRIPTION: 
+ *  Activation activity provides UI where a user can enter its Costco
+ *  membership id and activate the SLH application.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
@@ -45,11 +46,7 @@ implements IActivationTaskCaller {
 	private View activationView;
 	
 	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PROTECTED METHODS
+	// ACTIVITY METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
@@ -74,16 +71,11 @@ implements IActivationTaskCaller {
 	}
 	
 	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// IAsyncActivity METHODS
 	//-------------------------------------------------------------------------
 	
-	public View getActivationView() {
-		return activationView;
-	}
-	
-	public ActivationViewAdapter getActivationViewAdapter() {
-		return activationViewAdapter;
-	}
+	@Override
+	public void onAsyncTaskSucceeded(Class<?> taskClass) {}
 
 	@Override
 	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
@@ -100,7 +92,7 @@ implements IActivationTaskCaller {
 							@Override
 							public void onClick(DialogInterface dialog, 
 									int which) {
-								ActivationActivity.this.finish();
+								dialog.dismiss();
 							}
 						};
 				
@@ -110,6 +102,10 @@ implements IActivationTaskCaller {
 		});
 	}
 
+	//-------------------------------------------------------------------------
+	// IActivationTaskCaller METHODS
+	//-------------------------------------------------------------------------
+	
 	@Override
 	public void onActivationTaskSucceeded(final String memberId, 
 			final boolean activated) {
@@ -153,12 +149,35 @@ implements IActivationTaskCaller {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
-	private void saveMemberId(final String memberId) {
+	/**
+	 * Initializes and returns the activation view
+	 * 
+	 * @return - activation view
+	 */
+	private View initializeView() {
 		
-		if (!StringUtils.isNullOrEmpty(memberId)) {
-			ApplicationState.getInstance().setMemberId(memberId);
-			ActivationAdapter.persistMemberId(memberId);
+		LayoutInflater inflater = (LayoutInflater)
+				 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				 
+		View view = inflater.inflate(R.layout.activation, null);
+		
+		return view;
+	}
+	
+	private String getAsyncTaskFailedMessage(Class<?> taskClass, Throwable t) {
+		
+		int msgResID = R.string.error_unspecified;
+		
+		if (taskClass == ActivationTask.class) {
+			msgResID = R.string.activation_error_activatonFailed;
+		} else {
+			Logger.logErrorAndThrow(getClass(), 
+					new IllegalArgumentException("Unexpected class: " 
+							+ taskClass.toString()));
 		}
+		
+		return StringUtils.getLimitedString(
+				getString(msgResID, t.getMessage()), 200, "...");
 	}
 	
 	private void initializeButtons() {
@@ -196,39 +215,14 @@ implements IActivationTaskCaller {
 		});
 	}
 	
-	private String getAsyncTaskFailedMessage(Class<?> taskClass, Throwable t) {
+	private void saveMemberId(final String memberId) {
 		
-		int msgResID = R.string.error_unspecified;
-		
-		if (taskClass == ActivationTask.class) {
-			msgResID = R.string.activation_error_activatonFailed;
-		} else {
-			Logger.logErrorAndThrow(getClass(), 
-					new IllegalArgumentException("Unexpected class: " 
-							+ taskClass.toString()));
+		if (!StringUtils.isNullOrEmpty(memberId)) {
+			ApplicationState.getInstance().setMemberId(memberId);
+			ActivationAdapter.persistMemberId(memberId);
 		}
-		
-		return StringUtils.getLimitedString(
-				getString(msgResID, t.getMessage()), 200, "...");
 	}
 	
-	/**
-	 * Initializes and returns the activation view
-	 * @return - activation view
-	 */
-	private View initializeView() {
-		
-		LayoutInflater inflater = (LayoutInflater)
-				 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				 
-		View view = inflater.inflate(R.layout.activation, null);
-		
-		return view;
-	}
-	
-	/**
-	 * Shows ShoppingListsActivity
-	 */
 	private void showMainActivity() {
 		Intent intent = new Intent(this, SLHTabLayouActivity.class);
 		startActivity(intent);

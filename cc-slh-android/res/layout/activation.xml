@@ -30,6 +30,7 @@
         <!--  Header Ends -->
  
         <!-- Footer Start -->
+        <!--  
         <LinearLayout
             android:id="@+id/footer"
 		    android:layout_width="fill_parent"
@@ -38,6 +39,7 @@
 		    android:layout_alignParentBottom="true"
 		    android:orientation="horizontal">
 		</LinearLayout>
+		-->
         <!-- Footer Ends -->
  
         <!-- BEGIN: Activation Form -->
@@ -61,7 +63,8 @@
 		                android:layout_marginTop="5dip"
 		                android:layout_marginBottom="20dip"
 		                android:singleLine="true"
-		                android:inputType="text"/>
+		                android:inputType="text"
+		                android:textColor="#372c24"/>
 		          
 		          <!-- Activate button -->
 		          <Button 
@@ -69,7 +72,8 @@
 		                android:layout_width="fill_parent"
 		                android:layout_height="wrap_content"
 		                android:layout_marginTop="10dip"
-		                android:text="@string/activation_activate"/>
+		                android:text="@string/activation_activate"
+		                android:textColor="#372c24"/>
 		          
 		</LinearLayout>
         <!-- END: Activation Form -->

@@ -26,7 +26,7 @@ final class DBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "cc.slh.db";
 	
 	/** Database version number. Used to check for updates */
-	public static final int DATABASE_VERSION = 2;
+	public static final int DATABASE_VERSION = 4;
 	
 
 	

@@ -27,21 +27,21 @@ public abstract class Triangulation {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	public static String TRIANG_METHOD = "TRIANG_METHOD";
+	public static final String TRIANG_METHOD = "TRIANG_METHOD";
 	
-	public static String TRIANG_METHOD_WCL = "WCL";
+	public static final String TRIANG_METHOD_WCL = "WCL";
 	
-	public static String TRIANG_METHOD_AWCL = "AWCL";
-	
-	
-	public static String SCAN_NUMBER = "SCAN_NUMBER";
-	
-	public static int DEFAULT_SCAN_NUMBER = 5;
+	public static final String TRIANG_METHOD_AWCL = "AWCL";
 	
 	
-	public static String NOISE_FILTER = "NOISE_FILTER";
+	public static final String SCAN_NUMBER = "SCAN_NUMBER";
 	
-	public static boolean DEFAULT_NOISE_FILTER = true;
+	public static final int DEFAULT_SCAN_NUMBER = 5;
+	
+	
+	public static final String NOISE_FILTER = "NOISE_FILTER";
+	
+	public static final boolean DEFAULT_NOISE_FILTER = true;
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -76,10 +76,8 @@ public abstract class Triangulation {
 		return wifiScanner.getUpdatedAccessPoints().get(0);
 	}
 	
-	public Section findNearestSection(List<Section> sections,
-			double x, double y) {
-		return null;
-	}
+	public abstract Section findNearestSection(
+			List<Section> sections, double x, double y);
 	
 	public void stop() {
 		wifiScanner.scanStop();

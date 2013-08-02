@@ -10,8 +10,6 @@ import java.util.Map;
 
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.slh.ApplicationState;
-import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.model.AccessPoint;
 import edu.cmu.cc.slh.model.Section;
 import edu.cmu.cc.slh.service.proximityalert.ProximityIntentReceiver;
@@ -23,7 +21,6 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
-import android.widget.Toast;
 
 /**
  *  DESCRIPTION: 
@@ -72,7 +69,7 @@ implements IFetchFloorPlanTaskCaller {
 		initParams = new HashMap<String, Object>();
 		
 		if (!initPreference()) {
-			throw new RuntimeException("WiFi is not enabled");
+			throw new IllegalStateException("WiFi is not enabled");
 		}
 		
 		if (wifiManager.isWifiEnabled() == false) {
@@ -167,11 +164,11 @@ implements IFetchFloorPlanTaskCaller {
 			List<AccessPoint> accessPoints) {
 		
 		if (sections == null || sections.size() == 0) {
-			throw new RuntimeException("Sections list is empty or null");
+			throw new IllegalArgumentException("Sections list is empty or null");
 		}
 		
 		if (accessPoints == null || accessPoints.size() == 0) {
-			throw new RuntimeException("AccessPoints list is empty or null");
+			throw new IllegalArgumentException("AccessPoints list is empty or null");
 		}
 		
 		this.sections = sections;
@@ -188,13 +185,6 @@ implements IFetchFloorPlanTaskCaller {
 	
 	private boolean initPreference() {
 		
-		boolean wifiEnabled = SettingsAdapter.retrieveWIFIStatus();
-		if (!wifiEnabled) {
-			Toast.makeText(ctx, R.string.settings_wifi_status_enable, 
-					Toast.LENGTH_SHORT).show();
-			return false;
-		}
-			
 		initParams.put(Triangulation.TRIANG_METHOD, 
 				Triangulation.TRIANG_METHOD_WCL);
 		initParams.put(Triangulation.SCAN_NUMBER, 

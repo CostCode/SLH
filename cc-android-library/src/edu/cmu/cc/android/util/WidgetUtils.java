@@ -12,6 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -88,6 +89,11 @@ public class WidgetUtils {
 		
 		return false;
 	}
+	
+	public static Switch getSwitch(View parentView, int id) {
+		return (Switch) parentView.findViewById(id);
+	}
+	
 	
 	// DIALOGS
 	

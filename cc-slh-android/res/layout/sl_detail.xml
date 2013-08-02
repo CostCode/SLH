@@ -56,4 +56,13 @@
         	style="@style/formField.text" />
     </TableRow>
     
+    <!-- ACTIVATE -->
+    
+    <TableRow>
+        <Switch 
+            android:id="@+id/sw_activate" 
+            android:text="@string/sl_activate" 
+            style="@style/formField.text" />
+    </TableRow>
+    
 </TableLayout>

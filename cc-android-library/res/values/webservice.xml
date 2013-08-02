@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Web Service: Common data -->
+    
+    <string name="ws_error_noconnection">Application cannot continue. No Internet connection is active</string>
+    
+    <string name="ws_property_memberId">membershipID</string>
+    <string name="ws_property_exception">exception</string>
+    
+</resources>

@@ -74,9 +74,9 @@ implements IAsyncActivity {
 	}
 	
 	@Override
-	public void onAsyncTaskSucceeded(Class<?> taskClass) {}
+	public abstract void onAsyncTaskSucceeded(Class<?> taskClass);
 
 	@Override
-	public void onAsyncTaskFailed(Class<?> taskClass, Throwable t) {}
+	public abstract void onAsyncTaskFailed(Class<?> taskClass, Throwable t);
 
 }

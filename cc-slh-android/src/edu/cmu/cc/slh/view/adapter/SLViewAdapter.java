@@ -14,6 +14,7 @@ import edu.cmu.cc.android.util.WidgetUtils;
 import edu.cmu.cc.android.view.IValidatingView;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.view.validator.textview.CommentValidator;
 import edu.cmu.cc.slh.view.validator.textview.NameValidator;
@@ -61,9 +62,10 @@ public class SLViewAdapter extends AbstractViewAdapter {
 			.setText(sl.getName());
 		WidgetUtils.getEditText(view, R.id.et_sl_comment)
 			.setText(sl.getDescription());
-		
 		WidgetUtils.getTextView(view, R.id.tv_sl_date)
 			.setText(StringUtils.getDateAsString(sl.getDate(), DATE_PATTERN));
+		WidgetUtils.getSwitch(view, R.id.sw_activate)
+			.setChecked(isActiveSL(sl));
 	}
 	
 	
@@ -77,6 +79,10 @@ public class SLViewAdapter extends AbstractViewAdapter {
 		
 		sl.setDescription(WidgetUtils
 				.getEditTextAsString(view, R.id.et_sl_comment));
+		
+		if (WidgetUtils.getSwitch(view, R.id.sw_activate).isChecked()) {
+			setActiveSL(sl);
+		}
 		
 		ApplicationState.getInstance().setCurrentSL(sl);
 	}
@@ -101,6 +107,17 @@ public class SLViewAdapter extends AbstractViewAdapter {
 			assignValidatorToView(parentView, R.id.et_sl_comment, 
 					R.string.sl_comment, new CommentValidator(ctx));
 		}
+	}
+	
+	private static boolean isActiveSL(ShoppingList sl) {
+		
+		ShoppingList activeSL = ActiveSLAdapter.retrieveActiveSL();
+		
+		return sl.equals(activeSL);
+	}
+	
+	private static void setActiveSL(ShoppingList sl) {
+		ActiveSLAdapter.persistActiveSL(sl);
 	}
 
 }

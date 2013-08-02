@@ -73,7 +73,7 @@ extends AsyncTask<ShoppingList, Void, List<ShoppingListItem>>{
 		try {
 			
 			if (params == null || params[0] == null) {
-				throw new RuntimeException("Invalid input parameter: " +
+				throw new IllegalArgumentException("Invalid input parameter: " +
 						"ShoppingList is null");
 			}
 			

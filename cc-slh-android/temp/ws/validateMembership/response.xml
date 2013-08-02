@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Root: validateMembershipResponse -->
 <validateMembershipResponse>
-    <!-- Property: validity -->
-    <validity>true</validity>
+    <response>
+        <validity>false</validity>
+        <exception>Biz: No results</exception>
+    </response>
 </validateMembershipResponse>

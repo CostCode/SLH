@@ -103,7 +103,7 @@ public class SLItemDAO extends BaseDAO {
 		
 		if (!isValid(sl)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("ShoppingList[%s]" +
+					new IllegalArgumentException(String.format("ShoppingList[%s]" +
 							" has wrong value", sl)));
 		}
 		
@@ -183,7 +183,7 @@ public class SLItemDAO extends BaseDAO {
 		
 		if (!isValid(slItem)) {
 			Logger.logErrorAndThrow(getClass(),
-					new RuntimeException(String.format("ShoppingListItem[%s]" +
+					new IllegalArgumentException(String.format("ShoppingListItem[%s]" +
 							" has wrong value", slItem)));
 		}
 		
@@ -236,7 +236,7 @@ public class SLItemDAO extends BaseDAO {
 		
 		if (!isValid(item)) {
 			Logger.logErrorAndThrow(getClass(),
-					new RuntimeException(String.format("ShoppingListItem[%s]" +
+					new IllegalArgumentException(String.format("ShoppingListItem[%s]" +
 							" has wrong value", item)));
 		}
 		

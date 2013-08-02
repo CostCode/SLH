@@ -16,7 +16,7 @@
     <!-- VERSION SUPPORT -->
     
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <!-- APPLICATION -->
@@ -46,6 +46,9 @@
         
         <activity 
             android:name="edu.cmu.cc.slh.activity.SLItemsActivity" />
+        
+        <activity 
+            android:name="edu.cmu.cc.slh.activity.SettingsActivity" />
         
     </application>
 

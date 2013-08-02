@@ -5,7 +5,7 @@
 package edu.cmu.cc.android.activity.async;
 
 /**
- *  DESCRIPTION: All activities that are going to use asynchronous
+ *  All activities that are going to use asynchronous
  *  tasks should implement this interface. It specifies progress dialog
  *  window methods.
  *	
@@ -16,12 +16,17 @@ package edu.cmu.cc.android.activity.async;
 public interface IAsyncActivity {
 	
 	/**
-	 * Show progress dialog
+	 * Show the progress dialog.
+	 * 
+	 * @param titleResID - dialog title
+	 * @param textResID - dialog text
 	 */
 	public void showProgressDialog(int titleResID, int textResID);
 	
 	/**
-	 * Show progress dialog
+	 * Show the progress dialog.
+	 * 
+	 * @param textResID - dialog text
 	 */
 	public void showProgressDialog(int textResID);
 	
@@ -30,12 +35,18 @@ public interface IAsyncActivity {
 	 */
 	public void dismissProgressDialog();
 	
-	
+	/**
+	 * Method which is called when an asynchronous task successfully 
+	 * finished its execution. 
+	 * 
+	 * @param taskClass - class of the task
+	 */
 	public void onAsyncTaskSucceeded(Class<?> taskClass);
 	
 	/**
 	 * This method will be called by the Async Task classes to notify the
 	 * async activity about the error happened during the task execution.
+	 * 
 	 * @param taskClass - calling task class
 	 * @param t - exception object
 	 */

@@ -47,18 +47,10 @@ public class SLItemsActivity extends AbstractAsyncListActivity
 implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 
 	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
 	private Map<Integer, MenuItem> menuItems;
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -71,7 +63,7 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	
 
 	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// ACTIVITY METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
@@ -87,35 +79,28 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 		fetchActiveShoppingListItems();
 	}
 	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		return prepareOptionsMenu(menu);
-	}
+	//-------------------------------------------------------------------------
+	// ITabActivity METHODS
+	//-------------------------------------------------------------------------
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return handleOptionsMenuItemSelection(item);
-	}
+	public void init(ITabHostActivity tabHost) {}
 	
 	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
+		
+		menu.clear();
 		
 		if (ApplicationState.getInstance().getCurrentSL() == null) {
 			return false;
 		}
 		
-		menuItems = new HashMap<Integer, MenuItem>(3);
+		menuItems = new HashMap<Integer, MenuItem>(1);
 		
 		menuItems.put(R.string.sl_item_add, 
 				menu.add(R.string.sl_item_add).setIcon(R.drawable.add));
-		menuItems.put(R.string.settings_triangulation_onOff, 
-				menu.add(R.string.settings_triangulation_onOff).setIcon(R.drawable.add));
-		menuItems.put(R.string.sl_show_summary, 
-				menu.add(R.string.sl_show_summary).setIcon(R.drawable.add));
 		
 		setMenuItemState(R.string.sl_item_add, true, true);
-		setMenuItemState(R.string.settings_triangulation_onOff, true, true);
-		setMenuItemState(R.string.sl_show_summary, true, true);
 		
 		return true;
 	}
@@ -139,12 +124,6 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 							ApplicationState.getInstance().getCurrentSL());
 					
 					showSLItemDialog(newSLItem);
-				} else if (item.getTitle().equals(
-						getString(R.string.settings_triangulation_onOff))) {
-					//TODO:
-				} else if (item.getTitle().equals(
-						getString(R.string.sl_show_summary))) {
-					//TODO:
 				}
 			}
 		});
@@ -167,7 +146,6 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 
 	@Override
 	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
-		super.onAsyncTaskSucceeded(taskClass);
 		
 		addTaskToUIQueue(new Runnable() {
 			

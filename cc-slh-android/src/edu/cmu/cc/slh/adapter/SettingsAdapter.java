@@ -4,6 +4,7 @@
  */
 package edu.cmu.cc.slh.adapter;
 
+import android.content.Context;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
@@ -21,79 +22,25 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_SETTING_WIFI = "setting_wifi";
-	
-	private static String KEY_SETTING_BCKG_SCANNING = "setting_scanning_bckg";
-	
-	private static String KEY_SETTING_WAREHOUSE = "setting_warehouse";
-
-	//-------------------------------------------------------------------------
-	// SETTING: WIFI
-	//-------------------------------------------------------------------------
-	
-	public static synchronized boolean persistWIFIStatus(boolean status) {
-		
-		return saveToSharedPrefs(SettingsAdapter.class,
-				ApplicationState.getContext(), KEY_SETTING_WIFI, 
-				String.valueOf(status), 
-				R.string.settings_wifi_status_error_persist);
-	}
-	
-	public static boolean retrieveWIFIStatus() {
-		
-		String strStatus = retrieveFromSharedPrefs(SettingsAdapter.class,
-				ApplicationState.getContext(), KEY_SETTING_WIFI, 
-				R.string.settings_wifi_status_error_retrieve);
-		
-		if (!StringUtils.isNullOrEmpty(strStatus)) {
-			return Boolean.parseBoolean(strStatus);
-		}
-		
-		return true;
-	}
-	
-	//-------------------------------------------------------------------------
-	// SETTING: BACKGROUND SCANNIG
-	//-------------------------------------------------------------------------
-	
-	public static synchronized boolean persistBckgScanningStatus(
-			boolean status) {
-		
-		return saveToSharedPrefs(SettingsAdapter.class,
-				ApplicationState.getContext(), KEY_SETTING_BCKG_SCANNING, 
-				String.valueOf(status), 
-				R.string.settings_bckgscan_status_error_persist);
-	}
-	
-	public static boolean retrieveBckgScanningStatus() {
-		
-		String strStatus = retrieveFromSharedPrefs(SettingsAdapter.class,
-				ApplicationState.getContext(), KEY_SETTING_BCKG_SCANNING, 
-				R.string.settings_bckgscan_status_error_retrieve);
-		
-		if (!StringUtils.isNullOrEmpty(strStatus)) {
-			return Boolean.parseBoolean(strStatus);
-		}
-		
-		return true;
-	}
-	
 	//-------------------------------------------------------------------------
 	// SETTING: WAREHOUSE
 	//-------------------------------------------------------------------------
 	
-	public static synchronized boolean persistDefaultWarehouseId(long id) {
+	public static synchronized boolean persistSelectedWarehouseId(long id) {
+		
+		Context ctx = ApplicationState.getContext();
 		
 		return saveToSharedPrefs(SettingsAdapter.class, 
-				ApplicationState.getContext(), KEY_SETTING_WAREHOUSE, 
-				String.valueOf(id), 
-				R.string.settings_warehouse_error_persist);
+				ctx, ctx.getString(R.string.setting_warehouse_key),
+				String.valueOf(id), R.string.settings_warehouse_error_persist);
 	}
 	
-	public static long retrieveDefaultWarehouseId() {
+	public static long retrieveSelectedWarehouseId() {
+		
+		Context ctx = ApplicationState.getContext();
 		
 		String strId = retrieveFromSharedPrefs(SettingsAdapter.class, 
-				ApplicationState.getContext(), KEY_SETTING_WAREHOUSE, 
+				ctx, ctx.getString(R.string.setting_warehouse_key),
 				R.string.settings_warehouse_error_retrieve);
 		
 		if (StringUtils.isNullOrEmpty(strId)) {
@@ -101,6 +48,89 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		}
 		
 		return Long.parseLong(strId);
+	}
+	
+	//-------------------------------------------------------------------------
+	// SETTING: PROXIMITY ALERT ENABLED
+	//-------------------------------------------------------------------------
+	
+	public static synchronized boolean persistProximityAlertEnabled(
+			boolean enabled) {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		return saveToSharedPrefs(SettingsAdapter.class, 
+				ctx, ctx.getString(R.string.setting_proximity_enable_key),
+				String.valueOf(enabled), 
+				R.string.settings_proximityalert_enabled_error_persist);
+	}
+	
+	public static boolean retrieveProximityAlertEnabled() {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		String strEnabled = retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, ctx.getString(R.string.setting_proximity_enable_key),
+				R.string.settings_proximityalert_enabled_error_retrieve);
+		
+		if (!StringUtils.isNullOrEmpty(strEnabled)) {
+			return Boolean.parseBoolean(strEnabled);
+		}
+		
+		return false;
+	}
+	
+	//-------------------------------------------------------------------------
+	// SETTING: PROXIMITY ALERT METHOD [GPS, WIFI]
+	//-------------------------------------------------------------------------
+	
+	public static synchronized boolean persistProximityAlertMethod(
+			String method) {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		return saveToSharedPrefs(SettingsAdapter.class, 
+				ctx, ctx.getString(R.string.setting_proximity_method_key), 
+				method, R.string.settings_proximityalert_method_error_persist);
+	}
+	
+	public static String retrieveProximityAlertMethod() {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		return retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, ctx.getString(R.string.setting_proximity_method_key), 
+				R.string.settings_proximityalert_method_error_retrieve);
+	}
+	
+	//-------------------------------------------------------------------------
+	// SETTING: PROXIMITY ALERT VIBRATION
+	//-------------------------------------------------------------------------
+	
+	public static synchronized boolean persistProximityAlertVibration(
+			boolean status) {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		return saveToSharedPrefs(SettingsAdapter.class, 
+				ctx, ctx.getString(R.string.setting_proximity_alert_vibration_key), 
+				String.valueOf(status), 
+				R.string.settings_proximityalert_vibration_error_persist);
+	}
+	
+	public static boolean retrieveProximityAlertVibration() {
+		
+		Context ctx = ApplicationState.getContext();
+		
+		String strStatus = retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, ctx.getString(R.string.setting_proximity_alert_vibration_key), 
+				R.string.settings_proximityalert_vibration_error_retrieve);
+		
+		if (!StringUtils.isNullOrEmpty(strStatus)) {
+			return Boolean.parseBoolean(strStatus);
+		}
+		
+		return false;
 	}
 
 }

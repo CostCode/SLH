@@ -24,7 +24,7 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_ACTIVE_SHOPPINGLIST = "active-shoppinglist";
+	private static final String KEY_ACTIVE_SHOPPINGLIST = "active-shoppinglist";
 	
 	//-------------------------------------------------------------------------
 	// FIELDS

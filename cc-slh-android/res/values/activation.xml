@@ -3,7 +3,7 @@
     
     <!-- Activation form details -->
     
-    <string name="activation_title">Application activation</string>
+    <string name="activation_title">Activation</string>
     <string name="activation_membershipid">Membership ID</string>
     <string name="activation_activate">Activate!</string>
     <string name="activation_result">Activation result</string>

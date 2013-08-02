@@ -21,7 +21,7 @@ public class WarehouseAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_VERSION_WAREHOUSES = "version-warehouses";
+	private static final String KEY_VERSION_WAREHOUSES = "version-warehouses";
 
 	//-------------------------------------------------------------------------
 	// FIELDS

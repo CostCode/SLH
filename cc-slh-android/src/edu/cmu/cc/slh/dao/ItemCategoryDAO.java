@@ -35,16 +35,12 @@ public class ItemCategoryDAO extends BaseDAO {
 	/** COLUMN: Item category name */
 	static final String COLUMN_NAME = "name";
 	
-	/** COLUMN: Item category description */
-	static final String COLUMN_DESC = "description";
-	
 	
 	/** Create ItemCategory table SQL script */
 	static final String SQL_CREATE_TABLE =
 			"CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
 			COLUMN_ID + " INTEGER PRIMARY KEY, " +
-			COLUMN_NAME + " TEXT, " +
-			COLUMN_DESC + " TEXT)";
+			COLUMN_NAME + " TEXT)";
 	
 	static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	
@@ -95,7 +91,6 @@ public class ItemCategoryDAO extends BaseDAO {
 				
 				category.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 				category.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
-				category.setDescription(cursor.getString(cursor.getColumnIndex(COLUMN_DESC)));
 				
 				list.add(category);
 			}
@@ -125,7 +120,7 @@ public class ItemCategoryDAO extends BaseDAO {
 		
 		if (category == null) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException("Saving null " +
+					new IllegalArgumentException("Saving null " +
 							"ItemCategory object is not allowed"));
 		}
 		
@@ -138,7 +133,6 @@ public class ItemCategoryDAO extends BaseDAO {
 			ContentValues values = new ContentValues();
 			values.put(COLUMN_ID, category.getId());
 			values.put(COLUMN_NAME, category.getName());
-			values.put(COLUMN_DESC, category.getDescription());
 			
 			db.insert(TABLE_NAME, null, values);
 			

@@ -95,7 +95,7 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 		try {
 			
 			if (params == null || params[0] == null) {
-				throw new RuntimeException("Invalid input parameter: " +
+				throw new IllegalArgumentException("Invalid input parameter: " +
 						"ShoppingListItem is null");
 			}
 			ShoppingListItem item = params[0];
@@ -106,7 +106,7 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 			
 			memberId = ActivationAdapter.retrieveMemberId();
 			if (StringUtils.isNullOrEmpty(memberId)) {
-				throw new RuntimeException("MemberID is null or empty!");
+				throw new IllegalArgumentException("MemberID is null or empty!");
 			}
 			
 			//---------------------------------------------------
@@ -160,7 +160,7 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 		
 		Map<String, String> arguments = new HashMap<String, String>(8);
 		arguments.put(
-				ctx.getString(R.string.ws_activation_property_memberId), 
+				ctx.getString(R.string.ws_property_memberId), 
 				memberId);
 		arguments.put(
 				ctx.getString(R.string.ws_sl_item_property_id), 
@@ -194,7 +194,7 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 	private int parseSLVersion(SoapObject root) throws Throwable {
 		
 		String strSLVersion = root.getPropertyAsString(
-				ctx.getString(R.string.ws_sl_property_version));
+				ctx.getString(R.string.ws_property_version));
 		
 		return Integer.parseInt(strSLVersion);
 	}

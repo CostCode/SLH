@@ -21,7 +21,7 @@ public class ItemCategoryAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_ITEMCATEGORIES_VERSION = "version-itemcategories";
+	private static final String KEY_ITEMCATEGORIES_VERSION = "version-itemcategories";
 
 	//-------------------------------------------------------------------------
 	// FIELDS

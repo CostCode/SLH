@@ -26,7 +26,8 @@ import android.widget.TextView;
  *  Date: Jul 11, 2013
  */
 @SuppressWarnings("deprecation")
-public class SLHTabLayouActivity extends TabActivity {
+public class SLHTabLayouActivity extends TabActivity 
+implements ITabHostActivity {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS
@@ -35,6 +36,8 @@ public class SLHTabLayouActivity extends TabActivity {
 	private static final String TAB_SL_ALL = "tab_sl_all";
 	
 	private static final String TAB_SL_ACTIVE = "tab_sl_active";
+	
+	private static final String TAB_SETTINGS = "tab_settings";
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -43,15 +46,7 @@ public class SLHTabLayouActivity extends TabActivity {
 	private TabHost tabHost;
 
 	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// ACTIVITY METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
@@ -66,6 +61,9 @@ public class SLHTabLayouActivity extends TabActivity {
 		
 		setupTab(TAB_SL_ACTIVE, getString(R.string.tab_sl_active), 
 				R.drawable.icon_songs_tab, SLItemsActivity.class);
+		
+		setupTab(TAB_SETTINGS, getString(R.string.tab_settings), 
+				R.drawable.icon_songs_tab, SettingsActivity.class);
 		
 		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			
@@ -103,6 +101,16 @@ public class SLHTabLayouActivity extends TabActivity {
 	}
 
 	//-------------------------------------------------------------------------
+	// ITabActivity METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public void refresh() {
+		tabHost.getTabWidget().getChildTabViewAt(1)
+			.setEnabled(hasActiveSL());
+	}
+	
+	//-------------------------------------------------------------------------
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
@@ -133,12 +141,15 @@ public class SLHTabLayouActivity extends TabActivity {
 	
 	private View createTabIndicator(final String label, int iconResId) {
 		
-		View tabIndicator = getLayoutInflater().inflate(R.layout.tab_indicator, null);
+		View tabIndicator = 
+				getLayoutInflater().inflate(R.layout.tab_indicator, null);
 		
-		ImageView ivIcon = (ImageView) tabIndicator.findViewById(R.id.iv_tab_indicator_icon);
+		ImageView ivIcon = (ImageView) 
+				tabIndicator.findViewById(R.id.iv_tab_indicator_icon);
 		ivIcon.setImageResource(iconResId);
 		
-		TextView tvTitle = (TextView) tabIndicator.findViewById(R.id.tv_tab_indicator_title);
+		TextView tvTitle = (TextView) 
+				tabIndicator.findViewById(R.id.tv_tab_indicator_title);
 		tvTitle.setText(label);
 		
 		return tabIndicator;
@@ -147,6 +158,10 @@ public class SLHTabLayouActivity extends TabActivity {
 	private ITabActivity getCurrentTabActivity() {
 		return (ITabActivity) getLocalActivityManager()
 				.getActivity(getTabHost().getCurrentTabTag());
+	}
+	
+	private boolean hasActiveSL() {
+		return (ActiveSLAdapter.retrieveActiveSL() != null);
 	}
 
 }

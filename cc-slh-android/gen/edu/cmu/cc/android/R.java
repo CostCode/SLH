@@ -21,5 +21,8 @@ public final class R {
 		public static final int app_name = 0x7f040006;
 		public static final int validation_regex = 0x7f040007;
 		public static final int validation_username = 0x7f040008;
+		public static final int ws_error_noconnection = 0x7f040009;
+		public static final int ws_property_exception = 0x7f04000b;
+		public static final int ws_property_memberId = 0x7f04000a;
 	}
 }

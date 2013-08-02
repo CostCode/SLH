@@ -23,17 +23,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 /**
- *  DESCRIPTION: 
+ *  This task is used for downloading the list of all Costco Warehouses.
+ *  There is no UI activity which executes this task. 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 24, 2013
  */
 public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -56,13 +53,17 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 	}
 
 	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// AsyncTask METHODS
 	//-------------------------------------------------------------------------
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 		
+		//---------------------------------------------------
+		// Checking whether the network is connected or not.
+		// If not, we cancel the execution of the task.
+		//---------------------------------------------------
 		if (!DeviceUtils.isNetworkConnectedElseAlert(
 				ctx, getClass(), R.string.ws_error_noconnection)) {
 			this.cancel(true);
@@ -82,7 +83,8 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 			
 			memberId = ActivationAdapter.retrieveMemberId();
 			if (StringUtils.isNullOrEmpty(memberId)) {
-				throw new RuntimeException("MemberID is null or empty!");
+				throw new IllegalArgumentException("MemberID is null " +
+						"or empty!");
 			}
 			
 			//---------------------------------------------------
@@ -117,10 +119,21 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * Gets client warehouses version number
+	 * 
+	 * @return warehouses version number
+	 */
 	private int retrieveLocalWarehousesVersion() {
 		return WarehouseAdapter.retrieveVersion();
 	}
 	
+	/**
+	 * Gets the current version of the warehouses table from the server.
+	 * 
+	 * @return server warehouses version
+	 * @throws Throwable - web service call exceptions
+	 */
 	private int retrieveServerWarehousesVersion() throws Throwable {
 		
 		Logger.logDebug(this.getClass(), 
@@ -130,23 +143,45 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 				ctx.getString(R.string.ws_warehouse_namespace), 
 				ctx.getString(R.string.ws_warehouse_url));
 		
-		SoapObject response = service.invokeMethod(
-				ctx.getString(R.string.ws_warehouse_method_retrieveWarehousesVersion), 
+		SoapObject response = service.invokeMethod(ctx.getString(
+				R.string.ws_warehouse_method_retrieveWarehousesVersion), 
 				SecureWSHelper.initWSArguments(ctx, memberId));
 		
-		String strVersion = response.getPropertyAsString(ctx
-				.getString(R.string.ws_warehouse_property_version));
-		
-		Logger.logDebug(this.getClass(), 
-				String.format("Server Warehouses Version: [%s]", strVersion));
-		
-		return Integer.parseInt(strVersion);
+		return parseWarehousesVersion(response);
 	}
 	
+	/**
+	 * Parses warehouses version number from the SoapObject
+	 * 
+	 * @param root - SoapObject
+	 * @return server warehouses version number
+	 */
+	private int parseWarehousesVersion(SoapObject root) {
+		
+		SoapObject result = (SoapObject) root.getProperty(0);
+		
+		if (SoapUtils.hasException(ctx, result)) {
+			throw new IllegalStateException(
+					SoapUtils.getException(ctx, result));
+		}
+		
+		return SoapUtils.getIntPropertyValue(result, 
+				ctx.getString(R.string.ws_property_version));
+	}
+	
+	/**
+	 * Deletes all the local Warehouse objects from the local DB
+	 */
 	private void deleteLocalWarehouses() {
 		warehouseDAO.deleteAll();
 	}
 	
+	/**
+	 * Calls the web service to get the list of Warehouses and
+	 * saves them in the local DB.
+	 * 
+	 * @throws Throwable - web service call exceptions
+	 */
 	private void retrieveAndSaveServerWarehouses() throws Throwable {
 		
 		Logger.logDebug(this.getClass(), 
@@ -163,46 +198,61 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 		parseAndSaveWarehousesXML(response);
 	}
 	
+	/**
+	 * Parses Soap response and creates Warehouse objects based on that.
+	 * Also, saves each warehouse object in the local DB.
+	 * 
+	 * @param root - SoapObject
+	 */
 	private void parseAndSaveWarehousesXML(SoapObject root) {
 		
-		if (root == null) {
-			throw new RuntimeException("Soap source is null");
+		SoapObject result = (SoapObject) root.getProperty(0);
+		
+		if (SoapUtils.hasException(ctx, result)) {
+			throw new IllegalStateException(
+					SoapUtils.getException(ctx, result));
 		}
 		
-		Object warehousesProperty = root.getProperty(
-				ctx.getString(R.string.ws_warehouse_property_warehouses));
-		
-		if (warehousesProperty instanceof SoapObject) {
-			SoapObject warehousesXml = (SoapObject) warehousesProperty;
+		for (int i = 0; i < result.getPropertyCount(); i++) {
 			
-			for (int i = 0; i < warehousesXml.getPropertyCount(); i++) {
-				Object warehouseProperty = warehousesXml.getProperty(i);
-				if (warehouseProperty instanceof SoapObject) {
-					SoapObject warehouseXml = (SoapObject) warehouseProperty;
-					
-					Warehouse wh = new Warehouse();
-					wh.setId(SoapUtils.getLongPropertyValue(warehouseXml, 
-							ctx.getString(R.string.ws_warehouse_property_id)));
-					wh.setAddress(warehouseXml.getPropertyAsString(
-							R.string.ws_warehouse_property_address));
-					wh.setVersion(SoapUtils.getIntPropertyValue(warehouseXml, 
-							ctx.getString(R.string.ws_warehouse_property_version)));
-					
-					saveWarehouse(wh);
-				}
-			}
+			SoapObject warehouseProperty = 
+					(SoapObject) result.getProperty(i);
+			
+			Warehouse wh = new Warehouse();
+			wh.setId(SoapUtils.getLongPropertyValue(warehouseProperty, 
+					ctx.getString(R.string.ws_warehouse_property_id)));
+			wh.setAddress(warehouseProperty.getPropertyAsString(
+					R.string.ws_warehouse_property_address));
+			wh.setVersion(SoapUtils.getIntPropertyValue(warehouseProperty, 
+					ctx.getString(R.string.ws_property_version)));
+			
+			saveWarehouse(wh);
 		}
 		
 	}
 	
+	/**
+	 * Saves the given Warehouse object in the local DB
+	 * 
+	 * @param wh - Warehouse object
+	 */
 	private void saveWarehouse(Warehouse wh) {
 		warehouseDAO.save(wh);
 	}
 	
+	/**
+	 * Saves the updated warehouses version as the local warehouses version 
+	 * 
+	 * @param version - warehouses version
+	 */
 	private void saveLocalWarehousesVersion(int version) {
 		WarehouseAdapter.persistVersion(version);
 	}
 	
+	/**
+	 * Loads all the warehouses from the local DB and stores them
+	 * in the central application state
+	 */
 	private void loadLocalWarehouses() {
 		List<Warehouse> warehouses = warehouseDAO.getAll();
 		ApplicationState.getInstance().setWarehouses(warehouses);

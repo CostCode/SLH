@@ -32,11 +32,13 @@ public class SectionDAO extends BaseDAO {
 		/** TABLE NAME */
 		static final String TABLE_NAME = "sectionCategory";
 		
+		
 		/** PRIMARY KEY: Section id */
 		static final String COLUMN_SECTION = "sectionId";
 		
 		/** PRIMARY KEY: Item category id */
 		static final String COLUMN_CATEGORY = "categoryId";
+		
 		
 		/** Create sectionCategory table SQL script */
 		static final String SQL_CREATE_TABLE =
@@ -61,6 +63,7 @@ public class SectionDAO extends BaseDAO {
 	
 	/** TABLE NAME */
 	static final String TABLE_NAME = "section";
+	
 	
 	/** COLUMN: Section Warehouse */
 	static final String COLUMN_WAREHOUSE = "warehouseId";
@@ -107,7 +110,7 @@ public class SectionDAO extends BaseDAO {
 		
 		if (!super.isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalArgumentException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		
@@ -185,7 +188,7 @@ public class SectionDAO extends BaseDAO {
 		
 		if (!isValid(section)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Section[%s]" +
+					new IllegalArgumentException(String.format("Section[%s]" +
 							" has wrong value", section)));
 		}
 		
@@ -235,7 +238,7 @@ public class SectionDAO extends BaseDAO {
 		
 		if (!super.isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalArgumentException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		
@@ -273,7 +276,7 @@ public class SectionDAO extends BaseDAO {
 		
 		if (!super.isValid(section)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Section[%s]" +
+					new IllegalArgumentException(String.format("Section[%s]" +
 							" has wrong value", section)));
 		}
 		
@@ -289,7 +292,7 @@ public class SectionDAO extends BaseDAO {
 		
 		if (!super.isValid(category)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("ItemCategory[%s]" +
+					new IllegalArgumentException(String.format("ItemCategory[%s]" +
 							" has wrong value", category)));
 		}
 		

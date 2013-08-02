@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<retrieveWarehousesVersionResponse>
+<retrieveCategoriesVersionResponse>
     <response>
         <version>5</version>
         <exception>asldaldsj</exception>
     </response>
-</retrieveWarehousesVersionResponse>
+</retrieveCategoriesVersionResponse>

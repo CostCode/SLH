@@ -150,7 +150,7 @@ public class WarehouseDAO extends BaseDAO {
 		
 		if (!isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalAccessException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		
@@ -194,7 +194,7 @@ public class WarehouseDAO extends BaseDAO {
 		
 		if (!isValid(wh)) {
 			Logger.logErrorAndThrow(getClass(), 
-					new RuntimeException(String.format("Warehouse[%s]" +
+					new IllegalArgumentException(String.format("Warehouse[%s]" +
 							" has wrong value", wh)));
 		}
 		

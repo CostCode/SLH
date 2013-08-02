@@ -36,9 +36,6 @@ public class AccessPoint extends BaseEntity {
 	
 	private double distance;
 	
-	private String description;
-
-	
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
@@ -113,13 +110,6 @@ public class AccessPoint extends BaseEntity {
 		this.distance = distance;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}	
-	
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------

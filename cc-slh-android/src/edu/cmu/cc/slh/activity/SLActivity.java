@@ -44,12 +44,10 @@ public class SLActivity extends AbstractAsyncListActivity
 implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 
 	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
+	
+	private ITabHostActivity tabHost;
 	
 	private Map<Integer, MenuItem> menuItems;
 
@@ -84,12 +82,13 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	
 	@Override
 	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
-		super.onAsyncTaskSucceeded(taskClass);
 		
 		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
+				
+				SLActivity.this.tabHost.refresh();
 				
 				if (taskClass == SaveSLTask.class) {
 					Toast.makeText(SLActivity.this,
@@ -129,9 +128,20 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		refreshGUI();
 	}
 
+	//-------------------------------------------------------------------------
+	// ITabActivity METHODS
+	//-------------------------------------------------------------------------
+	
+	@Override
+	public void init(ITabHostActivity tabHost) {
+		this.tabHost = tabHost;
+	}
 	
 	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
+		
+		menu.clear();
+		
 		menuItems = new HashMap<Integer, MenuItem>(1);
 		
 		menuItems.put(R.string.sl_all_add, 

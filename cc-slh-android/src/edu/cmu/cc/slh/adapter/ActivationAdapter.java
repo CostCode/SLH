@@ -21,9 +21,9 @@ public class ActivationAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
-	private static String KEY_ACTIVATION_STATUS = "activation-status";
+	private static final String KEY_ACTIVATION_STATUS = "activation-status";
 	
-	private static String KEY_ACTIVATION_MEMBERID = "activation-memberid";
+	private static final String KEY_ACTIVATION_MEMBERID = "activation-memberid";
 
 	//-------------------------------------------------------------------------
 	// FIELDS

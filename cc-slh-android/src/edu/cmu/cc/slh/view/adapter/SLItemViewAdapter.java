@@ -104,7 +104,7 @@ public class SLItemViewAdapter extends AbstractViewAdapter {
 			if (!WidgetUtils.setSpinnerSelectedItem(categoriesSpinner, 
 					item.getCategory())) {
 				Logger.logErrorAndThrow(SLItemViewAdapter.class, 
-						new RuntimeException("Cannot assign item Category [" 
+						new IllegalArgumentException("Cannot assign item Category [" 
 								+ item.getCategory() + "] to Spinner"));
 			}
 		}
@@ -121,7 +121,7 @@ public class SLItemViewAdapter extends AbstractViewAdapter {
 		if (!StringUtils.isNullOrEmpty(unit)) {
 			if (!WidgetUtils.setSpinnerSelectedItem(unitsSpinner, unit)) {
 				Logger.logErrorAndThrow(SLItemViewAdapter.class, 
-						new RuntimeException("Cannot assign item Unit [ID=" 
+						new IllegalArgumentException("Cannot assign item Unit [ID=" 
 								+ item.getUnit() + "] to Spinner"));
 			}
 		}
@@ -174,7 +174,7 @@ public class SLItemViewAdapter extends AbstractViewAdapter {
 			item.setCategory((ItemCategory) selectedCategory);
 		} else {
 			Logger.logErrorAndThrow(SLItemViewAdapter.class, 
-					new RuntimeException("Cannot set item CATEGORY " +
+					new IllegalArgumentException("Cannot set item CATEGORY " +
 							"from Spinner. Unknown object type: " + 
 								selectedCategory.getClass().getName()));
 		}
@@ -193,14 +193,14 @@ public class SLItemViewAdapter extends AbstractViewAdapter {
 			
 			if (unitCode <= 0) {
 				Logger.logErrorAndThrow(SLItemViewAdapter.class, 
-						new RuntimeException("Cannot set item UNIT from " +
+						new IllegalArgumentException("Cannot set item UNIT from " +
 								"Spinner. Unknown Unit: " + selectedUnit));
 			}
 			
 			item.setUnit(unitCode);
 		} else {
 			Logger.logErrorAndThrow(SLItemViewAdapter.class, 
-					new RuntimeException("Cannot set item UNIT " +
+					new IllegalArgumentException("Cannot set item UNIT " +
 							"from Spinner. Unknown object type: " + 
 								selectedUnit.getClass().getName()));
 		}
