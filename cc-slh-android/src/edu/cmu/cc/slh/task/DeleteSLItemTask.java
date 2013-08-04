@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.task;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.ksoap2.serialization.SoapObject;
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
 import edu.cmu.cc.android.service.soap.SoapWebService;
+import edu.cmu.cc.android.service.soap.util.SoapUtils;
 import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
@@ -25,17 +25,13 @@ import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.model.ShoppingListItem;
 
 /**
- *  DESCRIPTION: 
+ *  Deletes the given ShoppingListItem object from the server and local DB. 
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 22, 2013
  */
 public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -63,10 +59,6 @@ public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 		this.ctx = ctx;
 		this.caller = caller;
 	}
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -115,19 +107,12 @@ public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 			
 			SoapObject response = deleteServerSLItem(item);
 			
-			if (isDeletionSucceeded(response)) {
-				
-				int serverSLVersion = parseSLVersion(response);
-				int localSLVersion = 
-						retrieveLocalSLVersion(item.getShoppingList());
-				
-				if (serverSLVersion == localSLVersion + 1) {
-					deleteLocalSLItem(item);
-					saveLocalSLVersion(serverSLVersion, item.getShoppingList());
-				}
-			} else {
-				throw new IllegalStateException("Server was not able to " +
-						"delete the ShoppingListItem");
+			int serverSLVersion = parseSLVersion(response);
+			int localSLVersion = retrieveLocalSLVersion(item.getShoppingList());
+			
+			if (serverSLVersion == localSLVersion + 1) {
+				deleteLocalSLItem(item);
+				saveLocalSLVersion(serverSLVersion, item.getShoppingList());
 			}
 			
 		} catch (Throwable t) {
@@ -155,6 +140,13 @@ public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * Calls the web service to delete the given ShoppingListItem object.
+	 * 
+	 * @param item - ShoppingListItem object
+	 * @return soap response
+	 * @throws Throwable - web service call exceptions
+	 */
 	private SoapObject deleteServerSLItem(ShoppingListItem item) 
 			throws Throwable {
 		
@@ -165,10 +157,11 @@ public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 				ctx.getString(R.string.ws_sl_namespace),
 				ctx.getString(R.string.ws_sl_url));
 		
-		Map<String, String> arguments = new HashMap<String, String>(2);
+		Map<String, String> arguments = 
+				SecureWSHelper.initWSArguments(ctx, memberId);
 		arguments.put(
-				ctx.getString(R.string.ws_property_memberId), 
-				memberId);
+				ctx.getString(R.string.ws_sl_property_id), 
+				String.valueOf(item.getShoppingList().getId()));
 		arguments.put(
 				ctx.getString(R.string.ws_sl_item_property_id), 
 				String.valueOf(item.getId()));
@@ -178,31 +171,48 @@ public class DeleteSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 				arguments);
 	}
 	
-	private boolean isDeletionSucceeded(SoapObject root) {
-		
-//		String strStatus = root.getPropertyAsString(
-//				ctx.getString(R.string.ws_method_status));
-		
-//		return Boolean.parseBoolean(strStatus);
-		return true;
-	}
-	
+	/**
+	 * Parses the updated ShoppingList version number from
+	 * the soap response
+	 * 
+	 * @param root - soap response
+	 * @return ShoppingList version
+	 */
 	private int parseSLVersion(SoapObject root) {
 		
-		String strSLVersion = root.getPropertyAsString(
-				ctx.getString(R.string.ws_property_version));
+		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		return Integer.parseInt(strSLVersion);
+		SoapUtils.checkForException(ctx, result);
+		
+		return SoapUtils.getIntPropertyValue(result, 
+				ctx.getString(R.string.ws_property_version));
 	}
 	
+	/**
+	 * Gets the old version number of the ShoppingList
+	 * 
+	 * @param sl - ShoppingList
+	 * @return old version number
+	 */
 	private int retrieveLocalSLVersion(ShoppingList sl) {
 		return sl.getVersion();
 	}
 	
+	/**
+	 * Deletes the given ShoppingListItem object from the local DB.
+	 * 
+	 * @param item - ShoppingListItem
+	 */
 	private void deleteLocalSLItem(ShoppingListItem item) {
 		itemDAO.delete(item);
 	}
 	
+	/**
+	 * Updates the version number of the parent ShoppingList.
+	 * 
+	 * @param version - new version number
+	 * @param parentSL - parent ShoppingList object
+	 */
 	private void saveLocalSLVersion(int version, ShoppingList parentSL) {
 		parentSL.setVersion(version);
 		slDAO.save(parentSL);

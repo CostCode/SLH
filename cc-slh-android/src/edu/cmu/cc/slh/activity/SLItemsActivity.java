@@ -16,6 +16,7 @@ import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
+import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.dialog.SLItemDialog;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -24,6 +25,7 @@ import edu.cmu.cc.slh.task.DeleteSLItemTask;
 import edu.cmu.cc.slh.task.FetchSLItemsTask;
 import edu.cmu.cc.slh.task.FetchSLItemsTask.IFetchSLItemsTaskCaller;
 import edu.cmu.cc.slh.task.SaveSLItemTask;
+import edu.cmu.cc.slh.task.TriangulationTask;
 import edu.cmu.cc.slh.view.adapter.ActiveSLViewListAdapter;
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
@@ -99,8 +101,12 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 		
 		menuItems.put(R.string.sl_item_add, 
 				menu.add(R.string.sl_item_add).setIcon(R.drawable.add));
+		menuItems.put(getProximityAlertTextResId(), 
+				menu.add(getProximityAlertTextResId())
+				.setIcon(getProximityAlertIconResId()));
 		
 		setMenuItemState(R.string.sl_item_add, true, true);
+		setMenuItemState(getProximityAlertTextResId(), true, true);
 		
 		return true;
 	}
@@ -124,6 +130,17 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 							ApplicationState.getInstance().getCurrentSL());
 					
 					showSLItemDialog(newSLItem);
+					
+				} else if (item.getTitle().equals(
+						getString(R.string.proximityalert_enable))) {
+					
+					SettingsAdapter.persistProximityAlertEnabled(false);
+					
+				} else if (item.getTitle().equals(
+						getString(R.string.proximityalert_disable))) {
+					
+					SettingsAdapter.persistProximityAlertEnabled(true);
+					new TriangulationTask(getApplicationContext()).execute();
 				}
 			}
 		});
@@ -328,6 +345,20 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 		setListAdapter();
 		onContentChanged();
 		prepareListClick();
+	}
+	
+	private int getProximityAlertIconResId() {
+		if (SettingsAdapter.retrieveProximityAlertEnabled()) {
+			return R.drawable.proximity_alert_white;
+		}
+		return R.drawable.proximity_alert_black;
+	}
+	
+	private int getProximityAlertTextResId() {
+		if (SettingsAdapter.retrieveProximityAlertEnabled()) {
+			return R.string.proximityalert_disable;
+		}
+		return R.string.proximityalert_enable;
 	}
 	
 }

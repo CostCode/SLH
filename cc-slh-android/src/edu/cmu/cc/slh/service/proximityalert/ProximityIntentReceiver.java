@@ -9,20 +9,26 @@ import java.util.List;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.activity.SLHTabLayouActivity;
+import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.Section;
 import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.model.ShoppingListItem;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.widget.Toast;
 
 
 /**
  *  DESCRIPTION: 
  *	
- *  @author Azamat Samiyev
+ *  @author Nohsam Park, Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 26, 2013
  */
@@ -31,6 +37,8 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 	//-------------------------------------------------------------------------
 	// CONSTANTS
 	//-------------------------------------------------------------------------
+	
+	private static final int NOTIFICATION_ID = 1000;
 	
 	public static final String EVENT_PROXIMITY_ALERT = 
 			"edu.cmu.cc.slh.PROXIMITY_ALERT";
@@ -65,9 +73,18 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 				composeNotificationItems(section, currentSL.getItems());
 		
 		if (!StringUtils.isNullOrEmpty(notificationItems)) {
-			Toast.makeText(ctx, ctx.getString(
-					R.string.proximityalert_items, notificationItems), 
-					Toast.LENGTH_LONG).show();
+			
+			final String notificationMsg = ctx.getString(
+					R.string.proximityalert_items, notificationItems);
+			
+			Toast.makeText(ctx, notificationMsg, Toast.LENGTH_LONG).show();
+			
+			NotificationManager notificationManager = (NotificationManager) 
+					ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(NOTIFICATION_ID, 
+					createNotification(ctx, ctx.getString(
+							R.string.proximityalert_notification_title), 
+							notificationMsg));
 		}
 	}
 	
@@ -105,6 +122,40 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 		}
 		
 		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private Notification createNotification(Context ctx, 
+			String notificaionTitle, String notificationText) {
+		
+		Notification notification = new Notification();
+		
+		notification.icon = R.drawable.notification;
+		notification.when = System.currentTimeMillis();
+		
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+		
+		if (SettingsAdapter.retrieveProximityAlertVibration()) {
+			notification.defaults |= Notification.DEFAULT_VIBRATE;
+		}
+		
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.defaults |= Notification.DEFAULT_LIGHTS;
+		
+		notification.ledARGB = Color.WHITE;
+		notification.ledOnMS = 1500;
+		notification.ledOffMS = 1500;
+		
+		Intent slhIntent = new Intent(ctx, SLHTabLayouActivity.class);
+		PendingIntent intent = PendingIntent.getActivity(ctx, 0, slhIntent, 
+				PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		notification.setLatestEventInfo(ctx, notificaionTitle, 
+				notificationText, intent);
+		
+		return notification;
 	}
 
 }

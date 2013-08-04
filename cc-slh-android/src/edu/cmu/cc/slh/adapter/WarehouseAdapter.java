@@ -7,6 +7,7 @@ package edu.cmu.cc.slh.adapter;
 import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.model.Warehouse;
 
 /**
  *  DESCRIPTION: 
@@ -58,6 +59,23 @@ public class WarehouseAdapter extends AbstractSharedPrefsAdapter {
 		}
 		
 		return Integer.parseInt(strValue);
+	}
+	
+	public static Warehouse getDefaultWarehouse() {
+		
+		long id = SettingsAdapter.retrieveSelectedWarehouseId();
+		
+		if (id <= 0) {
+			return null;
+		}
+		
+		for (Warehouse wh : ApplicationState.getInstance().getWarehouses()) {
+			if (wh.getId() == id) {
+				return wh;
+			}
+		}
+		
+		return null;
 	}
 
 	//-------------------------------------------------------------------------

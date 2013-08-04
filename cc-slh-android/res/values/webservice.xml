@@ -4,6 +4,7 @@
     <!-- Web Service: Common properties -->
     
     <string name="ws_property_version">version</string>
+    <string name="ws_property_id">id</string>
     
     <!-- Web Service: Member -->
     
@@ -32,11 +33,11 @@
     <string name="ws_sl_url">http://slhwsapp-costcode.rhcloud.com/ShoppingListWS</string>
     <string name="ws_sl_namespace">http://ws.biz.slh.cc.mse.cmu.edu/</string>
     
-    <string name="ws_sl_method_retrieveSLs">retrieveShoppingLists</string>
+    <string name="ws_sl_method_retrieveSLs">getShoppingLists</string>
     <string name="ws_sl_method_saveSL">saveShoppingList</string>
     <string name="ws_sl_method_deleteSL">deleteShoppingList</string>
     
-    <string name="ws_sl_property_id">id</string>
+    <string name="ws_sl_property_id">slID</string>
     <string name="ws_sl_property_name">name</string>
     <string name="ws_sl_property_date">date</string>
     <string name="ws_sl_property_desc">description</string>
@@ -46,13 +47,12 @@
     <string name="ws_sl_item_method_saveSLItem">saveShoppingListItem</string>
     <string name="ws_sl_item_method_deleteSLItem">deleteShoppingListItem</string>
     
-    <string name="ws_sl_item_property_id">id</string>
-    <string name="ws_sl_item_property_sl">shoppinglistId</string>
-    <string name="ws_sl_item_property_category">categoryId</string>
+    <string name="ws_sl_item_property_id">itemID</string>
+    <string name="ws_sl_item_property_category">categoryID</string>
     <string name="ws_sl_item_property_name">name</string>
     <string name="ws_sl_item_property_quantity">quantity</string>
     <string name="ws_sl_item_property_price">price</string>
-    <string name="ws_sl_item_property_unit">unitId</string>
+    <string name="ws_sl_item_property_unit">unitID</string>
     <string name="ws_sl_item_property_desc">description</string>
     
     <!-- Web Service: Warehouse -->

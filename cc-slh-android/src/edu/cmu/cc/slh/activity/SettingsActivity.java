@@ -8,7 +8,6 @@ import java.util.List;
 
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
-import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.model.Warehouse;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -26,18 +25,6 @@ import android.view.MenuItem;
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity 
 implements ITabActivity {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PROTECTED METHODS
@@ -88,31 +75,21 @@ implements ITabActivity {
 		List<Warehouse> warehouses = 
 				ApplicationState.getInstance().getWarehouses();
 		
-		ListPreference lpWarehouse = (ListPreference) 
-				findPreference(getString(R.string.setting_warehouse_key));
-		
-		String[] entries = new String[warehouses.size()];
-		String[] entryValues = new String[warehouses.size()];
-		
-		for (int i = 0; i < warehouses.size(); i++) {
-			entries[i] = warehouses.get(i).getAddress();
-			entryValues[i] = String.valueOf(warehouses.get(i).getId());
-		}
-		
-		lpWarehouse.setEntries(entries);
-		lpWarehouse.setEntryValues(entryValues);
-		
-		prepareSelectedWarehouse(warehouses);
-	}
-
-	private void prepareSelectedWarehouse(List<Warehouse> warehouses) {
-		
-		long warehouseId = SettingsAdapter.retrieveSelectedWarehouseId();
-		
-		if (warehouseId <= 0) {
-			Warehouse selectedWarehouse = warehouses.get(0);
-			SettingsAdapter.persistSelectedWarehouseId(
-					selectedWarehouse.getId());
+		if (warehouses != null && warehouses.size() > 0) {
+			
+			ListPreference lpWarehouse = (ListPreference) 
+					findPreference(getString(R.string.setting_warehouse_key));
+			
+			String[] entries = new String[warehouses.size()];
+			String[] entryValues = new String[warehouses.size()];
+			
+			for (int i = 0; i < warehouses.size(); i++) {
+				entries[i] = warehouses.get(i).getAddress();
+				entryValues[i] = String.valueOf(warehouses.get(i).getId());
+			}
+			
+			lpWarehouse.setEntries(entries);
+			lpWarehouse.setEntryValues(entryValues);
 		}
 	}
 	

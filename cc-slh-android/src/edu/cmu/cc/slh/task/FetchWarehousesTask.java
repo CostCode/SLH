@@ -160,10 +160,7 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		return SoapUtils.getIntPropertyValue(result, 
 				ctx.getString(R.string.ws_property_version));
@@ -208,10 +205,7 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		for (int i = 0; i < result.getPropertyCount(); i++) {
 			

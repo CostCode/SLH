@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.task;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.ksoap2.serialization.SoapObject;
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
 import edu.cmu.cc.android.service.soap.SoapWebService;
+import edu.cmu.cc.android.service.soap.util.SoapUtils;
 import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
@@ -23,17 +23,14 @@ import edu.cmu.cc.slh.dao.SLDAO;
 import edu.cmu.cc.slh.model.ShoppingList;
 
 /**
- *  DESCRIPTION: 
+ *  Deletes the given ShoppingList object from the server as well as from
+ *  the local DB.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 20, 2013
  */
 public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -59,10 +56,6 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 		this.ctx = ctx;
 		this.caller = caller;
 	}
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -110,18 +103,12 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 			
 			SoapObject response = deleteServerSL(sl);
 			
-			if (isDeletionSucceeded(response)) {
-				
-				int serverMemberVersion = parseMemberVersion(response);
-				int localMemberVersion = retrieveLocalMemberVersion();
-				
-				if (serverMemberVersion == localMemberVersion + 1) {
-					deleteLocalSL(sl);
-					saveLocalMemberVersion(serverMemberVersion);
-				}
-			} else {
-				throw new IllegalStateException("Server was not able to " +
-						"delete the ShoppingList");
+			int serverMemberVersion = parseMemberVersion(response);
+			int localMemberVersion = retrieveLocalMemberVersion();
+			
+			if (serverMemberVersion == localMemberVersion + 1) {
+				deleteLocalSL(sl);
+				saveLocalMemberVersion(serverMemberVersion);
 			}
 			
 		} catch (Throwable t) {
@@ -148,6 +135,14 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * Calls the web service to delete the given ShoppingList object
+	 * from the server.
+	 * 
+	 * @param sl - ShoppingList object
+	 * @return soap response
+	 * @throws Throwable - web service call exceptions
+	 */
 	private SoapObject deleteServerSL(ShoppingList sl) throws Throwable {
 		
 		Logger.logDebug(this.getClass(), String.format("Deleting " +
@@ -157,44 +152,56 @@ public class DeleteSLTask extends AsyncTask<ShoppingList, Void, Void> {
 				ctx.getString(R.string.ws_sl_namespace),
 				ctx.getString(R.string.ws_sl_url));
 		
-		Map<String, String> arguments = new HashMap<String, String>(2);
+		Map<String, String> arguments = 
+				SecureWSHelper.initWSArguments(ctx, memberId);
 		arguments.put(
-				ctx.getString(R.string.ws_property_memberId), 
-				memberId);
-		arguments.put(
-				ctx.getString(R.string.ws_sl_property_id), 
+				ctx.getString(R.string.ws_property_id), 
 				String.valueOf(sl.getId()));
 
 		return service.invokeMethod(
 				ctx.getString(R.string.ws_sl_method_deleteSL), arguments);
 	}
 	
-	private boolean isDeletionSucceeded(SoapObject root) {
-		
-//		String strStatus = root.getPropertyAsString(
-//				ctx.getString(R.string.ws_method_status));
-		
-//		return Boolean.parseBoolean(strStatus);
-		
-		return true;
-	}
-	
+	/**
+	 * Parses member version number from the soap response.
+	 * 
+	 * @param root - soap response
+	 * @return member version
+	 */
 	private int parseMemberVersion(SoapObject root) {
 		
-		String strMemberVersion = root.getPropertyAsString(
-				ctx.getString(R.string.ws_property_version));
+		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		return Integer.parseInt(strMemberVersion);
+		SoapUtils.checkForException(ctx, result);
+		
+		return SoapUtils.getIntPropertyValue(result, 
+				ctx.getString(R.string.ws_property_version));
 	}
 	
+	/**
+	 * Gets the local member version number
+	 * 
+	 * @return local member version number
+	 */
 	private int retrieveLocalMemberVersion() {
 		return SLAdapter.retrieveMemberVersion();
 	}
 	
+	/**
+	 * Deletes the given ShoppingList object from the local
+	 * DB.
+	 * 
+	 * @param sl - ShoppingList object
+	 */
 	private void deleteLocalSL(ShoppingList sl) {
 		slDAO.delete(sl);
 	}
 	
+	/**
+	 * Updates the local member version number
+	 * 
+	 * @param version - updated member version number
+	 */
 	private void saveLocalMemberVersion(int version) {
 		SLAdapter.persistMemberVersion(version);
 	}

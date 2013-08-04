@@ -57,13 +57,13 @@ implements ITabHostActivity {
 		tabHost = getTabHost();
 		
 		setupTab(TAB_SL_ALL, getString(R.string.tab_sl_all), 
-				R.drawable.icon_photos_tab, SLActivity.class);
+				R.drawable.icon_sl_tab, SLActivity.class);
 		
 		setupTab(TAB_SL_ACTIVE, getString(R.string.tab_sl_active), 
-				R.drawable.icon_songs_tab, SLItemsActivity.class);
+				R.drawable.icon_sl_item_tab, SLItemsActivity.class);
 		
 		setupTab(TAB_SETTINGS, getString(R.string.tab_settings), 
-				R.drawable.icon_songs_tab, SettingsActivity.class);
+				R.drawable.icon_settings_tab, SettingsActivity.class);
 		
 		tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			
@@ -89,6 +89,9 @@ implements ITabHostActivity {
 		
 		ITabActivity tabActivity = getCurrentTabActivity();
 		
+		tabActivity.init(this);
+		refresh();
+		
 		return tabActivity.prepareOptionsMenu(menu);
 	}
 
@@ -106,6 +109,7 @@ implements ITabHostActivity {
 	
 	@Override
 	public void refresh() {
+		
 		tabHost.getTabWidget().getChildTabViewAt(1)
 			.setEnabled(hasActiveSL());
 	}
@@ -123,7 +127,7 @@ implements ITabHostActivity {
 		// TAB: Setting up tab indicator
 		//---------------------------------------------------
 		
-		tabSpec.setIndicator(createTabIndicator(label, iconResId));
+		tabSpec.setIndicator(createTabIndicator(tag, label, iconResId));
 		
 		//---------------------------------------------------
 		// TAB: Setting up tab activity
@@ -139,7 +143,8 @@ implements ITabHostActivity {
 		tabHost.addTab(tabSpec);
 	}
 	
-	private View createTabIndicator(final String label, int iconResId) {
+	private View createTabIndicator(final String tag, final String label, 
+			int iconResId) {
 		
 		View tabIndicator = 
 				getLayoutInflater().inflate(R.layout.tab_indicator, null);

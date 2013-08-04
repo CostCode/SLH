@@ -82,7 +82,7 @@ public abstract class SoapUtils {
 		return (property instanceof SoapObject);
 	}
 	
-	public static synchronized String getException(
+	private static synchronized String getException(
 			Context ctx, SoapObject source) {
 		
 		checkPropertyPresence(source, 
@@ -92,16 +92,16 @@ public abstract class SoapUtils {
 				ctx.getString(R.string.ws_property_exception));
 	}
 	
-	public static synchronized boolean hasException(
+	private static synchronized boolean hasException(
 			Context ctx, SoapObject source) {
 		return source.hasProperty(ctx.getString(R.string.ws_property_exception));
 	}
 	
-	public static boolean isBisunessException(String exception) {
+	private static boolean isBisunessException(String exception) {
 		return exception.startsWith(EXCEPTION_BIZ_PREFIX);
 	}
 	
-	public static String getBusinessException(String exception) {
+	private static String getBusinessException(String exception) {
 		
 		if (isBisunessException(exception)) {
 			return exception.replaceAll(EXCEPTION_BIZ_PREFIX, "").trim();

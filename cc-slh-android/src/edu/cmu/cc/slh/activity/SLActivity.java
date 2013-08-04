@@ -52,10 +52,6 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	private Map<Integer, MenuItem> menuItems;
 
 	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
 	//-------------------------------------------------------------------------
 	
@@ -83,12 +79,12 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	@Override
 	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
 		
+		SLActivity.this.tabHost.refresh();
+		
 		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
-				
-				SLActivity.this.tabHost.refresh();
 				
 				if (taskClass == SaveSLTask.class) {
 					Toast.makeText(SLActivity.this,
@@ -133,7 +129,8 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public void init(ITabHostActivity tabHost) {
+	public void init(final ITabHostActivity tabHost) {
+		
 		this.tabHost = tabHost;
 	}
 	
@@ -181,21 +178,33 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	@Override
 	public void onSLUpdated() {
 		
-		ShoppingList sl = 
-				ApplicationState.getInstance().getCurrentSL();
-		
-		new SaveSLTask(SLActivity.this, SLActivity.this)
-			.execute(new ShoppingList[]{sl});
+		addTaskToUIQueue(new Runnable() {
+			
+			@Override
+			public void run() {
+				ShoppingList sl = 
+						ApplicationState.getInstance().getCurrentSL();
+				
+				new SaveSLTask(SLActivity.this, SLActivity.this)
+					.execute(new ShoppingList[]{sl});
+			}
+		});
 	}
 
 	@Override
 	public void onSLDeleted() {
 		
-		ShoppingList sl = 
-				ApplicationState.getInstance().getCurrentSL();
-		
-		new DeleteSLTask(SLActivity.this, SLActivity.this)
-			.execute(new ShoppingList[]{sl});
+		addTaskToUIQueue(new Runnable() {
+			
+			@Override
+			public void run() {
+				ShoppingList sl = 
+						ApplicationState.getInstance().getCurrentSL();
+				
+				new DeleteSLTask(SLActivity.this, SLActivity.this)
+					.execute(new ShoppingList[]{sl});
+			}
+		});
 	}
 	
 	@Override
@@ -212,6 +221,13 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * Sets up menu item states
+	 * 
+	 * @param menuItemTitleResID
+	 * @param visible
+	 * @param enabled
+	 */
 	private void setMenuItemState(int menuItemTitleResID, 
 			boolean visible, boolean enabled) {
 		
@@ -233,12 +249,20 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		slDialog.show(getFragmentManager(), null);
 	}
 	
+	/**
+	 * Constructs the task failed message to be displayed to 
+	 * the user by the given task class. 
+	 */
 	private String getAsyncTaskFailedMessage(Class<?> taskClass, Throwable t) {
 		
 		int msgResID = R.string.error_unspecified;
 		
 		if (taskClass == FetchSLsTask.class) {
 			msgResID = R.string.sl_all_error_fetch;
+		} else if (taskClass == SaveSLTask.class) {
+			msgResID = R.string.sl_save_failed;
+		} else if (taskClass == DeleteSLTask.class) {
+			msgResID = R.string.sl_delete_failed;
 		} else {
 			Logger.logErrorAndThrow(getClass(), 
 					new IllegalArgumentException("Unexpected class: " 

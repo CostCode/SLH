@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.task;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.ksoap2.serialization.SoapObject;
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import edu.cmu.cc.android.activity.async.IAsyncActivity;
 import edu.cmu.cc.android.service.soap.SoapWebService;
+import edu.cmu.cc.android.service.soap.util.SoapUtils;
 import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
@@ -25,17 +25,14 @@ import edu.cmu.cc.slh.model.ShoppingList;
 import edu.cmu.cc.slh.model.ShoppingListItem;
 
 /**
- *  DESCRIPTION: 
+ *  Tries to save the given ShoppingListItem object first in the server,
+ *  then if it succeeds, saves it in the local DB.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
  *  Date: Jul 20, 2013
  */
 public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
-
-	//-------------------------------------------------------------------------
-	// CONSTANTS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// FIELDS
@@ -63,10 +60,6 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 		this.ctx = ctx;
 		this.caller = caller;
 	}
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
 
 	//-------------------------------------------------------------------------
 	// PUBLIC METHODS
@@ -148,6 +141,13 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 	// PRIVATE METHODS
 	//-------------------------------------------------------------------------
 	
+	/**
+	 * Calls the web service to save the given ShoppingListItem object.
+	 * 
+	 * @param item - ShoppingListItem object
+	 * @return soap response
+	 * @throws Throwable - web service call exceptions
+	 */
 	private SoapObject saveServerSLItem(ShoppingListItem item) 
 			throws Throwable {
 		
@@ -158,15 +158,13 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 				ctx.getString(R.string.ws_sl_namespace),
 				ctx.getString(R.string.ws_sl_url));
 		
-		Map<String, String> arguments = new HashMap<String, String>(8);
+		Map<String, String> arguments = 
+				SecureWSHelper.initWSArguments(ctx, memberId);
 		arguments.put(
-				ctx.getString(R.string.ws_property_memberId), 
-				memberId);
-		arguments.put(
-				ctx.getString(R.string.ws_sl_item_property_id), 
+				ctx.getString(R.string.ws_property_id),
 				String.valueOf(item.getId()));
 		arguments.put(
-				ctx.getString(R.string.ws_sl_item_property_sl), 
+				ctx.getString(R.string.ws_sl_property_id), 
 				String.valueOf(item.getShoppingList().getId()));
 		arguments.put(
 				ctx.getString(R.string.ws_sl_item_property_category), 
@@ -191,34 +189,69 @@ public class SaveSLItemTask extends AsyncTask<ShoppingListItem, Void, Void> {
 				ctx.getString(R.string.ws_sl_item_method_saveSLItem), arguments);
 	}
 	
+	/**
+	 * Parses ShoppingList version number from the Soap response
+	 * 
+	 * @param root - soap response
+	 * @return ShoppingList version number
+	 * @throws Throwable - web service call exceptions
+	 */
 	private int parseSLVersion(SoapObject root) throws Throwable {
 		
-		String strSLVersion = root.getPropertyAsString(
-				ctx.getString(R.string.ws_property_version));
+		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		return Integer.parseInt(strSLVersion);
+		SoapUtils.checkForException(ctx, result);
+		
+		return SoapUtils.getIntPropertyValue(result, 
+				ctx.getString(R.string.ws_property_version));
 	}
 	
+	/**
+	 * Gets the local ShoppingList version number
+	 * 
+	 * @param sl - local ShoppingList
+	 * @return local ShoppingList version
+	 */
 	private int retrieveLocalSLVersion(ShoppingList sl) {
 		
 		return sl.getVersion();
 	}
 	
+	/**
+	 * Parses the soap response to get the newly saved item id and saves 
+	 * the local ShoppinglistItem with that id into the DB.
+	 * 
+	 * @param root - soap response
+	 * @param item - ShoppingListItem object
+	 */
 	private void parseAndSaveSLItem(SoapObject root, ShoppingListItem item) {
 		
-		String strId = root.getPropertyAsString(
-				ctx.getString(R.string.ws_sl_item_property_id));
+		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		long id = Long.parseLong(strId);
+		SoapUtils.checkForException(ctx, result);
+		
+		long id = SoapUtils.getLongPropertyValue(result, 
+				ctx.getString(R.string.ws_property_id));
 		item.setId(id);
 		
 		saveSLItem(item);
 	}
 	
+	/**
+	 * Saves the given ShoppingListItem object into the local DB.
+	 * 
+	 * @param item - ShoppingListItem object
+	 */
 	private void saveSLItem(ShoppingListItem item) {
 		itemDAO.save(item);
 	}
 	
+	/**
+	 * Updates the version number of the parent ShoppingList object
+	 * 
+	 * @param version - new version number
+	 * @param parentSL - parent ShoppingList object
+	 */
 	private void saveLocalSLVersion(int version, ShoppingList parentSL) {
 		parentSL.setVersion(version);
 		slDAO.save(parentSL);

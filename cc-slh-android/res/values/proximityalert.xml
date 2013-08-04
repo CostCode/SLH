@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="proximityalert_items">Items found in this section: \"%1$s\"</string>
+    <string name="proximityalert_items">Next items are found in this section: \"%1$s\"</string>
+    
+    <string name="proximityalert_notification_title">Attention!</string>
+    
+    <string name="proximityalert_enable">Enable Proximity alert</string>
+    <string name="proximityalert_disable">Disable Proximity alert</string>
+    
+    <string name="proximityalert_started">Proximity Alert service has started</string>
+    <string name="proximityalert_stopped">Proximity Alert service has stopped</string>
+    
+    <string name="proximityalert_error">Error occurred during the proximity alert task execution.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     
 </resources>

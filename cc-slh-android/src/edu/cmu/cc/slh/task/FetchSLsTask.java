@@ -117,7 +117,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 			// Here we start another task which tries to download
 			// warehouses from the server in a parallel thread.
 			//---------------------------------------------------
-			fetchWarehouses();
+//			fetchWarehouses();
 			
 			//---------------------------------------------------
 			// Item Categories Version checking
@@ -225,10 +225,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		return SoapUtils.getIntPropertyValue(result, 
 				ctx.getString(R.string.ws_property_version));
@@ -273,10 +270,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		for (int i = 0; i < result.getPropertyCount(); i++) {
 			
@@ -355,8 +349,8 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 				"Retrieving MemberVersion number from the server...");
 		
 		SoapWebService service = new SoapWebService(
-				ctx.getString(R.string.ws_sl_namespace),
-				ctx.getString(R.string.ws_sl_url));
+				ctx.getString(R.string.ws_member_namespace),
+				ctx.getString(R.string.ws_member_url));
 		
 		SoapObject response = service.invokeMethod(
 				ctx.getString(R.string.ws_member_method_retrieveVersion), 
@@ -375,10 +369,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		return SoapUtils.getIntPropertyValue(result, 
 				ctx.getString(R.string.ws_property_version));
@@ -424,10 +415,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		for (int i = 0; i < result.getPropertyCount(); i++) {
 			SoapObject slProperty = 

@@ -14,9 +14,9 @@ import edu.cmu.cc.android.service.soap.util.SoapUtils;
 import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
-import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.adapter.ActivationAdapter;
+import edu.cmu.cc.slh.adapter.WarehouseAdapter;
 import edu.cmu.cc.slh.dao.AccessPointDAO;
 import edu.cmu.cc.slh.dao.SectionDAO;
 import edu.cmu.cc.slh.dao.WarehouseDAO;
@@ -95,8 +95,7 @@ public class FetchFloorPlanTask {
 			// Getting Default Warehouse
 			//---------------------------------------------------
 			
-			Warehouse wh = 
-					ApplicationState.getInstance().getDefaultWarehouse();
+			Warehouse wh = WarehouseAdapter.getDefaultWarehouse();
 			if (wh == null) {
 				throw new IllegalArgumentException("Default Warehouse is null");
 			}
@@ -209,10 +208,7 @@ public class FetchFloorPlanTask {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		return SoapUtils.getIntPropertyValue(result, 
 				ctx.getString(R.string.ws_property_version));
@@ -271,14 +267,10 @@ public class FetchFloorPlanTask {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		for (int i = 0; i < result.getPropertyCount(); i++) {
-			SoapObject sectionProperty = 
-					(SoapObject) result.getProperty(i);
+			SoapObject sectionProperty = (SoapObject) result.getProperty(i);
 			
 			Section section = new Section();
 			section.setWarehouse(wh);
@@ -346,10 +338,7 @@ public class FetchFloorPlanTask {
 		
 		SoapObject result = (SoapObject) root.getProperty(0);
 		
-		if (SoapUtils.hasException(ctx, result)) {
-			throw new IllegalStateException(
-					SoapUtils.getException(ctx, result));
-		}
+		SoapUtils.checkForException(ctx, result);
 		
 		for (int i = 0; i < result.getPropertyCount(); i++) {
 			SoapObject apProperty = (SoapObject) result.getProperty(i);
@@ -389,7 +378,6 @@ public class FetchFloorPlanTask {
 	private void saveLocalWarehouseVersion(Warehouse wh, int version) {
 		wh.setVersion(version);
 		warehouseDAO.save(wh);
-		ApplicationState.getInstance().setDefaultWarehouse(wh);
 	}
 	
 	/**

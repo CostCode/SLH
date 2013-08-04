@@ -49,8 +49,6 @@ public class ApplicationState extends Application {
 	
 	private List<Warehouse> warehouses;
 	
-	private Warehouse defaultWarehouse;
-	
 	private List<ShoppingList> shoppingLists;
 	
 	private ShoppingList currentSL;
@@ -101,13 +99,6 @@ public class ApplicationState extends Application {
 		this.warehouses = warehouses;
 	}
 
-	public Warehouse getDefaultWarehouse() {
-		return defaultWarehouse;
-	}
-	public synchronized void setDefaultWarehouse(Warehouse defaultWarehouse) {
-		this.defaultWarehouse = defaultWarehouse;
-	}
-	
 	public List<ShoppingList> getShoppingLists() {
 		return shoppingLists;
 	}

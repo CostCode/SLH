@@ -8,8 +8,8 @@ package edu.cmu.cc.android;
 
 public final class R {
 	public static final class drawable {
-		public static final int cancel = 0x7f020002;
-		public static final int indicator_input_error = 0x7f02000a;
+		public static final int cancel = 0x7f020004;
+		public static final int indicator_input_error = 0x7f02000d;
 	}
 	public static final class string {
 		public static final int androidUtil_cancel = 0x7f040001;

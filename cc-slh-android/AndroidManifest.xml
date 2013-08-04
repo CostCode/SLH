@@ -24,13 +24,13 @@
     <application
         android:name="edu.cmu.cc.slh.ApplicationState"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/costco"
         android:label="@string/app_name"
         android:theme="@style/SLHTheme">
         
         <activity
             android:name="edu.cmu.cc.slh.activity.ActivationActivity"
-            android:label="@string/activation_title"
+            android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

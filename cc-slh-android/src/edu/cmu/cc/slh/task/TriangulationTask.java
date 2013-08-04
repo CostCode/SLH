@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import edu.cmu.cc.android.util.Logger;
+import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
+import edu.cmu.cc.slh.R;
+import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.model.AccessPoint;
 import edu.cmu.cc.slh.model.Section;
 import edu.cmu.cc.slh.service.proximityalert.ProximityIntentReceiver;
@@ -21,6 +24,7 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 /**
  *  DESCRIPTION: 
@@ -84,6 +88,9 @@ implements IFetchFloorPlanTaskCaller {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
+		
+		Toast.makeText(ctx, R.string.proximityalert_started, 
+				Toast.LENGTH_LONG).show();
 	}
 	
 	@Override
@@ -107,7 +114,7 @@ implements IFetchFloorPlanTaskCaller {
 			
 			while (true) {
 				
-				if (isCancelled()) {
+				if (!SettingsAdapter.retrieveProximityAlertEnabled()) {
 					break;
 				}
 				
@@ -139,7 +146,16 @@ implements IFetchFloorPlanTaskCaller {
 			}
 			
 		} catch (Throwable t) {
-			
+			final String errMessage = 
+					ctx.getString(R.string.proximityalert_error, 
+							t.getMessage());
+			Logger.logErrorAndAlert(ctx, getClass(), 
+					StringUtils.getLimitedString(errMessage, 200, "..."));
+		} finally {
+			if (triangulation != null) {
+				triangulation.stop();
+				triangulation = null;
+			}
 		}
 		
 		return null;
@@ -148,6 +164,13 @@ implements IFetchFloorPlanTaskCaller {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
+		
+		if (triangulation != null) {
+			triangulation.stop();
+		}
+		
+		Toast.makeText(ctx, R.string.proximityalert_stopped, 
+				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
