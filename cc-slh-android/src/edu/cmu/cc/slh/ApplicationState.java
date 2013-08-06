@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.cmu.cc.android.util.Logger;
+import edu.cmu.cc.slh.activity.ITabHostActivity;
 import edu.cmu.cc.slh.model.AccessPoint;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.Section;
@@ -41,6 +42,9 @@ public class ApplicationState extends Application {
 	private static ApplicationState instance;
 	
 	private ProximityIntentReceiver proximityReceiver;
+	
+	
+	private ITabHostActivity tabHostActivity;
 	
 	
 	private String memberId;
@@ -78,6 +82,13 @@ public class ApplicationState extends Application {
 		return instance.getApplicationContext();
 	}
 	
+	public ITabHostActivity getTabHostActivity() {
+		return tabHostActivity;
+	}
+	public void setTabHostActivity(ITabHostActivity tabHostActivity) {
+		this.tabHostActivity = tabHostActivity;
+	}
+
 	public String getMemberId() {
 		return memberId;
 	}

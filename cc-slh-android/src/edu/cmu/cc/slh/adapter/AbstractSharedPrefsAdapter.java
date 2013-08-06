@@ -23,11 +23,24 @@ abstract class AbstractSharedPrefsAdapter {
 	//-------------------------------------------------------------------------
 	
 	protected static boolean saveToSharedPrefs(Class<?> caller, Context ctx, 
-			String key, String value, int errMsgResId) {
+			String key, Object value, int errMsgResId) {
 		
 		try {
 			
-			return SharedPrefsAdapter.persist(ctx, key, value);
+			if (value.getClass() == String.class) {
+				return SharedPrefsAdapter.persistString(ctx, key, (String)value);
+			}
+			if (value.getClass() == Long.class) {
+				return SharedPrefsAdapter.persistLong(ctx, key, (Long)value);
+			}
+			if (value.getClass() == Integer.class) {
+				return SharedPrefsAdapter.persistInt(ctx, key, (Integer)value);
+			}
+			if (value.getClass() == Boolean.class) {
+				return SharedPrefsAdapter.persistBoolean(ctx, key, (Boolean)value);
+			}
+			
+			throw new IllegalArgumentException("Unsupported value type: " + value);
 			
 		} catch (Throwable t) {
 			String errMsg = getErrorMessage(ctx, errMsgResId, t);
@@ -37,12 +50,26 @@ abstract class AbstractSharedPrefsAdapter {
 		return false;
 	}
 	
-	protected static String retrieveFromSharedPrefs(Class<?> caller, Context ctx, 
-			String key, int errMsgResId) {
+	protected static Object retrieveFromSharedPrefs(Class<?> caller, Context ctx, 
+			String key, Class<?> valueType, int errMsgResId) {
 		
 		try {
 			
-			return SharedPrefsAdapter.retrieve(ctx, key);
+			if (valueType == String.class) {
+				return SharedPrefsAdapter.retrieveString(ctx, key);
+			}
+			if (valueType == Long.class) {
+				return SharedPrefsAdapter.retrieveLong(ctx, key);
+			}
+			if (valueType == Integer.class) {
+				return SharedPrefsAdapter.retrieveInt(ctx, key);
+			}
+			if (valueType == Boolean.class) {
+				return SharedPrefsAdapter.retrieveBoolean(ctx, key);
+			}
+			
+			throw new IllegalArgumentException("Unsupported value type: " + 
+					valueType);
 			
 		} catch (Throwable t) {
 			String errMsg = getErrorMessage(ctx, errMsgResId, t);

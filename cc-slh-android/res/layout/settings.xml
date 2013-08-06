@@ -11,12 +11,6 @@
             android:title="@string/setting_warehouse_title" 
             android:summary="@string/setting_warehouse_summary" />
         
-        <CheckBoxPreference
-            android:key="@string/setting_proximity_enable_key" 
-            android:title="@string/setting_proximity_enable_title" 
-            android:summary="@string/setting_proximity_enable_summary" 
-            android:defaultValue="false" />
-        
         <ListPreference 
             android:key="@string/setting_proximity_method_key" 
             android:title="@string/setting_proximity_method_title" 

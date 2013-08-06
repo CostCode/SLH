@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.adapter;
 
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -24,40 +23,21 @@ public class ItemCategoryAdapter extends AbstractSharedPrefsAdapter {
 	private static final String KEY_ITEMCATEGORIES_VERSION = "version-itemcategories";
 
 	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// CATEGORIES VERSION
 	//-------------------------------------------------------------------------
 	
 	public static synchronized boolean persistVersion(int version) {
 		
 		return saveToSharedPrefs(ItemCategoryAdapter.class, 
 				ApplicationState.getContext(), KEY_ITEMCATEGORIES_VERSION, 
-				String.valueOf(version), 
-				R.string.itemcategory_error_versionPersist);
+				Integer.valueOf(version), R.string.itemcategory_error_versionPersist);
 	}
 	
 	public static int retrieveVersion() {
 		
-		String strValue = retrieveFromSharedPrefs(ItemCategoryAdapter.class, 
-				ApplicationState.getContext(), KEY_ITEMCATEGORIES_VERSION, 
-				R.string.itemcategory_error_versionRetrieve);
-		
-		if (StringUtils.isNullOrEmpty(strValue)) {
-			return -1;
-		}
-		
-		return Integer.parseInt(strValue);
+		return (Integer) retrieveFromSharedPrefs(ItemCategoryAdapter.class, 
+				ApplicationState.getContext(), KEY_ITEMCATEGORIES_VERSION,
+				Integer.class, R.string.itemcategory_error_versionRetrieve);
 	}
 
 }

@@ -6,7 +6,6 @@ package edu.cmu.cc.slh.adapter;
 
 import java.util.List;
 
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -27,39 +26,39 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	private static final String KEY_ACTIVE_SHOPPINGLIST = "active-shoppinglist";
 	
 	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// ACTIVE SHOPPINGLIST
 	//-------------------------------------------------------------------------
 	
 	public static synchronized boolean persistActiveSL(ShoppingList sl) {
 		
+		long id = 0;
+		
+		if (sl != null) {
+			id = sl.getId();
+		}
+		
 		return saveToSharedPrefs(ActiveSLAdapter.class, 
 				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST, 
-				String.valueOf(sl.getId()), R.string.sl_active_error_persist);
+				Long.valueOf(id), R.string.sl_active_error_persist);
 	}
 	
 	public static ShoppingList retrieveActiveSL() {
 		
-		String strId = retrieveFromSharedPrefs(ActiveSLAdapter.class, 
-				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST, 
-				R.string.sl_active_error_retrieve);
+		long id = (Long) retrieveFromSharedPrefs(ActiveSLAdapter.class, 
+				ApplicationState.getContext(), KEY_ACTIVE_SHOPPINGLIST,
+				Long.class, R.string.sl_active_error_retrieve);
 		
-		if (!StringUtils.isNullOrEmpty(strId)) {
-			return findSLById(Long.parseLong(strId));
+		return findSLById(id);
+	}
+	
+	public static synchronized void clearActiveSL(ShoppingList sl) {
+		
+		ShoppingList activeSL = retrieveActiveSL();
+		if (activeSL != null) {
+			if (activeSL.equals(sl)) {
+				persistActiveSL(null);
+			}
 		}
-		
-		return null;
 	}
 	
 
@@ -68,6 +67,10 @@ public class ActiveSLAdapter extends AbstractSharedPrefsAdapter {
 	//-------------------------------------------------------------------------
 	
 	private static ShoppingList findSLById(long id) {
+		
+		if (id <= 0) {
+			return null;
+		}
 		
 		List<ShoppingList> list = 
 				ApplicationState.getInstance().getShoppingLists();

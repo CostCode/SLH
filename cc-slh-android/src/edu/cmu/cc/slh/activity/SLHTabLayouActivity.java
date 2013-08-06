@@ -10,6 +10,8 @@ import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +45,8 @@ implements ITabHostActivity {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
+	private Handler asyncTaskHandler;
+	
 	private TabHost tabHost;
 
 	//-------------------------------------------------------------------------
@@ -53,6 +57,8 @@ implements ITabHostActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.slh_tabhost);
+		
+		ApplicationState.getInstance().setTabHostActivity(this);
 		
 		tabHost = getTabHost();
 		
@@ -69,17 +75,16 @@ implements ITabHostActivity {
 			
 			@Override
 			public void onTabChanged(String tabId) {
-				
 				invalidateOptionsMenu();
-				
-				if (tabId.equals(TAB_SL_ACTIVE)) {
-					ApplicationState.getInstance().setCurrentSL(
-							ActiveSLAdapter.retrieveActiveSL());
-					
-					getCurrentTabActivity().refresh();
-				}
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		asyncTaskHandler = new Handler();
+		refresh();
 	}
 
 	@Override
@@ -88,9 +93,6 @@ implements ITabHostActivity {
 		menu.clear();
 		
 		ITabActivity tabActivity = getCurrentTabActivity();
-		
-		tabActivity.init(this);
-		refresh();
 		
 		return tabActivity.prepareOptionsMenu(menu);
 	}
@@ -108,10 +110,31 @@ implements ITabHostActivity {
 	//-------------------------------------------------------------------------
 	
 	@Override
+	public boolean isActiveTab(Class<?> tabClass) {
+		
+		if (tabClass == SLItemsActivity.class) {
+			return tabHost.getCurrentTabTag().equals(TAB_SL_ACTIVE);
+		}
+		
+		return false;
+	}
+
+	
+	@Override
 	public void refresh() {
 		
-		tabHost.getTabWidget().getChildTabViewAt(1)
-			.setEnabled(hasActiveSL());
+		Runnable callback = new Runnable() {
+			
+			@Override
+			public void run() {
+				SLHTabLayouActivity.this.tabHost.getTabWidget()
+					.getChildTabViewAt(1).setEnabled(hasActiveSL());
+				SLHTabLayouActivity.this.invalidateOptionsMenu();
+			}
+		};
+		
+		Message osMessage = Message.obtain(this.asyncTaskHandler, callback);
+		osMessage.sendToTarget();
 	}
 	
 	//-------------------------------------------------------------------------

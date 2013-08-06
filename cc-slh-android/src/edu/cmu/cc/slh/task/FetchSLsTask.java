@@ -117,7 +117,7 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 			// Here we start another task which tries to download
 			// warehouses from the server in a parallel thread.
 			//---------------------------------------------------
-//			fetchWarehouses();
+			fetchWarehouses();
 			
 			//---------------------------------------------------
 			// Item Categories Version checking
@@ -503,8 +503,11 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 	 */
 	private void saveSL(ShoppingList sl) {
 		slDAO.save(sl);
-		for (ShoppingListItem item : sl.getItems()) {
-			slItemDAO.save(item);
+		
+		if (sl.getItems() != null) {
+			for (ShoppingListItem item : sl.getItems()) {
+				slItemDAO.save(item);
+			}
 		}
 	}
 	

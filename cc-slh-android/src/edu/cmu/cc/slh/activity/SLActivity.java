@@ -47,9 +47,9 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
-	private ITabHostActivity tabHost;
-	
 	private Map<Integer, MenuItem> menuItems;
+	
+	private FetchSLsTask fetchSLsTask;
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -79,8 +79,6 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	@Override
 	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
 		
-		SLActivity.this.tabHost.refresh();
-		
 		addTaskToUIQueue(new Runnable() {
 			
 			@Override
@@ -97,12 +95,14 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 				}
 				
 				fetchShoppingLists();
+				
+				ApplicationState.getInstance().getTabHostActivity().refresh();
 			}
 		});
 	}
 
 	@Override
-	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
+	public void onAsyncTaskFailed(final Class<?> taskClass, final Throwable t) {
 		
 		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
 		
@@ -110,8 +110,17 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 			
 			@Override
 			public void run() {
+				
+				if (taskClass == FetchSLsTask.class) {
+					SLActivity.this.fetchSLsTask.cancel(true);
+					SLActivity.this.fetchSLsTask = null;
+					SLActivity.this.dismissProgressDialog();
+				}
+				
 				Logger.logErrorAndAlert(SLActivity.this, 
 						SLActivity.class, errorMsg, t);
+				
+				ApplicationState.getInstance().getTabHostActivity().refresh();
 			}
 		});
 	}
@@ -119,20 +128,18 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	@Override
 	public void onFetchSLTaskSucceeded(List<ShoppingList> list) {
 		
+		fetchSLsTask = null;
+		
 		ApplicationState.getInstance().setShoppingLists(list);
 		
 		refreshGUI();
+		
+		ApplicationState.getInstance().getTabHostActivity().refresh();
 	}
 
 	//-------------------------------------------------------------------------
 	// ITabActivity METHODS
 	//-------------------------------------------------------------------------
-	
-	@Override
-	public void init(final ITabHostActivity tabHost) {
-		
-		this.tabHost = tabHost;
-	}
 	
 	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
@@ -167,10 +174,6 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 		return true;
 	}
 
-	@Override
-	public void refresh() {}
-	
-	
 	//-------------------------------------------------------------------------
 	// ISLStateListener methods
 	//-------------------------------------------------------------------------
@@ -274,7 +277,14 @@ implements IFetchSLTaskCaller, ISLStateListener, ITabActivity {
 	}
 
 	private void fetchShoppingLists() {
-		new FetchSLsTask(this, this).execute();
+		
+		if (fetchSLsTask != null && !fetchSLsTask.isCancelled()) {
+			fetchSLsTask.cancel(true);
+			this.dismissProgressDialog();
+		}
+		
+		fetchSLsTask = new FetchSLsTask(this, this);
+		fetchSLsTask.execute();
 	}
 	
 	/**

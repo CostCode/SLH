@@ -5,7 +5,7 @@
 package edu.cmu.cc.slh.view.validator.textview;
 
 import android.content.Context;
-import edu.cmu.cc.android.view.validation.textview.NumberValidator;
+import edu.cmu.cc.android.view.validation.textview.DecimalNumberValidator;
 import edu.cmu.cc.slh.R;
 
 /**
@@ -15,7 +15,7 @@ import edu.cmu.cc.slh.R;
  *	@version 1.0
  *  Date: Jun 10, 2013
  */
-public class MoneyValidator extends NumberValidator {
+public class MoneyValidator extends DecimalNumberValidator {
 
 	//-------------------------------------------------------------------------
 	// CONSTANTS

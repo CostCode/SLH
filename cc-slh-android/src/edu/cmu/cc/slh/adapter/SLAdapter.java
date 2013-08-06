@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.adapter;
 
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -24,39 +23,21 @@ public class SLAdapter extends AbstractSharedPrefsAdapter {
 	private static final String KEY_MEMBER_VERSION = "version-member";
 
 	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// MEMBER VERSION
 	//-------------------------------------------------------------------------
 	
 	public static synchronized boolean persistMemberVersion(int version) {
 		
 		return saveToSharedPrefs(SLAdapter.class, ApplicationState.getContext(), 
-				KEY_MEMBER_VERSION, String.valueOf(version), 
+				KEY_MEMBER_VERSION, Integer.valueOf(version), 
 				R.string.sl_all_error_versionPersist);
 	}
 	
 	public static int retrieveMemberVersion() {
 		
-		String strValue = retrieveFromSharedPrefs(SLAdapter.class, 
+		return (Integer) retrieveFromSharedPrefs(SLAdapter.class, 
 				ApplicationState.getContext(), KEY_MEMBER_VERSION, 
-				R.string.sl_all_error_versionRetrieve);
-		
-		if (StringUtils.isNullOrEmpty(strValue)) {
-			return 0;
-		}
-		
-		return Integer.parseInt(strValue);
+				Integer.class, R.string.sl_all_error_versionRetrieve);
 	}
 
 }

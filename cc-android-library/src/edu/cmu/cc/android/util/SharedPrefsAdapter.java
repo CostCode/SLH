@@ -24,38 +24,47 @@ public class SharedPrefsAdapter {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	/**
-	 * Storing the given value by given key
-	 * @param ctx - android context
-	 * @param key - key of the value to be stored
-	 * @param value - data to be stored
-	 * @return <b>true</b> - data was successfully stored, <b>false</b> - if not
-	 */
-	public static boolean persist(Context ctx, String key, String value) {
-		
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(ctx);
-		
-		Editor editor = preferences.edit();
-		
+	public static boolean persistString(Context ctx, String key, String value) {
+		Editor editor = getPreferences(ctx).edit();
 		editor.putString(key, value);
-		
 		return editor.commit();
 	}
+	public static String retrieveString(Context ctx, String key) {
+		return getPreferences(ctx).getString(key, null);
+	}
 	
-	/**
-	 * Retrieving a stored value by the given key
-	 * @param ctx - android context
-	 * @param key - key by which the data to be retrieved
-	 * @return data value
-	 */
-	public static String retrieve(Context ctx, String key) {
-		
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(ctx);
-		
-		return preferences.getString(key, null);
-	} 
-
+	public static boolean persistLong(Context ctx, String key, long value) {
+		Editor editor = getPreferences(ctx).edit();
+		editor.putLong(key, value);
+		return editor.commit();
+	}
+	public static long retrieveLong(Context ctx, String key) {
+		return getPreferences(ctx).getLong(key, -1);
+	}
 	
+	public static boolean persistInt(Context ctx, String key, int value) {
+		Editor editor = getPreferences(ctx).edit();
+		editor.putInt(key, value);
+		return editor.commit();
+	}
+	public static int retrieveInt(Context ctx, String key) {
+		return getPreferences(ctx).getInt(key, -1);
+	}
+	
+	public static boolean persistBoolean(Context ctx, String key, boolean value) {
+		Editor editor = getPreferences(ctx).edit();
+		editor.putBoolean(key, value);
+		return editor.commit();
+	}
+	public static boolean retrieveBoolean(Context ctx, String key) {
+		return getPreferences(ctx).getBoolean(key, false);
+	}
+	
+	//-------------------------------------------------------------------------
+	// PRIVATE METHODS
+	//-------------------------------------------------------------------------
+	
+	private static SharedPreferences getPreferences(Context ctx) {
+		return PreferenceManager.getDefaultSharedPreferences(ctx);
+	}
 }

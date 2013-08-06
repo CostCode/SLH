@@ -43,9 +43,6 @@ implements ITabActivity {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public void init(ITabHostActivity tabHost) {}
-	
-	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
 		return false;
 	}
@@ -54,9 +51,6 @@ implements ITabActivity {
 	public boolean handleOptionsMenuItemSelection(MenuItem item) {
 		return false;
 	}
-
-	@Override
-	public void refresh() {}
 
 	//-------------------------------------------------------------------------
 	// PRIVATE METHODS

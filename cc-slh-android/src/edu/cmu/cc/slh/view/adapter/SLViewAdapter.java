@@ -81,7 +81,9 @@ public class SLViewAdapter extends AbstractViewAdapter {
 				.getEditTextAsString(view, R.id.et_sl_comment));
 		
 		if (WidgetUtils.getSwitch(view, R.id.sw_activate).isChecked()) {
-			setActiveSL(sl);
+			ActiveSLAdapter.persistActiveSL(sl);
+		} else {
+			ActiveSLAdapter.clearActiveSL(sl);
 		}
 		
 		ApplicationState.getInstance().setCurrentSL(sl);
@@ -114,10 +116,6 @@ public class SLViewAdapter extends AbstractViewAdapter {
 		ShoppingList activeSL = ActiveSLAdapter.retrieveActiveSL();
 		
 		return sl.equals(activeSL);
-	}
-	
-	private static void setActiveSL(ShoppingList sl) {
-		ActiveSLAdapter.persistActiveSL(sl);
-	}
+	}	
 
 }

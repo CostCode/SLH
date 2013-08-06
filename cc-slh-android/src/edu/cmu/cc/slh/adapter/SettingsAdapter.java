@@ -5,7 +5,6 @@
 package edu.cmu.cc.slh.adapter;
 
 import android.content.Context;
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -22,6 +21,9 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 	// CONSTANTS
 	//-------------------------------------------------------------------------
 	
+	private static final String SETTING_PROXIMITYALERT_ENABLED 
+		= "setting-proximityalert-enabled";
+	
 	//-------------------------------------------------------------------------
 	// SETTING: WAREHOUSE
 	//-------------------------------------------------------------------------
@@ -32,22 +34,16 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		return saveToSharedPrefs(SettingsAdapter.class, 
 				ctx, ctx.getString(R.string.setting_warehouse_key),
-				String.valueOf(id), R.string.settings_warehouse_error_persist);
+				Long.valueOf(id), R.string.settings_warehouse_error_persist);
 	}
 	
 	public static long retrieveSelectedWarehouseId() {
 		
 		Context ctx = ApplicationState.getContext();
 		
-		String strId = retrieveFromSharedPrefs(SettingsAdapter.class, 
-				ctx, ctx.getString(R.string.setting_warehouse_key),
+		return (Long) retrieveFromSharedPrefs(SettingsAdapter.class, 
+				ctx, ctx.getString(R.string.setting_warehouse_key), Long.class,
 				R.string.settings_warehouse_error_retrieve);
-		
-		if (StringUtils.isNullOrEmpty(strId)) {
-			return -1;
-		}
-		
-		return Long.parseLong(strId);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -60,8 +56,8 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		Context ctx = ApplicationState.getContext();
 		
 		return saveToSharedPrefs(SettingsAdapter.class, 
-				ctx, ctx.getString(R.string.setting_proximity_enable_key),
-				String.valueOf(enabled), 
+				ctx, SETTING_PROXIMITYALERT_ENABLED,
+				Boolean.valueOf(enabled),
 				R.string.settings_proximityalert_enabled_error_persist);
 	}
 	
@@ -69,15 +65,10 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		Context ctx = ApplicationState.getContext();
 		
-		String strEnabled = retrieveFromSharedPrefs(SettingsAdapter.class,
-				ctx, ctx.getString(R.string.setting_proximity_enable_key),
+		return (Boolean) retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, SETTING_PROXIMITYALERT_ENABLED,
+				Boolean.class,
 				R.string.settings_proximityalert_enabled_error_retrieve);
-		
-		if (!StringUtils.isNullOrEmpty(strEnabled)) {
-			return Boolean.parseBoolean(strEnabled);
-		}
-		
-		return false;
 	}
 	
 	//-------------------------------------------------------------------------
@@ -98,8 +89,9 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		Context ctx = ApplicationState.getContext();
 		
-		return retrieveFromSharedPrefs(SettingsAdapter.class,
-				ctx, ctx.getString(R.string.setting_proximity_method_key), 
+		return (String) retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, ctx.getString(R.string.setting_proximity_method_key),
+				String.class,
 				R.string.settings_proximityalert_method_error_retrieve);
 	}
 	
@@ -114,7 +106,7 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		return saveToSharedPrefs(SettingsAdapter.class, 
 				ctx, ctx.getString(R.string.setting_proximity_alert_vibration_key), 
-				String.valueOf(status), 
+				Boolean.valueOf(status), 
 				R.string.settings_proximityalert_vibration_error_persist);
 	}
 	
@@ -122,15 +114,10 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		Context ctx = ApplicationState.getContext();
 		
-		String strStatus = retrieveFromSharedPrefs(SettingsAdapter.class,
-				ctx, ctx.getString(R.string.setting_proximity_alert_vibration_key), 
+		return (Boolean) retrieveFromSharedPrefs(SettingsAdapter.class,
+				ctx, ctx.getString(R.string.setting_proximity_alert_vibration_key),
+				Boolean.class,
 				R.string.settings_proximityalert_vibration_error_retrieve);
-		
-		if (!StringUtils.isNullOrEmpty(strStatus)) {
-			return Boolean.parseBoolean(strStatus);
-		}
-		
-		return false;
 	}
 
 }

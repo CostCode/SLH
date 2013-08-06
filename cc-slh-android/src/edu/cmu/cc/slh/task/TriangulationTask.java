@@ -114,7 +114,8 @@ implements IFetchFloorPlanTaskCaller {
 			
 			while (true) {
 				
-				if (!SettingsAdapter.retrieveProximityAlertEnabled()) {
+				if (!SettingsAdapter.retrieveProximityAlertEnabled() 
+						|| isCancelled()) {
 					break;
 				}
 				

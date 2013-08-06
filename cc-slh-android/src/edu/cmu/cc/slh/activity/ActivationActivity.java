@@ -45,6 +45,8 @@ implements IActivationTaskCaller {
 	
 	private View activationView;
 	
+	private boolean internalCheckMode;
+	
 	//-------------------------------------------------------------------------
 	// ACTIVITY METHODS
 	//-------------------------------------------------------------------------
@@ -57,9 +59,8 @@ implements IActivationTaskCaller {
 			
 			final String memberId = ActivationAdapter.retrieveMemberId();
 			if (!StringUtils.isNullOrEmpty(memberId)) {
-				ApplicationState.getInstance().setMemberId(memberId);
-				showMainActivity();
-				this.finish();
+				internalCheckMode = true;
+				new ActivationTask(this, this).execute(memberId);
 			}
 		}
 		
@@ -112,23 +113,20 @@ implements IActivationTaskCaller {
 		
 		addTaskToUIQueue(new Runnable() {
 			
-			@Override
-			public void run() {
+			private void showDialog() {
 				DialogInterface.OnClickListener dialogListener =
 						new DialogInterface.OnClickListener() {
 							
 							@Override
 							public void onClick(DialogInterface dialog, 
 									int which) {
-								
-								if (activated) {
-									saveMemberId(memberId);
-									showMainActivity();
-								}
 								dialog.dismiss();
+								if (activated) {
+									proceedToMainActivity();
+								}
 							}
 						};
-				
+						
 				int resultMsgResID = (activated) 
 						? R.string.activation_success 
 						: R.string.activation_unsuccess;
@@ -139,6 +137,24 @@ implements IActivationTaskCaller {
 						getString(resultMsgResID), dialogListener);
 				
 				dialog.show();
+			}
+			
+			private void proceedToMainActivity() {
+				saveMemberId(memberId);
+				showMainActivity();
+				ActivationActivity.this.finish();
+			}
+			
+			@Override
+			public void run() {
+				
+				if (!ActivationActivity.this.internalCheckMode) {
+					showDialog();
+				} else {
+					if (activated) {
+						proceedToMainActivity();
+					}
+				}
 			}
 		});
 		
@@ -206,6 +222,7 @@ implements IActivationTaskCaller {
 									ActivationActivity.this.getClass());
 					
 					if (networkConnected) {
+						ActivationActivity.this.internalCheckMode = false;
 						new ActivationTask(ActivationActivity.this, 
 								ActivationActivity.this)
 								.execute(membershipID);

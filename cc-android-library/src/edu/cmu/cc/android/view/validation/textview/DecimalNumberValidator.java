@@ -8,13 +8,13 @@ import android.content.Context;
 import edu.cmu.cc.android.view.validation.IViewValidator;
 
 /**
- *  DESCRIPTION: Abstract class for all numeric validators
+ *  DESCRIPTION: Abstract class for decimal number validators.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0
- *  Date: Jun 27, 2013
+ *  Date: Aug 3, 2013
  */
-public abstract class NumberValidator extends RegexValidator 
+public abstract class DecimalNumberValidator extends RegexValidator 
 implements IViewValidator {
 
 	//-------------------------------------------------------------------------
@@ -29,7 +29,7 @@ implements IViewValidator {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	protected NumberValidator(Context ctx, final String regex) {
+	public DecimalNumberValidator(Context ctx, final String regex) {
 		super(ctx, regex);
 	}
 

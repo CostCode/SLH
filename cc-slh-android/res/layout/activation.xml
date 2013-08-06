@@ -7,7 +7,8 @@
   
   	<RelativeLayout
     	android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:background="#ffffff">
+        android:layout_height="wrap_content" 
+        android:background="#ffffff">
  
         <!--  Header Starts-->
         <LinearLayout 
@@ -20,11 +21,11 @@
 		        <!-- Logo Start-->
 		        <ImageView 
 		            android:src="@drawable/costco_logo"
-		            android:layout_width="wrap_content"
+		            android:layout_width="fill_parent"
 		            android:layout_height="wrap_content"
-		            android:layout_marginLeft="10dip"
 		            android:contentDescription="@string/image_logo"
-		            android:textAlignment="center"/>
+		            android:textAlignment="center"
+		            android:layout_gravity="center_horizontal"/>
 		        <!-- Logo Ends -->
 		</LinearLayout>
         <!--  Header Ends -->

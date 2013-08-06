@@ -14,6 +14,7 @@ import edu.cmu.cc.android.service.soap.util.SoapUtils;
 import edu.cmu.cc.android.util.DeviceUtils;
 import edu.cmu.cc.android.util.Logger;
 import edu.cmu.cc.android.util.StringUtils;
+import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.adapter.ActivationAdapter;
 import edu.cmu.cc.slh.adapter.WarehouseAdapter;
@@ -21,6 +22,7 @@ import edu.cmu.cc.slh.dao.AccessPointDAO;
 import edu.cmu.cc.slh.dao.SectionDAO;
 import edu.cmu.cc.slh.dao.WarehouseDAO;
 import edu.cmu.cc.slh.model.AccessPoint;
+import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.Section;
 import edu.cmu.cc.slh.model.Warehouse;
 import android.content.Context;
@@ -281,7 +283,36 @@ public class FetchFloorPlanTask {
 			section.setPosY(SoapUtils.getDoublePropertyValue(sectionProperty, 
 					ctx.getString(R.string.ws_section_property_posy)));
 			
+			parseSectionCategoriesXML(sectionProperty, section);
+			
 			saveSection(section);
+		}
+		
+	}
+	
+	/**
+	 * Parses section categories from the section property
+	 * and adds categories to the section object.
+	 * 
+	 * @param sectionProperty - soap section property
+	 * @param section - section object
+	 */
+	private void parseSectionCategoriesXML(SoapObject sectionProperty, 
+			Section section) {
+		
+		for (int i = 0; i < sectionProperty.getPropertyCount(); i++) {
+			if (SoapUtils.isComplexProperty(sectionProperty.getProperty(i))) {
+				SoapObject categoryProperty = 
+						(SoapObject) sectionProperty.getProperty(i);
+				
+				long categoryId = SoapUtils.getLongPropertyValue(
+						categoryProperty, ctx.getString(R.string.ws_property_id));
+				
+				ItemCategory category = ApplicationState.getInstance()
+						.getCategories().get(categoryId);
+				
+				section.addCategory(category);
+			}
 		}
 		
 	}

@@ -16,6 +16,7 @@ import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
+import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import edu.cmu.cc.slh.adapter.SettingsAdapter;
 import edu.cmu.cc.slh.dialog.SLItemDialog;
 import edu.cmu.cc.slh.model.ItemCategory;
@@ -47,12 +48,18 @@ import android.widget.Toast;
 @SuppressLint("UseSparseArrays")
 public class SLItemsActivity extends AbstractAsyncListActivity
 implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
-
+	
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
 	
 	private Map<Integer, MenuItem> menuItems;
+	
+	private FetchSLItemsTask fetchSLItemsTask;
+	
+	private TriangulationTask triangulationTask;
+	
+	private ShoppingList sl;
 
 	//-------------------------------------------------------------------------
 	// GETTERS - SETTERS
@@ -62,7 +69,6 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	public ActiveSLViewListAdapter getListAdapter() {
 		return (ActiveSLViewListAdapter) super.getListAdapter();
 	}
-	
 
 	//-------------------------------------------------------------------------
 	// ACTIVITY METHODS
@@ -77,8 +83,19 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		setupSLItemsFetching();
 		setActivityTitle();
-		fetchActiveShoppingListItems();
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return prepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return handleOptionsMenuItemSelection(item);
 	}
 	
 	//-------------------------------------------------------------------------
@@ -86,16 +103,9 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public void init(ITabHostActivity tabHost) {}
-	
-	@Override
 	public boolean prepareOptionsMenu(Menu menu) {
 		
 		menu.clear();
-		
-		if (ApplicationState.getInstance().getCurrentSL() == null) {
-			return false;
-		}
 		
 		menuItems = new HashMap<Integer, MenuItem>(1);
 		
@@ -114,53 +124,46 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	@Override
 	public boolean handleOptionsMenuItemSelection(final MenuItem item) {
 		
-		if (ApplicationState.getInstance().getCurrentSL() == null) {
-			return false;
-		}
-		
 		addTaskToUIQueue(new Runnable() {
 			
 			@Override
 			public void run() {
+				
 				if (item.getTitle().equals(
 						getString(R.string.sl_item_add))) {
 					
 					ShoppingListItem newSLItem = new ShoppingListItem();
-					newSLItem.setShoppingList(
-							ApplicationState.getInstance().getCurrentSL());
+					newSLItem.setShoppingList(sl);
 					
 					showSLItemDialog(newSLItem);
 					
 				} else if (item.getTitle().equals(
 						getString(R.string.proximityalert_enable))) {
 					
-					SettingsAdapter.persistProximityAlertEnabled(false);
+					SettingsAdapter.persistProximityAlertEnabled(true);
+					
+//					if (triangulationTask != null && !triangulationTask.isCancelled()) {
+//						triangulationTask.cancel(true);
+//					}
+//					triangulationTask = new TriangulationTask(getApplicationContext());
+//					triangulationTask.execute();
+					
+					SLItemsActivity.this.invalidateOptionsMenu();
 					
 				} else if (item.getTitle().equals(
 						getString(R.string.proximityalert_disable))) {
 					
-					SettingsAdapter.persistProximityAlertEnabled(true);
-					new TriangulationTask(getApplicationContext()).execute();
+					SettingsAdapter.persistProximityAlertEnabled(false);
+					SLItemsActivity.this.invalidateOptionsMenu();
 				}
+				
+				ApplicationState.getInstance().getTabHostActivity().refresh();
 			}
 		});
 		
 		return true;
 	}
 	
-	@Override
-	public void refresh() {
-		
-		addTaskToUIQueue(new Runnable() {
-			
-			@Override
-			public void run() {
-				refreshGUI();
-			}
-		});
-	}
-
-
 	@Override
 	public void onAsyncTaskSucceeded(final Class<?> taskClass) {
 		
@@ -179,13 +182,13 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 							Toast.LENGTH_LONG).show();
 				}
 				
-				fetchActiveShoppingListItems();
+				setupSLItemsFetching();
 			}
 		});
 	}
 	
 	@Override
-	public void onAsyncTaskFailed(Class<?> taskClass, final Throwable t) {
+	public void onAsyncTaskFailed(final Class<?> taskClass, final Throwable t) {
 		
 		final String errorMsg = getAsyncTaskFailedMessage(taskClass, t);
 		
@@ -193,6 +196,13 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 			
 			@Override
 			public void run() {
+				
+				if (taskClass == FetchSLItemsTask.class) {
+					SLItemsActivity.this.fetchSLItemsTask.cancel(true);
+					SLItemsActivity.this.fetchSLItemsTask = null;
+					SLItemsActivity.this.dismissProgressDialog();
+				}
+				
 				Logger.logErrorAndAlert(SLItemsActivity.this, 
 						SLItemsActivity.class, errorMsg, t);
 			}
@@ -202,10 +212,9 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	@Override
 	public void onFetchSLItemsTaskSucceeded(List<ShoppingListItem> items) {
 		
-		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
-		if (currentSL != null) {
-			currentSL.setItems(items);
-		}
+		fetchSLItemsTask = null;
+		
+		sl.setItems(items);
 		
 		refreshGUI();
 	}
@@ -244,12 +253,15 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 	
-	private void fetchActiveShoppingListItems() {
+	private void fetchShoppingListItems(ShoppingList sl) {
 		
-		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
-		
-		if (currentSL != null) {
-			new FetchSLItemsTask(this).execute(new ShoppingList[]{currentSL});
+		if (sl != null) {
+			if (fetchSLItemsTask != null && !fetchSLItemsTask.isCancelled()) {
+				fetchSLItemsTask.cancel(true);
+				this.dismissProgressDialog();
+			}
+			fetchSLItemsTask = new FetchSLItemsTask(this);
+			fetchSLItemsTask.execute(new ShoppingList[]{sl});
 		}
 	}
 	
@@ -273,10 +285,8 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 		
 		List<ShoppingListItem> categoryItems = new ArrayList<ShoppingListItem>();
 		
-		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
-		
-		if (currentSL != null) {
-			for (ShoppingListItem item : currentSL.getItems()) {
+		if (sl.getItems() != null) {
+			for (ShoppingListItem item : sl.getItems()) {
 				if (category.equals(item.getCategory())) {
 					categoryItems.add(item);
 				}
@@ -330,14 +340,7 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	private void setActivityTitle() {
 		
 		TextView tvTitle = (TextView) findViewById(R.id.tv_active_sl_title);
-		
-		ShoppingList currentSL = ApplicationState.getInstance().getCurrentSL();
-		
-		if (currentSL != null) {
-			tvTitle.setText(currentSL.getName());
-		} else {
-			tvTitle.setText("");
-		}
+		tvTitle.setText(sl.getName());
 	}
 	
 	private void refreshGUI() {
@@ -349,9 +352,9 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	
 	private int getProximityAlertIconResId() {
 		if (SettingsAdapter.retrieveProximityAlertEnabled()) {
-			return R.drawable.proximity_alert_white;
+			return R.drawable.proximity_alert_black;
 		}
-		return R.drawable.proximity_alert_black;
+		return R.drawable.proximity_alert_white;
 	}
 	
 	private int getProximityAlertTextResId() {
@@ -359,6 +362,20 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 			return R.string.proximityalert_disable;
 		}
 		return R.string.proximityalert_enable;
+	}
+	
+	private void setupSLItemsFetching() {
+		
+		if (ApplicationState.getInstance().getTabHostActivity() != null) {
+			if (ApplicationState.getInstance().getTabHostActivity()
+					.isActiveTab(getClass())) {
+				sl = ActiveSLAdapter.retrieveActiveSL();
+			} else {
+				sl = ApplicationState.getInstance().getCurrentSL();
+			}
+			
+			fetchShoppingListItems(sl);
+		}
 	}
 	
 }

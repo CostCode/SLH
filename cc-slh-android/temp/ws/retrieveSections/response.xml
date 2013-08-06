@@ -2,17 +2,33 @@
 
 <!-- Root: retrieveSectionsResponse -->
 <retrieveSectionsResponse>
-    <!-- Sections of the Requested Warehouse -->
-    <sections>
-        <section>
+    
+    <section>
+        <id>1</id>
+        <posx>24.56</posx>
+        <posy>12.02</posy>
+        
+        <category>
             <id>1</id>
-            <posx>24.56</posx>
-            <posy>12.02</posy>
-        </section>
-        <section>
+        </category>
+        <category>
             <id>2</id>
-            <posx>100.50</posx>
-            <posy>140.32</posy>
-        </section>
-    </sections>
+        </category>
+        <category>
+            <id>3</id>
+        </category>
+        
+    </section>
+    
+    <section>
+        <id>2</id>
+        <posx>100.50</posx>
+        <posy>140.32</posy>
+        
+        <category>
+            <id>6</id>
+        </category>
+        
+    </section>
+    
 </retrieveSectionsResponse>

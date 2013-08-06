@@ -13,9 +13,8 @@ package edu.cmu.cc.slh.activity;
  */
 public interface ITabHostActivity {
 	
-	/**
-	 * Refreshes the UI of the activity
-	 */
 	public void refresh();
+	
+	public boolean isActiveTab(Class<?> tabClass);
 
 }

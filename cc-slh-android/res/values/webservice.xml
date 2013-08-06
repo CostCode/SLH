@@ -65,7 +65,7 @@
     <string name="ws_warehouse_method_retrieveVersion">retrieveWarehouseVersion</string>
     
     <string name="ws_warehouse_property_id">id</string>
-    <string name="ws_warehouse_property_address">address</string>
+    <string name="ws_warehouse_property_address">name</string>
     
     <!-- Web Service: Section -->
     

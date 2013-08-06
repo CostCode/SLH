@@ -11,7 +11,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import edu.cmu.cc.android.view.validation.IViewValidator;
-import edu.cmu.cc.android.view.validation.textview.NumberValidator;
+import edu.cmu.cc.android.view.validation.textview.DecimalNumberValidator;
+import edu.cmu.cc.android.view.validation.textview.IntegerNumberValidator;
 
 /**
  *  DESCRIPTION: 
@@ -96,8 +97,11 @@ public class ValidatingEditText extends EditText implements IValidatingView {
 
 	protected void initInputType(IViewValidator validator) {
 		
-		if (validator instanceof NumberValidator) {
+		if (validator instanceof IntegerNumberValidator) {
 			setInputType(InputType.TYPE_CLASS_NUMBER);
+		} else if (validator instanceof DecimalNumberValidator) {
+			setInputType(InputType.TYPE_CLASS_NUMBER 
+					| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		} else {
 			setInputType(InputType.TYPE_CLASS_TEXT);
 		}

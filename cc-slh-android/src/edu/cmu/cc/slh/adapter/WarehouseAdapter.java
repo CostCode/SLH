@@ -4,7 +4,6 @@
  */
 package edu.cmu.cc.slh.adapter;
 
-import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.model.Warehouse;
@@ -25,41 +24,26 @@ public class WarehouseAdapter extends AbstractSharedPrefsAdapter {
 	private static final String KEY_VERSION_WAREHOUSES = "version-warehouses";
 
 	//-------------------------------------------------------------------------
-	// FIELDS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// CONSTRUCTORS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// GETTERS - SETTERS
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
-	// PUBLIC METHODS
+	// WAREHOUSES VERSION
 	//-------------------------------------------------------------------------
 	
 	public static synchronized boolean persistVersion(int version) {
 		
 		return saveToSharedPrefs(WarehouseAdapter.class, 
 				ApplicationState.getContext(), KEY_VERSION_WAREHOUSES, 
-				String.valueOf(version), 
-				R.string.warehouse_error_versionPersist);
+				Integer.valueOf(version), R.string.warehouse_error_versionPersist);
 	}
 	
 	public static int retrieveVersion() {
 		
-		String strValue = retrieveFromSharedPrefs(WarehouseAdapter.class, 
+		return (Integer) retrieveFromSharedPrefs(WarehouseAdapter.class, 
 				ApplicationState.getContext(), KEY_VERSION_WAREHOUSES, 
-				R.string.warehouse_error_versionRetrieve);
-		
-		if (StringUtils.isNullOrEmpty(strValue)) {
-			return -1;
-		}
-		
-		return Integer.parseInt(strValue);
+				Integer.class, R.string.warehouse_error_versionRetrieve);
 	}
+	
+	//-------------------------------------------------------------------------
+	// DEFAULT WAREHOUSE
+	//-------------------------------------------------------------------------
 	
 	public static Warehouse getDefaultWarehouse() {
 		
@@ -77,9 +61,5 @@ public class WarehouseAdapter extends AbstractSharedPrefsAdapter {
 		
 		return null;
 	}
-
-	//-------------------------------------------------------------------------
-	// PRIVATE METHODS
-	//-------------------------------------------------------------------------
 
 }

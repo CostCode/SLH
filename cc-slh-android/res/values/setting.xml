@@ -5,10 +5,6 @@
     <string name="setting_warehouse_title">Warehouse</string>
 	<string name="setting_warehouse_summary">Select Costco Warehouse</string>
     
-    <string name="setting_proximity_enable_key">setting-proximityalert-enabled</string>
-    <string name="setting_proximity_enable_title">Proximity detection</string>
-	<string name="setting_proximity_enable_summary">Tick to enable proximity detection</string>
-    
 	<string name="setting_proximity_method_key">setting-proximityalert-method</string>
 	<string name="setting_proximity_method_title">Proximity method</string>
 	<string name="setting_proximity_method_summary">Select proximity detection method</string>
