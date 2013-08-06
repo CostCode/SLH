@@ -151,6 +151,7 @@ public class AccessPointDAO extends BaseDAO {
 			openConnectionIfClosed();
 			
 			ContentValues values = new ContentValues();
+			values.put(COLUMN_WAREHOUSE, ap.getWarehouse().getId());
 			values.put(COLUMN_SSID, ap.getSsid());
 			values.put(COLUMN_POSX, ap.getPosX());
 			values.put(COLUMN_POSY, ap.getPosY());

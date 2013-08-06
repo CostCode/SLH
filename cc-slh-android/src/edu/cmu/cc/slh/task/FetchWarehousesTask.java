@@ -91,14 +91,14 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 			// Warehouse version checking and fetching
 			//---------------------------------------------------
 			
-//			int localWarehousesVersion = retrieveLocalWarehousesVersion();
-//			int serverWarehousesVersion = retrieveServerWarehousesVersion();
+			int localWarehousesVersion = retrieveLocalWarehousesVersion();
+			int serverWarehousesVersion = retrieveServerWarehousesVersion();
 			
-//			if (localWarehousesVersion != serverWarehousesVersion) {
+			if (localWarehousesVersion != serverWarehousesVersion) {
 				deleteLocalWarehouses();
 				retrieveAndSaveServerWarehouses();
-//				saveLocalWarehousesVersion(serverWarehousesVersion);
-//			}
+				saveLocalWarehousesVersion(serverWarehousesVersion);
+			}
 			
 			loadLocalWarehouses();
 		} catch (Throwable t) {
@@ -214,11 +214,12 @@ public class FetchWarehousesTask extends AsyncTask<Void, Void, Void> {
 			
 			Warehouse wh = new Warehouse();
 			wh.setId(SoapUtils.getLongPropertyValue(warehouseProperty, 
-					ctx.getString(R.string.ws_warehouse_property_id)));
+					ctx.getString(R.string.ws_property_id)));
 			wh.setAddress(warehouseProperty.getPropertyAsString(
 					ctx.getString(R.string.ws_warehouse_property_address)));
-			wh.setVersion(SoapUtils.getIntPropertyValue(warehouseProperty, 
-					ctx.getString(R.string.ws_property_version)));
+//			wh.setVersion(SoapUtils.getIntPropertyValue(warehouseProperty, 
+//					ctx.getString(R.string.ws_property_version)));
+			wh.setVersion(0);
 			
 			saveWarehouse(wh);
 		}

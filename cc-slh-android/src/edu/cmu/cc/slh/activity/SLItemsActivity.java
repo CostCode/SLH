@@ -142,11 +142,11 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 					
 					SettingsAdapter.persistProximityAlertEnabled(true);
 					
-//					if (triangulationTask != null && !triangulationTask.isCancelled()) {
-//						triangulationTask.cancel(true);
-//					}
-//					triangulationTask = new TriangulationTask(getApplicationContext());
-//					triangulationTask.execute();
+					if (triangulationTask != null && !triangulationTask.isCancelled()) {
+						triangulationTask.cancel(true);
+					}
+					triangulationTask = new TriangulationTask(getApplicationContext());
+					triangulationTask.execute();
 					
 					SLItemsActivity.this.invalidateOptionsMenu();
 					

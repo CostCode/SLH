@@ -29,7 +29,7 @@ public class WCL extends Triangulation {
 	
 	private static final float G = 0.6f;
 	
-	private static final double THRESHOLD_DISTANCE = 30.0;
+	private static final double THRESHOLD_DISTANCE = 300000.0;
 
 	//-------------------------------------------------------------------------
 	// FIELDS

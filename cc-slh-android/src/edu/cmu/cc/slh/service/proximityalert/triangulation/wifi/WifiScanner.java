@@ -4,6 +4,7 @@
  */
 package edu.cmu.cc.slh.service.proximityalert.triangulation.wifi;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -110,9 +111,9 @@ public class WifiScanner {
 			newResult = scanResults.get(i);
 			
 			if (i > 0 && oldResult.BSSID.compareTo(newResult.BSSID) != 0) {
-				if (!noiseFilterFlag && tCount == scanNumber) {
+//				if (!noiseFilterFlag && tCount == scanNumber) {
 					addAP(oldResult, rssi / tCount);
-				}
+//				}
 				rssi = newResult.level;
 				tCount = 1;
 			} else {
@@ -123,9 +124,9 @@ public class WifiScanner {
 			oldResult = newResult;
 			
 			if (i == scanResults.size() - 1) {
-				if(!noiseFilterFlag || tCount == scanNumber) {  
+//				if(!noiseFilterFlag || tCount == scanNumber) {  
    					addAP(oldResult, rssi / tCount);
-   				}
+//   				}
 			}
 		}
 		
@@ -160,7 +161,10 @@ public class WifiScanner {
 	private void removeInvalidAPs() {
 		
 		for (int i = 0; i < accessPoints.size(); i++) {
-			if (accessPoints.get(i).getRssi() == 0) {
+			
+			BigDecimal rssi = new BigDecimal(accessPoints.get(i).getRssi());
+			
+			if (rssi.compareTo(BigDecimal.ZERO) == 0) {
 				accessPoints.remove(i);
 			}
 		}

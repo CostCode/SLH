@@ -10,7 +10,9 @@ import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.SLHTabLayouActivity;
+import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import edu.cmu.cc.slh.adapter.SettingsAdapter;
+import edu.cmu.cc.slh.dao.SLItemDAO;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.Section;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -48,6 +50,8 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 	//-------------------------------------------------------------------------
 	// FIELDS
 	//-------------------------------------------------------------------------
+	
+	private SLItemDAO itemDAO;
 
 	//-------------------------------------------------------------------------
 	// CONSTRUCTORS
@@ -64,13 +68,14 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		
+		itemDAO = new SLItemDAO();
+		
 		Section section = ApplicationState.getInstance().getNearestSection();
 		
-		ShoppingList currentSL = 
-				ApplicationState.getInstance().getCurrentSL();
+		ShoppingList activeSL = ActiveSLAdapter.retrieveActiveSL();
 		
 		final String notificationItems = 
-				composeNotificationItems(section, currentSL.getItems());
+				composeNotificationItems(section, itemDAO.getAll(activeSL));
 		
 		if (!StringUtils.isNullOrEmpty(notificationItems)) {
 			
@@ -86,6 +91,8 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 							R.string.proximityalert_notification_title), 
 							notificationMsg));
 		}
+		
+		itemDAO.close();
 	}
 	
 	//-------------------------------------------------------------------------

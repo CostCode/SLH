@@ -34,16 +34,18 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		
 		return saveToSharedPrefs(SettingsAdapter.class, 
 				ctx, ctx.getString(R.string.setting_warehouse_key),
-				Long.valueOf(id), R.string.settings_warehouse_error_persist);
+				String.valueOf(id), R.string.settings_warehouse_error_persist);
 	}
 	
 	public static long retrieveSelectedWarehouseId() {
 		
 		Context ctx = ApplicationState.getContext();
 		
-		return (Long) retrieveFromSharedPrefs(SettingsAdapter.class, 
-				ctx, ctx.getString(R.string.setting_warehouse_key), Long.class,
+		String strId = (String) retrieveFromSharedPrefs(SettingsAdapter.class, 
+				ctx, ctx.getString(R.string.setting_warehouse_key), String.class,
 				R.string.settings_warehouse_error_retrieve);
+		
+		return Long.parseLong(strId);
 	}
 	
 	//-------------------------------------------------------------------------
