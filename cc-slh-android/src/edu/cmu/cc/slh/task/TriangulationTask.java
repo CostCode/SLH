@@ -110,7 +110,7 @@ implements IFetchFloorPlanTaskCaller {
 			// and firing ProximityAlert event.
 			//---------------------------------------------------
 			
-			triangulation = new WCL(wifiManager, initParams, accessPoints);
+			triangulation = new WCL(wifiManager, initParams);
 			
 			while (true) {
 				
@@ -119,7 +119,7 @@ implements IFetchFloorPlanTaskCaller {
 					break;
 				}
 				
-				AccessPoint nearestAP = triangulation.findNearestAccessPoint();
+				AccessPoint nearestAP = triangulation.findNearestAccessPoint(accessPoints);
 				if (nearestAP != null) {
 					Section nearestSection = 
 							triangulation.findNearestSection(sections, 

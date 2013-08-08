@@ -4,6 +4,7 @@
  */
 package edu.cmu.cc.slh.service.proximityalert.triangulation;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -39,10 +40,9 @@ public class WCL extends Triangulation {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public WCL(WifiManager wm, Map<String, Object> initParams, 
-			List<AccessPoint> accessPoints) {
+	public WCL(WifiManager wm, Map<String, Object> initParams) {
 		
-		super(wm, initParams, accessPoints);
+		super(wm, initParams);
 	}
 
 	//-------------------------------------------------------------------------
@@ -54,25 +54,27 @@ public class WCL extends Triangulation {
 	//-------------------------------------------------------------------------
 	
 	@Override
-	public AccessPoint findNearestAccessPoint() {
+	public AccessPoint findNearestAccessPoint(List<AccessPoint> accessPoints) {
 		
-		wifiScanner.scanStart();
+		List<AccessPoint> aps = createAPsCopy(accessPoints);
 		
-		List<AccessPoint> accessPoints = wifiScanner.getUpdatedAccessPoints();
+		wifiScanner.scanStart(aps);
 		
-		if (accessPoints == null || accessPoints.size() < 3) {
+		aps = wifiScanner.getUpdatedAccessPoints();
+		
+		if (aps == null || aps.size() < 3) {
 			return null;
 		}
 		
 		if (triangulationMethod.equals(TRIANG_METHOD_AWCL)) {
-			accessPoints = doAWCL(accessPoints);
+			aps = doAWCL(aps);
 		}
 		
 		AccessPoint nearestAP = null;
 		float sumRssi = 0;
 		
 		// Setting RSSI
-		for (AccessPoint ap : accessPoints) {
+		for (AccessPoint ap : aps) {
 			
 			float newRssi = (float) 
 					Math.pow(Math.pow(10, ap.getRssi() / 20), G);
@@ -86,7 +88,7 @@ public class WCL extends Triangulation {
 		float x = 0;
 		float y = 0;
 		
-		for (AccessPoint ap : accessPoints) {
+		for (AccessPoint ap : aps) {
 			float weight = ap.getRssi() / sumRssi;
 			x += ap.getPosX() * weight;
 			y += ap.getPosY() * weight;
@@ -96,7 +98,7 @@ public class WCL extends Triangulation {
 		double oldDist = Double.MAX_VALUE;
 		double newDist = Double.MAX_VALUE;
 		
-		for (AccessPoint ap : accessPoints) {
+		for (AccessPoint ap : aps) {
 			
 			newDist = calculateDestination(ap.getPosX(), ap.getPosY(), x, y);
 			
@@ -180,5 +182,21 @@ public class WCL extends Triangulation {
 		
 		return Math.sqrt((posX - x)*(posX - x) + (posY - y)*(posY - y));
 	}
+	
+	private List<AccessPoint> createAPsCopy(List<AccessPoint> list) {
+		
+		List<AccessPoint> newList = new ArrayList<AccessPoint>(list.size());
+		for (AccessPoint ap : list) {
+			AccessPoint newAP = new AccessPoint();
+			newAP.setId(ap.getId());
+			newAP.setSsid(ap.getSsid());
+			newAP.setPosX(ap.getPosX());
+			newAP.setPosY(ap.getPosY());
+			newList.add(newAP);
+		}
+		
+		return newList;
+	}
 
 }
+

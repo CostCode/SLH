@@ -55,11 +55,10 @@ public abstract class Triangulation {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public Triangulation(WifiManager wm, Map<String, Object> initParams, 
-			List<AccessPoint> accessPoints) {
+	public Triangulation(WifiManager wm, Map<String, Object> initParams) {
 		
 		triangulationMethod = (String) initParams.get(TRIANG_METHOD); 
-		wifiScanner = new WifiScanner(wm, initParams, accessPoints);
+		wifiScanner = new WifiScanner(wm, initParams);
 	}
 
 	//-------------------------------------------------------------------------
@@ -70,8 +69,8 @@ public abstract class Triangulation {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public AccessPoint findNearestAccessPoint() {
-		wifiScanner.scanStart();
+	public AccessPoint findNearestAccessPoint(List<AccessPoint> accessPoints) {
+		wifiScanner.scanStart(accessPoints);
 		
 		return wifiScanner.getUpdatedAccessPoints().get(0);
 	}

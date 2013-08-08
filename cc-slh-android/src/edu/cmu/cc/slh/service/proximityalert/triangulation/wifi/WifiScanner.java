@@ -48,12 +48,9 @@ public class WifiScanner {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public WifiScanner(WifiManager wifiManager, Map<String, Object> initParams, 
-			List<AccessPoint> accessPoints) {
+	public WifiScanner(WifiManager wifiManager, Map<String, Object> initParams) {
 		
 		this.wifiManager = wifiManager;
-		this.accessPoints = accessPoints;
-		
 		this.scanNumber = (Integer) initParams.get(Triangulation.SCAN_NUMBER);
 		this.noiseFilterFlag = (Boolean) initParams.get(Triangulation.NOISE_FILTER);
 	}
@@ -70,8 +67,10 @@ public class WifiScanner {
 	// PUBLIC METHODS
 	//-------------------------------------------------------------------------
 	
-	public void scanStart() {
+	public void scanStart(List<AccessPoint> accessPoints) {
 		Logger.logDebug(getClass(), "WIFI Scan has Started...");
+		
+		this.accessPoints = accessPoints;
 		
 		wifiManager.startScan();
 		scanResults = wifiManager.getScanResults();
