@@ -82,7 +82,7 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 			final String notificationMsg = ctx.getString(
 					R.string.proximityalert_items, notificationItems);
 			
-			Toast.makeText(ctx, notificationMsg, Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, notificationMsg, Toast.LENGTH_SHORT).show();
 			
 			NotificationManager notificationManager = (NotificationManager) 
 					ctx.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -113,10 +113,16 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
 			if (isItemToBeNotified(item, section.getCategories())) {
 				builder.append(item.getName());
 				builder.append(ITEM_SEPARATOR);
+				builder.append(" ");
 			}
 		}
 		
-		return builder.toString();
+		String msg = builder.toString();
+		if (!StringUtils.isNullOrEmpty(msg)) {
+			return msg.substring(0, msg.lastIndexOf(ITEM_SEPARATOR));
+		}
+		
+		return null;
 	}
 	
 	private boolean isItemToBeNotified(ShoppingListItem item, 

@@ -41,6 +41,7 @@
     <string name="ws_sl_property_name">name</string>
     <string name="ws_sl_property_date">date</string>
     <string name="ws_sl_property_desc">description</string>
+    <string name="ws_sl_property_items">items</string>
     
     <!-- Web Service: Shopping List Item  -->
     

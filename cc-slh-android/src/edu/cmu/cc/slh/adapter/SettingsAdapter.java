@@ -5,6 +5,7 @@
 package edu.cmu.cc.slh.adapter;
 
 import android.content.Context;
+import edu.cmu.cc.android.util.StringUtils;
 import edu.cmu.cc.slh.ApplicationState;
 import edu.cmu.cc.slh.R;
 
@@ -44,6 +45,10 @@ public class SettingsAdapter extends AbstractSharedPrefsAdapter {
 		String strId = (String) retrieveFromSharedPrefs(SettingsAdapter.class, 
 				ctx, ctx.getString(R.string.setting_warehouse_key), String.class,
 				R.string.settings_warehouse_error_retrieve);
+		
+		if (StringUtils.isNullOrEmpty(strId)) {
+			return -1;
+		}
 		
 		return Long.parseLong(strId);
 	}

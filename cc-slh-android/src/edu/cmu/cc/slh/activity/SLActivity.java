@@ -33,7 +33,8 @@ import edu.cmu.cc.slh.task.SaveSLTask;
 import edu.cmu.cc.slh.view.adapter.AllSLViewListAdapter;
 
 /**
- *  DESCRIPTION: 
+ *  Shopping list activity. It loads and displays the list of user
+ *  Shopping lists.
  *	
  *  @author Azamat Samiyev
  *	@version 1.0

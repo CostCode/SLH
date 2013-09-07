@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 
 import android.content.Context;
@@ -429,10 +430,15 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 			sl.setDate(new Date(
 					SoapUtils.getLongPropertyValue(slProperty, 
 							ctx.getString(R.string.ws_sl_property_date))));
-			sl.setDescription(slProperty.getPropertyAsString(
-					ctx.getString(R.string.ws_sl_property_desc)));
 			sl.setVersion(SoapUtils.getIntPropertyValue(slProperty, 
 					ctx.getString(R.string.ws_property_version)));
+			
+			if (!SoapUtils.isComplexProperty(
+					slProperty.getProperty(
+							ctx.getString(R.string.ws_sl_property_desc)))) {
+				sl.setDescription(slProperty.getPropertyAsString(
+						ctx.getString(R.string.ws_sl_property_desc)));
+			}
 			
 			parseSLItemsXML(slProperty, sl);
 			
@@ -456,7 +462,11 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 		
 		for (int i = 0; i < slProperty.getPropertyCount(); i++) {
 			
-			if (SoapUtils.isComplexProperty(slProperty.getProperty(i))) {
+			PropertyInfo pi = new PropertyInfo();
+			slProperty.getPropertyInfo(i, pi);
+			
+			if (pi.name.equals(ctx.getString(R.string.ws_sl_property_items))) {
+				
 				SoapObject itemProperty = (SoapObject) slProperty.getProperty(i);
 				
 				ShoppingListItem item = new ShoppingListItem();
@@ -476,8 +486,13 @@ public class FetchSLsTask extends AsyncTask<Void, Void, List<ShoppingList>> {
 						ctx.getString(R.string.ws_sl_item_property_price))));
 				item.setUnit(SoapUtils.getIntPropertyValue(itemProperty, 
 						ctx.getString(R.string.ws_sl_item_property_unit)));
-				item.setDescription(itemProperty.getPropertyAsString(
-						ctx.getString(R.string.ws_sl_item_property_desc)));
+				
+				if (!SoapUtils.isComplexProperty(
+						itemProperty.getProperty(
+								ctx.getString(R.string.ws_sl_item_property_desc)))) {
+					item.setDescription(itemProperty.getPropertyAsString(
+							ctx.getString(R.string.ws_sl_item_property_desc)));
+				}
 				
 				sl.addItem(item);
 			}

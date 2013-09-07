@@ -119,203 +119,205 @@ public final class R {
         /**  Global Application Sources 
          */
         public static final int app_name=0x7f040006;
-        public static final int error_unspecified=0x7f04006d;
-        public static final int image_logo=0x7f04006c;
+        public static final int error_unspecified=0x7f04006e;
+        public static final int image_logo=0x7f04006d;
         /**  Item Category 
          */
         public static final int itemcategory_error_versionPersist=0x7f04001a;
         public static final int itemcategory_error_versionRetrieve=0x7f04001b;
         public static final int proximityalert_disable=0x7f04001f;
         public static final int proximityalert_enable=0x7f04001e;
-        public static final int proximityalert_error=0x7f040022;
+        public static final int proximityalert_error=0x7f040023;
         public static final int proximityalert_items=0x7f04001c;
         public static final int proximityalert_notification_title=0x7f04001d;
         public static final int proximityalert_started=0x7f040020;
         public static final int proximityalert_stopped=0x7f040021;
-        public static final int setting_proximity_alert_vibration_key=0x7f040029;
-        public static final int setting_proximity_alert_vibration_summary=0x7f04002b;
-        public static final int setting_proximity_alert_vibration_title=0x7f04002a;
-        public static final int setting_proximity_method_gps=0x7f04002d;
-        public static final int setting_proximity_method_key=0x7f040026;
-        public static final int setting_proximity_method_summary=0x7f040028;
-        public static final int setting_proximity_method_title=0x7f040027;
-        public static final int setting_proximity_method_wifi=0x7f04002c;
-        public static final int setting_warehouse_key=0x7f040023;
-        public static final int setting_warehouse_summary=0x7f040025;
-        public static final int setting_warehouse_title=0x7f040024;
-        public static final int settings_activity_header=0x7f04002f;
+        public static final int proximityalert_warehouse_select=0x7f040022;
+        public static final int setting_proximity_alert_vibration_key=0x7f04002a;
+        public static final int setting_proximity_alert_vibration_summary=0x7f04002c;
+        public static final int setting_proximity_alert_vibration_title=0x7f04002b;
+        public static final int setting_proximity_method_gps=0x7f04002e;
+        public static final int setting_proximity_method_key=0x7f040027;
+        public static final int setting_proximity_method_summary=0x7f040029;
+        public static final int setting_proximity_method_title=0x7f040028;
+        public static final int setting_proximity_method_wifi=0x7f04002d;
+        public static final int setting_warehouse_key=0x7f040024;
+        public static final int setting_warehouse_summary=0x7f040026;
+        public static final int setting_warehouse_title=0x7f040025;
+        public static final int settings_activity_header=0x7f040030;
         /**  Setting Activity 
          */
-        public static final int settings_activity_title=0x7f04002e;
+        public static final int settings_activity_title=0x7f04002f;
         /**  Setting: Proximity alert enabled 
          */
-        public static final int settings_proximityalert_enabled_error_persist=0x7f040032;
-        public static final int settings_proximityalert_enabled_error_retrieve=0x7f040033;
+        public static final int settings_proximityalert_enabled_error_persist=0x7f040033;
+        public static final int settings_proximityalert_enabled_error_retrieve=0x7f040034;
         /**  Setting: Proximity alert method 
          */
-        public static final int settings_proximityalert_method_error_persist=0x7f040034;
-        public static final int settings_proximityalert_method_error_retrieve=0x7f040035;
+        public static final int settings_proximityalert_method_error_persist=0x7f040035;
+        public static final int settings_proximityalert_method_error_retrieve=0x7f040036;
         /**  Setting: Proximity alert vibration 
          */
-        public static final int settings_proximityalert_vibration_error_persist=0x7f040036;
-        public static final int settings_proximityalert_vibration_error_retrieve=0x7f040037;
+        public static final int settings_proximityalert_vibration_error_persist=0x7f040037;
+        public static final int settings_proximityalert_vibration_error_retrieve=0x7f040038;
         /**  Setting: Warehouse 
          */
-        public static final int settings_warehouse_error_persist=0x7f040030;
-        public static final int settings_warehouse_error_retrieve=0x7f040031;
-        public static final int sl_activate=0x7f04003d;
-        public static final int sl_active_error_persist=0x7f04004a;
-        public static final int sl_active_error_retrieve=0x7f04004b;
-        public static final int sl_active_notfound=0x7f040039;
-        public static final int sl_all_add=0x7f040050;
-        public static final int sl_all_deleting=0x7f040053;
-        public static final int sl_all_error_fetch=0x7f04004f;
-        public static final int sl_all_error_versionPersist=0x7f04004d;
-        public static final int sl_all_error_versionRetrieve=0x7f04004e;
-        public static final int sl_all_loading=0x7f040051;
-        public static final int sl_all_saving=0x7f040052;
+        public static final int settings_warehouse_error_persist=0x7f040031;
+        public static final int settings_warehouse_error_retrieve=0x7f040032;
+        public static final int sl_activate=0x7f04003e;
+        public static final int sl_active_error_persist=0x7f04004b;
+        public static final int sl_active_error_retrieve=0x7f04004c;
+        public static final int sl_active_notfound=0x7f04003a;
+        public static final int sl_all_add=0x7f040051;
+        public static final int sl_all_deleting=0x7f040054;
+        public static final int sl_all_error_fetch=0x7f040050;
+        public static final int sl_all_error_versionPersist=0x7f04004e;
+        public static final int sl_all_error_versionRetrieve=0x7f04004f;
+        public static final int sl_all_loading=0x7f040052;
+        public static final int sl_all_saving=0x7f040053;
         /**  Shopping lists 
          */
-        public static final int sl_all_title=0x7f04004c;
-        public static final int sl_cancel=0x7f040041;
-        public static final int sl_comment=0x7f04003c;
-        public static final int sl_date=0x7f04003b;
+        public static final int sl_all_title=0x7f04004d;
+        public static final int sl_cancel=0x7f040042;
+        public static final int sl_comment=0x7f04003d;
+        public static final int sl_date=0x7f04003c;
         /**  Shopping list: commands 
          */
-        public static final int sl_delete=0x7f04003e;
-        public static final int sl_delete_failed=0x7f040049;
-        public static final int sl_delete_message=0x7f040047;
-        public static final int sl_delete_success=0x7f040048;
-        public static final int sl_delete_title=0x7f040046;
+        public static final int sl_delete=0x7f04003f;
+        public static final int sl_delete_failed=0x7f04004a;
+        public static final int sl_delete_message=0x7f040048;
+        public static final int sl_delete_success=0x7f040049;
+        public static final int sl_delete_title=0x7f040047;
         /**  Shopping list Item: Buttons
          */
-        public static final int sl_item_add=0x7f04005c;
-        public static final int sl_item_cancel=0x7f04005f;
+        public static final int sl_item_add=0x7f04005d;
+        public static final int sl_item_cancel=0x7f040060;
         /**  Shopping list Item: Fields
          */
-        public static final int sl_item_category=0x7f040054;
-        public static final int sl_item_category_empty=0x7f04005a;
-        public static final int sl_item_comment=0x7f040059;
-        public static final int sl_item_delete=0x7f04005d;
-        public static final int sl_item_delete_message=0x7f040067;
-        public static final int sl_item_delete_success=0x7f040068;
-        public static final int sl_item_delete_title=0x7f040066;
-        public static final int sl_item_deleting=0x7f040063;
-        public static final int sl_item_error_fetch=0x7f040069;
-        public static final int sl_item_loading=0x7f040061;
+        public static final int sl_item_category=0x7f040055;
+        public static final int sl_item_category_empty=0x7f04005b;
+        public static final int sl_item_comment=0x7f04005a;
+        public static final int sl_item_delete=0x7f04005e;
+        public static final int sl_item_delete_message=0x7f040068;
+        public static final int sl_item_delete_success=0x7f040069;
+        public static final int sl_item_delete_title=0x7f040067;
+        public static final int sl_item_deleting=0x7f040064;
+        public static final int sl_item_error_fetch=0x7f04006a;
+        public static final int sl_item_loading=0x7f040062;
         /**  Shopping list Item: Others
          */
-        public static final int sl_item_mark=0x7f04006b;
-        public static final int sl_item_name=0x7f040055;
-        public static final int sl_item_price=0x7f040058;
-        public static final int sl_item_quantity=0x7f040056;
-        public static final int sl_item_save=0x7f04005e;
-        public static final int sl_item_save_failed=0x7f040065;
-        public static final int sl_item_save_invalidFields=0x7f04006a;
-        public static final int sl_item_save_success=0x7f040064;
-        public static final int sl_item_saving=0x7f040062;
+        public static final int sl_item_mark=0x7f04006c;
+        public static final int sl_item_name=0x7f040056;
+        public static final int sl_item_price=0x7f040059;
+        public static final int sl_item_quantity=0x7f040057;
+        public static final int sl_item_save=0x7f04005f;
+        public static final int sl_item_save_failed=0x7f040066;
+        public static final int sl_item_save_invalidFields=0x7f04006b;
+        public static final int sl_item_save_success=0x7f040065;
+        public static final int sl_item_saving=0x7f040063;
         /**  Shopping list Item: Dialogs
          */
-        public static final int sl_item_title=0x7f040060;
-        public static final int sl_item_unit=0x7f040057;
-        public static final int sl_item_unit_empty=0x7f04005b;
-        public static final int sl_items_edit=0x7f04003f;
-        public static final int sl_name=0x7f04003a;
-        public static final int sl_save=0x7f040040;
-        public static final int sl_save_failed=0x7f040045;
-        public static final int sl_save_invalidFields=0x7f040044;
-        public static final int sl_save_success=0x7f040043;
-        public static final int sl_show_summary=0x7f040042;
+        public static final int sl_item_title=0x7f040061;
+        public static final int sl_item_unit=0x7f040058;
+        public static final int sl_item_unit_empty=0x7f04005c;
+        public static final int sl_items_edit=0x7f040040;
+        public static final int sl_name=0x7f04003b;
+        public static final int sl_save=0x7f040041;
+        public static final int sl_save_failed=0x7f040046;
+        public static final int sl_save_invalidFields=0x7f040045;
+        public static final int sl_save_success=0x7f040044;
+        public static final int sl_show_summary=0x7f040043;
         /**  Shopping list 
          */
-        public static final int sl_title=0x7f040038;
-        public static final int tab_settings=0x7f040070;
-        public static final int tab_sl_active=0x7f04006f;
-        public static final int tab_sl_all=0x7f04006e;
-        public static final int validation_comment=0x7f040073;
-        public static final int validation_membership=0x7f040071;
-        public static final int validation_money=0x7f040075;
-        public static final int validation_name=0x7f040072;
-        public static final int validation_quantity=0x7f040074;
+        public static final int sl_title=0x7f040039;
+        public static final int tab_settings=0x7f040071;
+        public static final int tab_sl_active=0x7f040070;
+        public static final int tab_sl_all=0x7f04006f;
+        public static final int validation_comment=0x7f040074;
+        public static final int validation_membership=0x7f040072;
+        public static final int validation_money=0x7f040076;
+        public static final int validation_name=0x7f040073;
+        public static final int validation_quantity=0x7f040075;
         public static final int validation_regex=0x7f040007;
         public static final int validation_username=0x7f040008;
         /**  Item Category 
          */
-        public static final int warehouse_error_versionPersist=0x7f040076;
-        public static final int warehouse_error_versionRetrieve=0x7f040077;
+        public static final int warehouse_error_versionPersist=0x7f040077;
+        public static final int warehouse_error_versionRetrieve=0x7f040078;
         /**  Web Service: AccessPoint 
          */
-        public static final int ws_ap_method_retrieveAccessPoints=0x7f0400a5;
-        public static final int ws_ap_property_accesspoint=0x7f0400a7;
-        public static final int ws_ap_property_accesspoints=0x7f0400a6;
-        public static final int ws_ap_property_id=0x7f0400a8;
-        public static final int ws_ap_property_posx=0x7f0400aa;
-        public static final int ws_ap_property_posy=0x7f0400ab;
-        public static final int ws_ap_property_ssid=0x7f0400a9;
-        public static final int ws_category_method_retrieveCategories=0x7f040082;
-        public static final int ws_category_method_retrieveVersion=0x7f040081;
-        public static final int ws_category_namespace=0x7f040080;
-        public static final int ws_category_property_desc=0x7f040085;
-        public static final int ws_category_property_id=0x7f040083;
-        public static final int ws_category_property_name=0x7f040084;
+        public static final int ws_ap_method_retrieveAccessPoints=0x7f0400a7;
+        public static final int ws_ap_property_accesspoint=0x7f0400a9;
+        public static final int ws_ap_property_accesspoints=0x7f0400a8;
+        public static final int ws_ap_property_id=0x7f0400aa;
+        public static final int ws_ap_property_posx=0x7f0400ac;
+        public static final int ws_ap_property_posy=0x7f0400ad;
+        public static final int ws_ap_property_ssid=0x7f0400ab;
+        public static final int ws_category_method_retrieveCategories=0x7f040083;
+        public static final int ws_category_method_retrieveVersion=0x7f040082;
+        public static final int ws_category_namespace=0x7f040081;
+        public static final int ws_category_property_desc=0x7f040086;
+        public static final int ws_category_property_id=0x7f040084;
+        public static final int ws_category_property_name=0x7f040085;
         /**  Web Service: Item Category 
          */
-        public static final int ws_category_url=0x7f04007f;
+        public static final int ws_category_url=0x7f040080;
         /**  Web Service: Common data 
          */
         public static final int ws_error_noconnection=0x7f040009;
-        public static final int ws_member_method_retrieveVersion=0x7f04007d;
-        public static final int ws_member_method_validate=0x7f04007c;
-        public static final int ws_member_namespace=0x7f04007b;
-        public static final int ws_member_property_validity=0x7f04007e;
+        public static final int ws_member_method_retrieveVersion=0x7f04007e;
+        public static final int ws_member_method_validate=0x7f04007d;
+        public static final int ws_member_namespace=0x7f04007c;
+        public static final int ws_member_property_validity=0x7f04007f;
         /**  Web Service: Member 
          */
-        public static final int ws_member_url=0x7f04007a;
+        public static final int ws_member_url=0x7f04007b;
         public static final int ws_property_exception=0x7f04000b;
-        public static final int ws_property_id=0x7f040079;
+        public static final int ws_property_id=0x7f04007a;
         public static final int ws_property_memberId=0x7f04000a;
         /**  Web Service: Common properties 
          */
-        public static final int ws_property_version=0x7f040078;
+        public static final int ws_property_version=0x7f040079;
         /**  Web Service: Section 
          */
-        public static final int ws_section_method_retrieveSections=0x7f04009f;
-        public static final int ws_section_property_id=0x7f0400a2;
-        public static final int ws_section_property_posx=0x7f0400a3;
-        public static final int ws_section_property_posy=0x7f0400a4;
-        public static final int ws_section_property_section=0x7f0400a1;
-        public static final int ws_section_property_sections=0x7f0400a0;
-        public static final int ws_sl_item_method_deleteSLItem=0x7f040090;
+        public static final int ws_section_method_retrieveSections=0x7f0400a1;
+        public static final int ws_section_property_id=0x7f0400a4;
+        public static final int ws_section_property_posx=0x7f0400a5;
+        public static final int ws_section_property_posy=0x7f0400a6;
+        public static final int ws_section_property_section=0x7f0400a3;
+        public static final int ws_section_property_sections=0x7f0400a2;
+        public static final int ws_sl_item_method_deleteSLItem=0x7f040092;
         /**  Web Service: Shopping List Item  
          */
-        public static final int ws_sl_item_method_saveSLItem=0x7f04008f;
-        public static final int ws_sl_item_property_category=0x7f040092;
-        public static final int ws_sl_item_property_desc=0x7f040097;
-        public static final int ws_sl_item_property_id=0x7f040091;
-        public static final int ws_sl_item_property_name=0x7f040093;
-        public static final int ws_sl_item_property_price=0x7f040095;
-        public static final int ws_sl_item_property_quantity=0x7f040094;
-        public static final int ws_sl_item_property_unit=0x7f040096;
-        public static final int ws_sl_method_deleteSL=0x7f04008a;
-        public static final int ws_sl_method_retrieveSLs=0x7f040088;
-        public static final int ws_sl_method_saveSL=0x7f040089;
-        public static final int ws_sl_namespace=0x7f040087;
-        public static final int ws_sl_property_date=0x7f04008d;
-        public static final int ws_sl_property_desc=0x7f04008e;
-        public static final int ws_sl_property_id=0x7f04008b;
-        public static final int ws_sl_property_name=0x7f04008c;
+        public static final int ws_sl_item_method_saveSLItem=0x7f040091;
+        public static final int ws_sl_item_property_category=0x7f040094;
+        public static final int ws_sl_item_property_desc=0x7f040099;
+        public static final int ws_sl_item_property_id=0x7f040093;
+        public static final int ws_sl_item_property_name=0x7f040095;
+        public static final int ws_sl_item_property_price=0x7f040097;
+        public static final int ws_sl_item_property_quantity=0x7f040096;
+        public static final int ws_sl_item_property_unit=0x7f040098;
+        public static final int ws_sl_method_deleteSL=0x7f04008b;
+        public static final int ws_sl_method_retrieveSLs=0x7f040089;
+        public static final int ws_sl_method_saveSL=0x7f04008a;
+        public static final int ws_sl_namespace=0x7f040088;
+        public static final int ws_sl_property_date=0x7f04008e;
+        public static final int ws_sl_property_desc=0x7f04008f;
+        public static final int ws_sl_property_id=0x7f04008c;
+        public static final int ws_sl_property_items=0x7f040090;
+        public static final int ws_sl_property_name=0x7f04008d;
         /**  Web Service: Shopping List  
          */
-        public static final int ws_sl_url=0x7f040086;
-        public static final int ws_warehouse_method_retrieveVersion=0x7f04009c;
-        public static final int ws_warehouse_method_retrieveWarehouses=0x7f04009b;
-        public static final int ws_warehouse_method_retrieveWarehousesVersion=0x7f04009a;
-        public static final int ws_warehouse_namespace=0x7f040099;
-        public static final int ws_warehouse_property_address=0x7f04009e;
-        public static final int ws_warehouse_property_id=0x7f04009d;
+        public static final int ws_sl_url=0x7f040087;
+        public static final int ws_warehouse_method_retrieveVersion=0x7f04009e;
+        public static final int ws_warehouse_method_retrieveWarehouses=0x7f04009d;
+        public static final int ws_warehouse_method_retrieveWarehousesVersion=0x7f04009c;
+        public static final int ws_warehouse_namespace=0x7f04009b;
+        public static final int ws_warehouse_property_address=0x7f0400a0;
+        public static final int ws_warehouse_property_id=0x7f04009f;
         /**  Web Service: Warehouse 
          */
-        public static final int ws_warehouse_url=0x7f040098;
+        public static final int ws_warehouse_url=0x7f04009a;
     }
     public static final class style {
         /** 

@@ -11,6 +11,8 @@
     <string name="proximityalert_started">Proximity Alert service has started</string>
     <string name="proximityalert_stopped">Proximity Alert service has stopped</string>
     
+    <string name="proximityalert_warehouse_select">Please select Warehouse in the settings tab</string>
+    
     <string name="proximityalert_error">Error occurred during the proximity alert task execution.\n\nError details have been logged.\n\nError message: \"%1$s\"\n\n</string>
     
 </resources>

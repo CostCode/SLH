@@ -73,9 +73,8 @@ public class SoapWebService {
 		}
 		
 		// get envelope
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12); 
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
 		envelope.setOutputSoapObject(request);
-		envelope.dotNet = false;
 		
 		return makeCall(envelope);
 	}
@@ -88,15 +87,13 @@ public class SoapWebService {
 	private SoapObject makeCall(SoapSerializationEnvelope envelope) throws Exception {
 		SoapObject result = null; // Return object
 		
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
-
 		try {
+			HttpTransportSE androidHttpTransport = new HttpTransportSE(url);
 			androidHttpTransport.call(soapAction, envelope);
 			SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;
 			result = resultsRequestSOAP;
 		} catch (ConnectException e) {
 			throw e; 
-//			result."Network error. Check Internet", methodName);
 		} catch (Exception e) {
 			throw e;
 		}

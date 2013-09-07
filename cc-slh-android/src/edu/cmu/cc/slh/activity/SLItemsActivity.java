@@ -18,6 +18,7 @@ import edu.cmu.cc.slh.R;
 import edu.cmu.cc.slh.activity.listener.ISLItemStateListener;
 import edu.cmu.cc.slh.adapter.ActiveSLAdapter;
 import edu.cmu.cc.slh.adapter.SettingsAdapter;
+import edu.cmu.cc.slh.adapter.WarehouseAdapter;
 import edu.cmu.cc.slh.dialog.SLItemDialog;
 import edu.cmu.cc.slh.model.ItemCategory;
 import edu.cmu.cc.slh.model.ShoppingList;
@@ -89,6 +90,16 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	}
 	
 	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
+	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		return prepareOptionsMenu(menu);
 	}
@@ -107,7 +118,7 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 		
 		menu.clear();
 		
-		menuItems = new HashMap<Integer, MenuItem>(1);
+		menuItems = new HashMap<Integer, MenuItem>(2);
 		
 		menuItems.put(R.string.sl_item_add, 
 				menu.add(R.string.sl_item_add).setIcon(R.drawable.add));
@@ -116,7 +127,7 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 				.setIcon(getProximityAlertIconResId()));
 		
 		setMenuItemState(R.string.sl_item_add, true, true);
-		setMenuItemState(getProximityAlertTextResId(), true, true);
+		setMenuItemState(getProximityAlertTextResId(), isActiveTab(), true);
 		
 		return true;
 	}
@@ -140,15 +151,23 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 				} else if (item.getTitle().equals(
 						getString(R.string.proximityalert_enable))) {
 					
-					SettingsAdapter.persistProximityAlertEnabled(true);
 					
-					if (triangulationTask != null && !triangulationTask.isCancelled()) {
-						triangulationTask.cancel(true);
+					if (WarehouseAdapter.getDefaultWarehouse() != null) {
+						
+						SettingsAdapter.persistProximityAlertEnabled(true);
+						
+						if (triangulationTask != null && !triangulationTask.isCancelled()) {
+							triangulationTask.cancel(true);
+						}
+						triangulationTask = new TriangulationTask();
+						triangulationTask.execute();
+						
+						SLItemsActivity.this.invalidateOptionsMenu();
+					} else {
+						Toast.makeText(SLItemsActivity.this, 
+								R.string.proximityalert_warehouse_select, 
+								Toast.LENGTH_SHORT).show();
 					}
-					triangulationTask = new TriangulationTask(getApplicationContext());
-					triangulationTask.execute();
-					
-					SLItemsActivity.this.invalidateOptionsMenu();
 					
 				} else if (item.getTitle().equals(
 						getString(R.string.proximityalert_disable))) {
@@ -366,16 +385,25 @@ implements IFetchSLItemsTaskCaller, ISLItemStateListener, ITabActivity {
 	
 	private void setupSLItemsFetching() {
 		
+		if (isActiveTab()) {
+			sl = ActiveSLAdapter.retrieveActiveSL();
+		} else {
+			sl = ApplicationState.getInstance().getCurrentSL();
+		}
+		
+		fetchShoppingListItems(sl);
+	}
+	
+	private boolean isActiveTab() {
+		
 		if (ApplicationState.getInstance().getTabHostActivity() != null) {
 			if (ApplicationState.getInstance().getTabHostActivity()
 					.isActiveTab(getClass())) {
-				sl = ActiveSLAdapter.retrieveActiveSL();
-			} else {
-				sl = ApplicationState.getInstance().getCurrentSL();
+				return true;
 			}
-			
-			fetchShoppingListItems(sl);
 		}
+		
+		return false;
 	}
 	
 }

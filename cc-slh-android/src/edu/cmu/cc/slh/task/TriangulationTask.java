@@ -63,9 +63,9 @@ implements IFetchFloorPlanTaskCaller {
 	// CONSTRUCTORS
 	//-------------------------------------------------------------------------
 	
-	public TriangulationTask(Context ctx) {
+	public TriangulationTask() {
 		
-		this.ctx = ctx;
+		ctx = ApplicationState.getContext();
 		
 		wifiManager = (WifiManager) 
 				ctx.getSystemService(Context.WIFI_SERVICE);
